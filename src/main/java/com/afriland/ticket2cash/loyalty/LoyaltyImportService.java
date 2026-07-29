@@ -61,15 +61,19 @@ public class LoyaltyImportService {
         HEADER_ALIASES.put("description",   Set.of("libelle", "description", "motif", "memo", "narration", "designation"));
         HEADER_ALIASES.put("category",      Set.of("categorie", "category", "type", "type_operation", "categorie_op", "cat"));
         HEADER_ALIASES.put("referenceNumber", Set.of("reference", "ref", "transaction_id", "tx_ref", "numero", "reference_op", "id"));
+        HEADER_ALIASES.put("entityType",    Set.of("entitytype", "type_entite", "type_client", "entrepriseouparticulier", "particulier_entreprise", "client_type", "typeclient"));
     }
 
     private final LoyaltyTransactionRepository transactionRepository;
     private final LoyaltyBatchRepository batchRepository;
+    private final LoyaltyClientRepository clientRepository;
 
     public LoyaltyImportService(LoyaltyTransactionRepository transactionRepository,
-                                LoyaltyBatchRepository batchRepository) {
+                                LoyaltyBatchRepository batchRepository,
+                                LoyaltyClientRepository clientRepository) {
         this.transactionRepository = transactionRepository;
         this.batchRepository = batchRepository;
+        this.clientRepository = clientRepository;
     }
 
     /**
@@ -95,6 +99,9 @@ public class LoyaltyImportService {
         int total = rows.size();
         int parsed = 0;
         int failed = 0;
+
+        // Step 1: sync clients with entityType hints from the file, before persisting txs
+        syncClientsFromRows(rows);
 
         for (LoyaltyTransaction row : rows) {
             if (row.getAccountNumber() == null || row.getAccountNumber().isBlank()
@@ -275,8 +282,81 @@ public class LoyaltyImportService {
         String amt = get(cells, colIndex, "amount");
         tx.setAmount(parseAmount(amt));
 
+        // Entity-type hint (INDIVIDUAL / COMPANY) — carried via @Transient field
+        String et = normalizeEntityType(get(cells, colIndex, "entityType"));
+        tx.setImportedEntityType(et);
+
         tx.setImportedAt(LocalDateTime.now());
         return tx;
+    }
+
+    /**
+     * Maps free-form values to the two canonical entity types.
+     * Accepts French ("entreprise", "particulier", "société"), English
+     * ("company", "individual", "corporation", "personal"), and short codes
+     * ("E"/"P", "C"/"I"). Returns null when unrecognized so downstream code
+     * can fall back to defaults.
+     */
+    String normalizeEntityType(String raw) {
+        if (raw == null) return null;
+        String v = raw.trim().toLowerCase(Locale.ROOT);
+        if (v.isEmpty()) return null;
+        if (v.startsWith("e") || v.startsWith("c") || v.contains("entrep")
+                || v.contains("company") || v.contains("corp") || v.contains("societ")
+                || v.contains("business") || v.contains("sarl") || v.contains("sa"))
+            return "COMPANY";
+        if (v.startsWith("p") || v.startsWith("i") || v.contains("part")
+                || v.contains("indiv") || v.contains("person"))
+            return "INDIVIDUAL";
+        return null;
+    }
+
+    /**
+     * For every distinct account number in the parsed rows, upsert its
+     * {@link LoyaltyClient}: create if missing, patch entityType/name if
+     * previously blank/default. Never overrides a manually-set entityType.
+     */
+    private void syncClientsFromRows(List<LoyaltyTransaction> rows) {
+        // Collapse rows down to one authoritative view per account
+        java.util.Map<String, String[]> perAccount = new java.util.LinkedHashMap<>();
+        // Value format: [entityType, clientName]
+        for (LoyaltyTransaction r : rows) {
+            String acc = r.getAccountNumber();
+            if (acc == null || acc.isBlank()) continue;
+            String[] cur = perAccount.computeIfAbsent(acc, k -> new String[]{null, null});
+            if (cur[0] == null && r.getImportedEntityType() != null) cur[0] = r.getImportedEntityType();
+            if (cur[1] == null && r.getClientName() != null) cur[1] = r.getClientName();
+        }
+
+        for (java.util.Map.Entry<String, String[]> e : perAccount.entrySet()) {
+            String acc = e.getKey();
+            String hintedType = e.getValue()[0];
+            String hintedName = e.getValue()[1];
+
+            LoyaltyClient c = clientRepository.findByAccountNumber(acc).orElse(null);
+            if (c == null) {
+                c = new LoyaltyClient();
+                c.setAccountNumber(acc);
+                c.setFullName(hintedName);
+                c.setEntityType(hintedType != null ? hintedType : "INDIVIDUAL");
+                clientRepository.save(c);
+            } else {
+                boolean touched = false;
+                // Only overwrite entityType if the client was on the default
+                // AND the file gave us a definite hint. Never silently downgrade.
+                if (hintedType != null && ("INDIVIDUAL".equals(c.getEntityType()) || c.getEntityType() == null)) {
+                    if (!hintedType.equals(c.getEntityType())) {
+                        c.setEntityType(hintedType);
+                        touched = true;
+                    }
+                }
+                if ((c.getFullName() == null || c.getFullName().isBlank()) && hintedName != null) {
+                    c.setFullName(hintedName);
+                    touched = true;
+                }
+                if (touched) clientRepository.save(c);
+            }
+        }
     }
 
     private String get(String[] cells, Map<String, Integer> idx, String key) {

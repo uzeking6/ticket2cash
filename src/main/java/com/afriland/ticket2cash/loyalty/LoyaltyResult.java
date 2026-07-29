@@ -32,6 +32,10 @@ public class LoyaltyResult {
     private String cardNumber;
     private String tier;
 
+    /** Snapshot of the client's entity type at calc time. */
+    @Column(length = 15)
+    private String entityType;
+
     private Integer transactionCount;
 
     @Column(precision = 18, scale = 2)
@@ -81,6 +85,8 @@ public class LoyaltyResult {
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
     public String getTier() { return tier; }
     public void setTier(String tier) { this.tier = tier; }
+    public String getEntityType() { return entityType; }
+    public void setEntityType(String entityType) { this.entityType = entityType; }
     public Integer getTransactionCount() { return transactionCount; }
     public void setTransactionCount(Integer transactionCount) { this.transactionCount = transactionCount; }
     public BigDecimal getTotalVolume() { return totalVolume; }

@@ -38,6 +38,14 @@ public class LoyaltyClient {
     @Column(length = 20)
     private String tier;
 
+    /**
+     * Legal entity type — INDIVIDUAL (particulier) or COMPANY (entreprise).
+     * Drives the segmented view on the Business Dashboard and lets admins
+     * upload mixed batches without pre-splitting the file.
+     */
+    @Column(length = 15)
+    private String entityType;
+
     /** City / branch — used for geographic analytics. */
     private String city;
     private String branch;
@@ -61,6 +69,7 @@ public class LoyaltyClient {
         if (lifetimeCashback == null) lifetimeCashback = BigDecimal.ZERO;
         if (lifetimeVolume == null) lifetimeVolume = BigDecimal.ZERO;
         if (tier == null || tier.isBlank()) tier = "CLASSIC";
+        if (entityType == null || entityType.isBlank()) entityType = "INDIVIDUAL";
     }
 
     public Long getId() { return id; }
@@ -77,6 +86,8 @@ public class LoyaltyClient {
     public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
     public String getTier() { return tier; }
     public void setTier(String tier) { this.tier = tier; }
+    public String getEntityType() { return entityType; }
+    public void setEntityType(String entityType) { this.entityType = entityType; }
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
     public String getBranch() { return branch; }

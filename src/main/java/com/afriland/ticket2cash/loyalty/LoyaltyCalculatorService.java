@@ -258,6 +258,7 @@ public class LoyaltyCalculatorService {
         r.setPhone(client.getPhone());
         r.setCardNumber(client.getCardNumber());
         r.setTier(client.getTier());
+        r.setEntityType(client.getEntityType());
         r.setTransactionCount(txCount);
         r.setTotalVolume(volume);
         r.setCashbackAmount(cashback);

@@ -71,6 +71,14 @@ public class LoyaltyTransaction {
 
     private LocalDateTime importedAt;
 
+    /**
+     * Transient entity-type hint parsed from the file row (INDIVIDUAL / COMPANY).
+     * Used by the import service to set/refresh the {@link LoyaltyClient#entityType}
+     * for the row's owner; never persisted on the transaction itself.
+     */
+    @Transient
+    private String importedEntityType;
+
     public LoyaltyTransaction() {}
 
     @PrePersist
@@ -107,4 +115,6 @@ public class LoyaltyTransaction {
     public void setCashbackAmount(BigDecimal cashbackAmount) { this.cashbackAmount = cashbackAmount; }
     public LocalDateTime getImportedAt() { return importedAt; }
     public void setImportedAt(LocalDateTime importedAt) { this.importedAt = importedAt; }
+    public String getImportedEntityType() { return importedEntityType; }
+    public void setImportedEntityType(String importedEntityType) { this.importedEntityType = importedEntityType; }
 }

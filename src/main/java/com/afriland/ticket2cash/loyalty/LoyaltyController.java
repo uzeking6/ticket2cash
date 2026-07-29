@@ -229,6 +229,24 @@ public class LoyaltyController {
     @GetMapping("/clients")
     public List<LoyaltyClient> listClients() { return clientRepository.findAll(); }
 
+    /**
+     * Top clients by lifetime volume — powers the Business Dashboard.
+     * @param type INDIVIDUAL, COMPANY, or ALL (default)
+     * @param limit max rows to return, defaulted to 10, capped at 50
+     */
+    @GetMapping("/clients/top")
+    public List<LoyaltyClient> topClients(
+            @RequestParam(defaultValue = "ALL") String type,
+            @RequestParam(defaultValue = "10") int limit) {
+        int capped = Math.min(Math.max(limit, 1), 50);
+        org.springframework.data.domain.Pageable page =
+                org.springframework.data.domain.PageRequest.of(0, capped);
+        if ("ALL".equalsIgnoreCase(type)) {
+            return clientRepository.findTop(page);
+        }
+        return clientRepository.findTopByEntityType(type.toUpperCase(java.util.Locale.ROOT), page);
+    }
+
     @PostMapping("/clients")
     public LoyaltyClient createClient(@RequestBody LoyaltyClient c) {
         LoyaltyClient saved = clientRepository.save(c);
@@ -244,6 +262,7 @@ public class LoyaltyController {
             if (patch.getEmail() != null) c.setEmail(patch.getEmail());
             if (patch.getCardNumber() != null) c.setCardNumber(patch.getCardNumber());
             if (patch.getTier() != null) c.setTier(patch.getTier());
+            if (patch.getEntityType() != null) c.setEntityType(patch.getEntityType());
             if (patch.getCity() != null) c.setCity(patch.getCity());
             if (patch.getBranch() != null) c.setBranch(patch.getBranch());
             return ResponseEntity.ok(clientRepository.save(c));
@@ -263,6 +282,8 @@ public class LoyaltyController {
     public Map<String, Object> stats() {
         Map<String, Object> s = new HashMap<>();
         s.put("clients", clientRepository.count());
+        s.put("individuals", clientRepository.countByEntityType("INDIVIDUAL"));
+        s.put("companies", clientRepository.countByEntityType("COMPANY"));
         s.put("rules", ruleRepository.count());
         s.put("batches", batchRepository.count());
 
