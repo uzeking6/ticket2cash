@@ -40,6 +40,11 @@ public class TicketTemplateController {
             t.setTotalKeyword(in.getTotalKeyword());
             t.setDateFormat(in.getDateFormat());
             t.setSampleText(in.getSampleText());
+            // Only overwrite the sample image when the payload actually carries one.
+            // Sending null preserves the existing image; sending "" explicitly clears it.
+            if (in.getSampleImageBase64() != null) {
+                t.setSampleImageBase64(in.getSampleImageBase64().isEmpty() ? null : in.getSampleImageBase64());
+            }
             if (in.getActive() != null) t.setActive(in.getActive());
             return ResponseEntity.ok(repo.save(t));
         }).orElse(ResponseEntity.notFound().build());

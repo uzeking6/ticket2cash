@@ -20,6 +20,16 @@ public class TicketTemplate {
     @Column(length = 2000)
     private String sampleText;
 
+    /**
+     * Base64-encoded sample ticket image (data URI or raw base64).
+     * Used by operators as a visual reference when reviewing OCR results,
+     * and stored for future ML training runs. Max ~2 MB by app policy.
+     * Column is LOB so the DB can accept the payload size.
+     */
+    @Lob
+    @Column(columnDefinition = "CLOB")
+    private String sampleImageBase64;
+
     private Boolean active;
     private LocalDateTime createdAt;
 
@@ -45,6 +55,8 @@ public class TicketTemplate {
     public void setDateFormat(String dateFormat) { this.dateFormat = dateFormat; }
     public String getSampleText() { return sampleText; }
     public void setSampleText(String sampleText) { this.sampleText = sampleText; }
+    public String getSampleImageBase64() { return sampleImageBase64; }
+    public void setSampleImageBase64(String sampleImageBase64) { this.sampleImageBase64 = sampleImageBase64; }
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
     public LocalDateTime getCreatedAt() { return createdAt; }

@@ -95,6 +95,16 @@ public class LoyaltyCalculatorService {
         // Tier filter set
         Set<String> allowedTiers = parseTierFilter(rule.getTierFilter());
 
+        // Entity type filter (banking-informed criteria, V4)
+        String entityTypeFilter = rule.getEntityTypeFilter();
+        boolean hasEntityFilter = entityTypeFilter != null && !entityTypeFilter.isBlank()
+                                  && !"ALL".equalsIgnoreCase(entityTypeFilter);
+
+        int minTxCount = rule.getMinTransactionCount() != null ? rule.getMinTransactionCount() : 0;
+        BigDecimal minAvgValue = rule.getMinAvgTransactionValue();
+        Integer minAgeMonths = rule.getMinAccountAgeMonths();
+        java.time.LocalDate today = java.time.LocalDate.now();
+
         int qualifiedRowCount = 0;
         BigDecimal totalVolume = BigDecimal.ZERO;
         BigDecimal totalCashback = BigDecimal.ZERO;
@@ -115,6 +125,35 @@ public class LoyaltyCalculatorService {
                 skipped.setNote("Excluded by tier filter (" + rule.getTierFilter() + ")");
                 resultRepository.save(skipped);
                 continue;
+            }
+
+            // Skip clients not matching entityType filter
+            if (hasEntityFilter && !entityTypeFilter.equalsIgnoreCase(client.getEntityType())) {
+                LoyaltyResult skipped = buildResult(batch.getId(), client, group.size(),
+                        BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                skipped.setNote("Excluded by segment filter (" + entityTypeFilter + ")");
+                resultRepository.save(skipped);
+                continue;
+            }
+
+            // Skip clients whose account is too young
+            if (minAgeMonths != null && minAgeMonths > 0) {
+                java.time.LocalDate opened = client.getAccountOpenedDate();
+                if (opened == null) {
+                    LoyaltyResult skipped = buildResult(batch.getId(), client, group.size(),
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                    skipped.setNote("Excluded: accountOpenedDate missing (min age " + minAgeMonths + "mo)");
+                    resultRepository.save(skipped);
+                    continue;
+                }
+                long months = java.time.temporal.ChronoUnit.MONTHS.between(opened, today);
+                if (months < minAgeMonths) {
+                    LoyaltyResult skipped = buildResult(batch.getId(), client, group.size(),
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                    skipped.setNote("Excluded: account only " + months + " months old (min " + minAgeMonths + ")");
+                    resultRepository.save(skipped);
+                    continue;
+                }
             }
 
             // Compute qualifying volume for this client
@@ -145,6 +184,34 @@ public class LoyaltyCalculatorService {
                 totalVolume = totalVolume.add(clientVolume);
                 qualifiedRowCount += clientQualified;
                 continue;
+            }
+
+            // Enforce minTransactionCount
+            if (minTxCount > 0 && clientQualified < minTxCount) {
+                LoyaltyResult skipped = buildResult(batch.getId(), client, group.size(),
+                        clientVolume, BigDecimal.ZERO, BigDecimal.ZERO);
+                skipped.setNote(String.format(Locale.ROOT,
+                        "Only %d qualifying tx (min %d)", clientQualified, minTxCount));
+                resultRepository.save(skipped);
+                totalVolume = totalVolume.add(clientVolume);
+                qualifiedRowCount += clientQualified;
+                continue;
+            }
+
+            // Enforce minAvgTransactionValue
+            if (minAvgValue != null && minAvgValue.signum() > 0 && clientQualified > 0) {
+                BigDecimal avg = clientVolume.divide(BigDecimal.valueOf(clientQualified), 2, RoundingMode.HALF_UP);
+                if (avg.compareTo(minAvgValue) < 0) {
+                    LoyaltyResult skipped = buildResult(batch.getId(), client, group.size(),
+                            clientVolume, BigDecimal.ZERO, BigDecimal.ZERO);
+                    skipped.setNote(String.format(Locale.ROOT,
+                            "Avg tx %s below minAvg %s",
+                            avg.toPlainString(), minAvgValue.toPlainString()));
+                    resultRepository.save(skipped);
+                    totalVolume = totalVolume.add(clientVolume);
+                    qualifiedRowCount += clientQualified;
+                    continue;
+                }
             }
 
             // Apply the rate

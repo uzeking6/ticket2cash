@@ -93,6 +93,10 @@ public class LoyaltyController {
             if (patch.getCategoryFilter() != null) existing.setCategoryFilter(patch.getCategoryFilter());
             if (patch.getTierFilter() != null) existing.setTierFilter(patch.getTierFilter());
             if (patch.getMinPeriodVolume() != null) existing.setMinPeriodVolume(patch.getMinPeriodVolume());
+            if (patch.getEntityTypeFilter() != null) existing.setEntityTypeFilter(patch.getEntityTypeFilter());
+            if (patch.getMinTransactionCount() != null) existing.setMinTransactionCount(patch.getMinTransactionCount());
+            if (patch.getMinAvgTransactionValue() != null) existing.setMinAvgTransactionValue(patch.getMinAvgTransactionValue());
+            if (patch.getMinAccountAgeMonths() != null) existing.setMinAccountAgeMonths(patch.getMinAccountAgeMonths());
             if (patch.getActive() != null) existing.setActive(patch.getActive());
             LoyaltyRule saved = ruleRepository.save(existing);
             audit("UPDATE_LOYALTY_RULE", saved.getId(), "Rule updated: " + saved.getName());
@@ -265,6 +269,7 @@ public class LoyaltyController {
             if (patch.getEntityType() != null) c.setEntityType(patch.getEntityType());
             if (patch.getCity() != null) c.setCity(patch.getCity());
             if (patch.getBranch() != null) c.setBranch(patch.getBranch());
+            if (patch.getAccountOpenedDate() != null) c.setAccountOpenedDate(patch.getAccountOpenedDate());
             return ResponseEntity.ok(clientRepository.save(c));
         }).orElse(ResponseEntity.notFound().build());
     }

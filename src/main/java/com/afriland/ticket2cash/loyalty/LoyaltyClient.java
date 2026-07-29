@@ -3,6 +3,7 @@ package com.afriland.ticket2cash.loyalty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -34,7 +35,7 @@ public class LoyaltyClient {
     @Column(length = 20)
     private String cardNumber;
 
-    /** Segmentation tier — CLASSIC / SILVER / GOLD / PLATINUM. Free-form so admins can add tiers. */
+    /** Segmentation tier — CLASSIC / SILVER / GOLD / PLATINUM. */
     @Column(length = 20)
     private String tier;
 
@@ -45,6 +46,13 @@ public class LoyaltyClient {
      */
     @Column(length = 15)
     private String entityType;
+
+    /**
+     * Date the account was opened at Afriland.
+     * Used by rules with {@code minAccountAgeMonths} to reward loyalty.
+     * Set from bank data during client onboarding; null-safe in the calculator.
+     */
+    private LocalDate accountOpenedDate;
 
     /** City / branch — used for geographic analytics. */
     private String city;
@@ -88,6 +96,8 @@ public class LoyaltyClient {
     public void setTier(String tier) { this.tier = tier; }
     public String getEntityType() { return entityType; }
     public void setEntityType(String entityType) { this.entityType = entityType; }
+    public LocalDate getAccountOpenedDate() { return accountOpenedDate; }
+    public void setAccountOpenedDate(LocalDate accountOpenedDate) { this.accountOpenedDate = accountOpenedDate; }
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }
     public String getBranch() { return branch; }

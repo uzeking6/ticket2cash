@@ -376,7 +376,7 @@ const I18N={
   pricing:"Instances & tarifs",pricing_sub:"Forfaits, tarifs et nombre d'instances incluses.",
   ticketTemplate:"Modèle ticket",tt_sub2:"Modèles de lecture des tickets pour l'OCR.",
   f_code:"Code",f_monthlyfee:"Frais mensuels",f_commission:"Commission (%)",f_instances:"Instances incluses",f_desc:"Description",f_active:"Actif",
-  tt_store:"Motif nom magasin",tt_total:"Mot-clé total",tt_date:"Format date",tt_sample:"Exemple de texte",
+  tt_store:"Motif nom magasin",tt_total:"Mot-clé total",tt_date:"Format date",tt_sample:"Exemple de texte",tt_sample_img:"Ticket exemple",
   new_item:"Nouveau",saved_ok:"Enregistré.",deleted_ok:"Supprimé.",confirm_del2:"Supprimer cet élément ?",
   subPartners:"Sous-partenaires",sub_sub:"Créez et gérez les enseignes situées dans votre établissement.",
   new_subpartner:"Nouveau sous-partenaire",c_partner:"Partenaire",c_parent:"Partenaire parent",
@@ -399,11 +399,11 @@ const I18N={
   ak_endpoint:"Endpoint à communiquer",ak_header:"En-tête d'authentification",ak_revoke_confirm:"Révoquer cette clé ? Le système du partenaire ne pourra plus envoyer de transactions.",
   review:"File de révision",review_sub:"Réclamations en attente de validation manuelle.",rq_fraud:"Score fraude",rq_reason:"Motifs",approve:"Approuver",reject:"Rejeter",rq_approved:"Réclamation approuvée.",rq_rejected:"Réclamation rejetée.",rq_empty:"Aucune réclamation à réviser.",
   dashboard:"Tableau de bord",businessDashboard:"Dashboard métier",security:"Dashboard sécurité",
-  merchants:"Commerçants",loyalty:"Fidélité Afriland",bd_volume:"Volume",bd_sub:"Vue financiere et clients a fort volume",bd_cashback:"Cashback",bd_view:"Voir",bd_loyalty_paid:"Cashback fidelite verse",bd_reward:"Recompenser",bd_batches_credited:"batches credites",bd_no_clients:"Aucun client enrole. Uploadez un batch dans Fidelite pour commencer.",bd_indiv_comp:"Particuliers + Entreprises",bd_companies:"Entreprises",bd_top_clients:"Top clients Afriland",bd_campaigns_active:"campagnes actives",bd_rank:"#",bd_individuals:"Particuliers",bd_loyalty_clients:"Clients fidelite",bd_all:"Tous",bd_name:"Nom",bd_type:"Type",products:"Produits",campaigns:"Campagnes",tickets:"Tickets",claims:"Réclamations",
+  merchants:"Commerçants",loyalty:"Fidélité Afriland",bd_sub:"Vue financière et clients à fort volume",bd_top_clients:"Top clients Afriland",bd_all:"Tous",bd_companies:"Entreprises",bd_individuals:"Particuliers",bd_view:"Voir",bd_reward:"Récompenser",bd_no_clients:"Aucun client enrôlé. Uploadez un batch dans Fidélité pour commencer.",bd_rank:"#",bd_name:"Nom",bd_type:"Type",bd_volume:"Volume",bd_cashback:"Cashback",bd_loyalty_clients:"Clients fidélité",bd_loyalty_paid:"Cashback fidélité versé",bd_indiv_comp:"Particuliers + Entreprises",bd_campaigns_active:"campagnes actives",bd_batches_credited:"batches crédités",products:"Produits",campaigns:"Campagnes",tickets:"Tickets",claims:"Réclamations",
   payments:"Paiements",users:"Utilisateurs",fraud:"Alertes fraude",auditLogs:"Journaux",settings:"Paramètres",profile:"Mon profil",
   dash_sub:"Vue d'ensemble de l'activité cashback en temps réel.",
   kpi_cashback:"Cashback distribué",kpi_merchants:"Commerçants actifs",kpi_campaigns:"Campagnes actives",kpi_fraud:"Alertes fraude ouvertes",
-  pk_cashback:"Cashback reçu",pk_claims:"Réclamations",pk_bd_volume:"Volume",bd_sub:"Vue financiere et clients a fort volume",bd_cashback:"Cashback",bd_view:"Voir",bd_loyalty_paid:"Cashback fidelite verse",bd_reward:"Recompenser",bd_batches_credited:"batches credites",bd_no_clients:"Aucun client enrole. Uploadez un batch dans Fidelite pour commencer.",bd_indiv_comp:"Particuliers + Entreprises",bd_companies:"Entreprises",bd_top_clients:"Top clients Afriland",bd_campaigns_active:"campagnes actives",bd_rank:"#",bd_individuals:"Particuliers",bd_loyalty_clients:"Clients fidelite",bd_all:"Tous",bd_name:"Nom",bd_type:"Type",products:"Produits",pk_campaigns:"Campagnes actives",
+  pk_cashback:"Cashback reçu",pk_claims:"Réclamations",pk_products:"Produits",pk_campaigns:"Campagnes actives",
   recent_claims:"Réclamations récentes",claim_dist:"Répartition des réclamations",
   leg_submitted:"Soumises",leg_approved:"Approuvées",leg_paid:"Payées",leg_rejected:"Rejetées",
   no_claims:"Aucune réclamation pour l'instant.",
@@ -417,7 +417,7 @@ const I18N={
   fraud_sub:"Détections de risque et doublons de tickets.",
   auditLogs_sub:"Traçabilité des actions sensibles.",
   sec_sub:"Connexions, comptes verrouillés et alertes de fraude.",
-  sec_failed:"Tentatives échouées",sec_locked:"Comptes verrouillés",sec_open:"Alertes ouvertes",sec_success:"Connexions réussies",
+  sec_failed:"Tentatives échouées",sec_locked:"Comptes verrouillés",sec_open:"Alertes ouvertes",sec_success:"Connexions réussies",sec_disabled:"Comptes désactivés",sec_active_lc:"actifs",sec_total_lc:"total",sec_overview:"Vue d\'ensemble",sec_fraud:"Alertes fraude",sec_audit:"Journaux d\'audit",
   set_sub:"Configuration système et pool de cashback.",set_param:"Paramètre",set_value:"Valeur",
   pf_sub:"Informations de l'utilisateur connecté.",pf_account:"Compte",pf_fullname:"Nom complet",
   pf_username:"Identifiant",pf_role:"Rôle",pf_id:"ID",pf_merchant:"Commerçant lié",pf_changepw:"Changer le mot de passe",
@@ -448,7 +448,7 @@ const I18N={
   user_created:"Utilisateur créé.",users_list:"Comptes existants",
   set_saved:"Paramètre enregistré.",set_edit:"Modifier",
   cat_products:"Catalogue produits",cat_sub:"Créer ou modifier un produit, ou importer en masse.",
-  new_product:"Nouveau produit",tpl_import:"Modèle import",mass_import:"Import masse",
+  new_product:"Nouveau produit",new_campaign:"Nouvelle campagne",edit_campaign:"Modifier la campagne",tpl_import:"Modèle import",mass_import:"Import masse",
   f_sku:"SKU",f_name:"Nom du produit",f_category:"Catégorie",f_brand:"Marque",f_price:"Prix",f_group:"Clé groupe",
   f_cbtype:"Type cashback",f_cbvalue:"Valeur cashback",f_designation:"Désignation ticket",f_synonyms:"Synonymes",
   col_group:"Groupe",col_cashback:"Cashback",col_actions:"Actions",edit:"Modifier",del:"Supprimer",
@@ -479,7 +479,7 @@ const I18N={
   pricing:"Instances & pricing",pricing_sub:"Plans, tariffs and included instances.",
   ticketTemplate:"Ticket template",tt_sub2:"Receipt-reading templates for OCR.",
   f_code:"Code",f_monthlyfee:"Monthly fee",f_commission:"Commission (%)",f_instances:"Included instances",f_desc:"Description",f_active:"Active",
-  tt_store:"Store name pattern",tt_total:"Total keyword",tt_date:"Date format",tt_sample:"Sample text",
+  tt_store:"Store name pattern",tt_total:"Total keyword",tt_date:"Date format",tt_sample:"Sample text",tt_sample_img:"Ticket exemple",
   new_item:"New",saved_ok:"Saved.",deleted_ok:"Deleted.",confirm_del2:"Delete this item?",
   subPartners:"Sub-partners",sub_sub:"Create and manage the shops located inside your venue.",
   new_subpartner:"New sub-partner",c_partner:"Partner",c_parent:"Parent partner",
@@ -502,11 +502,11 @@ const I18N={
   ak_endpoint:"Endpoint to share",ak_header:"Authentication header",ak_revoke_confirm:"Revoke this key? The partner system will no longer be able to send transactions.",
   review:"Review queue",review_sub:"Claims awaiting manual validation.",rq_fraud:"Fraud score",rq_reason:"Reasons",approve:"Approve",reject:"Reject",rq_approved:"Claim approved.",rq_rejected:"Claim rejected.",rq_empty:"No claims to review.",
   dashboard:"Dashboard",businessDashboard:"Business dashboard",security:"Security dashboard",
-  merchants:"Merchants",loyalty:"Afriland Loyalty",bd_volume:"Volume",bd_sub:"Financial overview and high-volume clients",bd_cashback:"Cashback",bd_view:"View",bd_loyalty_paid:"Loyalty cashback paid",bd_reward:"Reward",bd_batches_credited:"credited batches",bd_no_clients:"No enrolled clients yet. Upload a batch in Loyalty to start.",bd_indiv_comp:"Individuals + Companies",bd_companies:"Companies",bd_top_clients:"Top Afriland clients",bd_campaigns_active:"active campaigns",bd_rank:"#",bd_individuals:"Individuals",bd_loyalty_clients:"Loyalty clients",bd_all:"All",bd_name:"Name",bd_type:"Type",products:"Products",campaigns:"Campaigns",tickets:"Tickets",claims:"Claims",
+  merchants:"Merchants",loyalty:"Afriland Loyalty",bd_sub:"Financial overview and high-volume clients",bd_top_clients:"Top Afriland clients",bd_all:"All",bd_companies:"Companies",bd_individuals:"Individuals",bd_view:"View",bd_reward:"Reward",bd_no_clients:"No enrolled clients yet. Upload a batch in Loyalty to start.",bd_rank:"#",bd_name:"Name",bd_type:"Type",bd_volume:"Volume",bd_cashback:"Cashback",bd_loyalty_clients:"Loyalty clients",bd_loyalty_paid:"Loyalty cashback paid",bd_indiv_comp:"Individuals + Companies",bd_campaigns_active:"active campaigns",bd_batches_credited:"credited batches",products:"Products",campaigns:"Campaigns",tickets:"Tickets",claims:"Claims",
   payments:"Payments",users:"Users",fraud:"Fraud alerts",auditLogs:"Audit logs",settings:"Settings",profile:"My profile",
   dash_sub:"Real-time overview of cashback activity.",
   kpi_cashback:"Cashback distributed",kpi_merchants:"Active merchants",kpi_campaigns:"Active campaigns",kpi_fraud:"Open fraud alerts",
-  pk_cashback:"Cashback received",pk_claims:"Claims",pk_bd_volume:"Volume",bd_sub:"Financial overview and high-volume clients",bd_cashback:"Cashback",bd_view:"View",bd_loyalty_paid:"Loyalty cashback paid",bd_reward:"Reward",bd_batches_credited:"credited batches",bd_no_clients:"No enrolled clients yet. Upload a batch in Loyalty to start.",bd_indiv_comp:"Individuals + Companies",bd_companies:"Companies",bd_top_clients:"Top Afriland clients",bd_campaigns_active:"active campaigns",bd_rank:"#",bd_individuals:"Individuals",bd_loyalty_clients:"Loyalty clients",bd_all:"All",bd_name:"Name",bd_type:"Type",products:"Products",pk_campaigns:"Active campaigns",
+  pk_cashback:"Cashback received",pk_claims:"Claims",pk_products:"Products",pk_campaigns:"Active campaigns",
   recent_claims:"Recent claims",claim_dist:"Claims breakdown",
   leg_submitted:"Submitted",leg_approved:"Approved",leg_paid:"Paid",leg_rejected:"Rejected",
   no_claims:"No claims yet.",
@@ -520,7 +520,7 @@ const I18N={
   fraud_sub:"Risk detections and duplicate receipts.",
   auditLogs_sub:"Audit trail of sensitive actions.",
   sec_sub:"Logins, locked accounts and fraud alerts.",
-  sec_failed:"Failed attempts",sec_locked:"Locked accounts",sec_open:"Open alerts",sec_success:"Successful logins",
+  sec_failed:"Failed attempts",sec_locked:"Locked accounts",sec_open:"Open alerts",sec_success:"Successful logins",sec_disabled:"Disabled accounts",sec_active_lc:"active",sec_total_lc:"total",sec_overview:"Vue d\'ensemble",sec_fraud:"Alertes fraude",sec_audit:"Journaux d\'audit",
   set_sub:"System configuration and cashback pool.",set_param:"Setting",set_value:"Value",
   pf_sub:"Details of the signed-in user.",pf_account:"Account",pf_fullname:"Full name",
   pf_username:"Username",pf_role:"Role",pf_id:"ID",pf_merchant:"Linked merchant",pf_changepw:"Change password",
@@ -551,7 +551,7 @@ const I18N={
   user_created:"User created.",users_list:"Existing accounts",
   set_saved:"Setting saved.",set_edit:"Edit",
   cat_products:"Product catalog",cat_sub:"Create or edit a product, or bulk import.",
-  new_product:"New product",tpl_import:"Import template",mass_import:"Bulk import",
+  new_product:"New product",new_campaign:"New campaign",edit_campaign:"Edit campaign",tpl_import:"Import template",mass_import:"Bulk import",
   f_sku:"SKU",f_name:"Product name",f_category:"Category",f_brand:"Brand",f_price:"Price",f_group:"Group key",
   f_cbtype:"Cashback type",f_cbvalue:"Cashback value",f_designation:"Ticket designation",f_synonyms:"Synonyms",
   col_group:"Group",col_cashback:"Cashback",col_actions:"Actions",edit:"Edit",del:"Delete",
@@ -612,10 +612,10 @@ const IC={
 const NAV={
  ADMIN:[{group:"g_principal",items:["dashboard","businessDashboard","security","trends"]},
         {group:"g_ops",items:["loyalty","merchants","products","campaigns","tickets","transactions","claims","review","payments","finance"]},
-        {group:"g_integration",items:["webhooks","apiKeys","ocr","ticketTemplate","pricing"]},
-        {group:"g_sys",items:["users","fraud","auditLogs"]}],
+        {group:"g_integration",items:["webhooks","apiKeys","ocr","ticketTemplate"]},
+        {group:"g_sys",items:["users"]}],
  PARTNER:[{group:"g_principal",items:["dashboard"]},
-          {group:"g_ops",items:["subPartners","products","claims","payments"]}],
+          {group:"g_ops",items:["campaigns","products","claims","payments"]}],
  DEFAULT:[{group:"g_principal",items:["dashboard"]},{group:"g_ops",items:["claims","payments"]}]
 };
 
@@ -663,7 +663,6 @@ const ROUTES={
  settings:()=>renderAccount("settings"),profile:()=>renderAccount("profile"),account:renderAccount,
  trends:renderTrends,webhooks:renderWebhooks,apiKeys:renderApiKeys,
  finance:renderFinance,ocr:renderOcr,pricing:()=>renderCrud("pricing"),ticketTemplate:()=>renderCrud("ticketTemplate"),
- loyalty:'<path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
  subPartners:renderSubPartners
 };
 function go(id,silent){
@@ -857,11 +856,480 @@ function bdReward(accountNumber){
 }
 
 async function renderLoyalty(){
-  const theme = document.documentElement.getAttribute("data-theme") || "light";
-  document.getElementById("content").innerHTML =
-    `<div class="page" style="padding:0"><iframe src="/loyalty.html?theme=${theme}"
-       style="width:100%;height:calc(100vh - 84px);border:none;border-radius:12px;background:var(--surface);display:block"></iframe></div>`;
+  document.getElementById("content").innerHTML = `<div class="page">
+    <div class="page-head"><h1>Fidélité Afriland</h1>
+      <p>Moteur de cashback pour les clients à fort volume.</p></div>
+    <div class="kpi-grid" id="loyKpis">${kpiSkeletons ? kpiSkeletons(4) : ''}</div>
+    <div class="tabs" id="loyTabs">
+      <div class="tab active" data-loytab="batches" onclick="loySwitchTab('batches')">Batches</div>
+      <div class="tab" data-loytab="rules" onclick="loySwitchTab('rules')">Règles</div>
+      <div class="tab" data-loytab="clients" onclick="loySwitchTab('clients')">Clients</div>
+    </div>
+    <div id="loyContent"></div></div>`;
+  await loyRefreshAll();
+  loyRenderKpis();
+  loySwitchTab("batches");
 }
+
+// ============================================================ LOYALTY STATE
+window.LOY = { stats:{}, batches:[], rules:[], clients:[], tab:"batches" };
+
+async function loyRefreshAll(){
+  try{
+    const [stats, batches, rules, clients] = await Promise.all([
+      api("/api/loyalty/stats").catch(()=>({})),
+      api("/api/loyalty/batches").catch(()=>[]),
+      api("/api/loyalty/rules").catch(()=>[]),
+      api("/api/loyalty/clients").catch(()=>[])
+    ]);
+    LOY.stats = stats || {};
+    LOY.batches = Array.isArray(batches) ? batches : [];
+    LOY.rules = Array.isArray(rules) ? rules : [];
+    LOY.clients = Array.isArray(clients) ? clients : [];
+  }catch(e){ toast("Erreur chargement fidélité: " + e.message, "err"); }
+}
+
+function loyRenderKpis(){
+  const s = LOY.stats || {};
+  const el = document.getElementById("loyKpis"); if(!el) return;
+  const K = [
+    {icon:"users", label:"Clients enrôlés", val:num(s.clients||0), sub:`${num(s.individuals||0)} part. · ${num(s.companies||0)} entr.`},
+    {icon:"payments", label:"Batches traités", val:num(s.batches||0), sub:`${num(s.creditedBatches||0)} crédités · ${num(s.pendingBatches||0)} en attente`},
+    {icon:"payments", label:"Cashback versé", val:money(s.totalPaidCashback||0), sub:"Cumulé"},
+    {icon:"products", label:"Règles actives", val:num(s.rules||0), sub:"Configurations"}
+  ];
+  el.innerHTML = K.map(k => (typeof kpiCard==="function") ? kpiCard(k) :
+    `<div class="kpi"><div class="kpi-label">${esc(k.label)}</div><div class="kpi-val">${esc(k.val)}</div><div class="kpi-sub">${esc(k.sub||"")}</div></div>`).join("");
+  if (typeof animateCounters === "function") animateCounters();
+}
+
+function loySwitchTab(tab){
+  LOY.tab = tab;
+  document.querySelectorAll("[data-loytab]").forEach(t => t.classList.toggle("active", t.dataset.loytab === tab));
+  if (tab === "batches") loyRenderBatches();
+  else if (tab === "rules") loyRenderRules();
+  else if (tab === "clients") loyRenderClients();
+}
+
+// ============================================================ BATCHES
+function loyRenderBatches(){
+  const c = document.getElementById("loyContent"); if(!c) return;
+  const rows = LOY.batches;
+  c.innerHTML = `
+    <div class="panel" style="margin-bottom:16px"><div class="panel-head"><h3>Nouveau batch</h3>
+      <span style="color:var(--muted);font-size:12px">CSV ou XLSX · Colonnes reconnues: compte, nom, date, montant, catégorie, entityType (COMPANY/INDIVIDUAL)</span></div>
+      <div class="panel-body">
+        <div class="grid-2" style="align-items:end">
+          <div><label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Nom du batch</label>
+            <input id="loyUpName" placeholder="Ex: Cashback Juillet 2026" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px"></div>
+          <div><label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Fichier</label>
+            <input type="file" id="loyUpFile" accept=".csv,.xlsx,.xls,.tsv,.txt" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:14px">
+          <button class="btn btn-primary" onclick="loyUploadBatch()">Uploader</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Batches</h3><span style="color:var(--muted);font-size:12px">${rows.length} batch(es)</span></div>
+      <div class="panel-body" style="padding:0">
+        <div class="table-wrap"><div class="table-scroll"><table>
+          <thead><tr><th>Nom</th><th>Statut</th><th>Règle</th>
+            <th style="text-align:right">Lignes</th><th style="text-align:right">Volume</th><th style="text-align:right">Cashback</th>
+            <th style="text-align:right">Clients</th><th>Créé</th><th style="width:260px">Actions</th></tr></thead>
+          <tbody>${rows.length === 0
+            ? `<tr><td colspan="9">${emptyMini("Aucun batch. Uploadez un fichier pour commencer.")}</td></tr>`
+            : rows.map(b => `<tr>
+                <td><strong>${esc(b.name||"")}</strong><br><span class="mono" style="color:var(--muted);font-size:11px">${esc(b.sourceFilename||"—")}</span></td>
+                <td>${loyStatusBadge(b.status)}</td>
+                <td>${esc(b.ruleNameSnapshot||"—")}</td>
+                <td style="text-align:right" class="mono">${num(b.parsedRows)} / ${num(b.totalRows)}</td>
+                <td style="text-align:right" class="mono">${money(b.totalVolume)}</td>
+                <td style="text-align:right" class="mono"><strong>${money(b.totalCashback)}</strong></td>
+                <td style="text-align:right" class="mono">${num(b.clientCount)}</td>
+                <td style="color:var(--text-2);font-size:12px">${dt(b.createdAt)}</td>
+                <td>${loyBatchActions(b)}</td>
+              </tr>`).join("")}
+          </tbody></table></div></div>
+      </div>
+    </div>`;
+}
+
+function loyBatchActions(b){
+  const s = b.status;
+  const btns = [];
+  btns.push(`<button class="mini-btn" onclick="loyOpenBatchDetails(${b.id})">Voir</button>`);
+  if (s === "IMPORTED" || s === "CALCULATED" || s === "FAILED")
+    btns.push(`<button class="mini-btn" onclick="loyOpenCalcModal(${b.id})">Calculer</button>`);
+  if (s === "CALCULATED")
+    btns.push(`<button class="mini-btn" style="color:var(--ok)" onclick="loyApproveBatch(${b.id})">Approuver</button>`);
+  if (s === "APPROVED")
+    btns.push(`<button class="mini-btn" style="color:var(--brand)" onclick="loyCreditBatch(${b.id})">Créditer</button>`);
+  if (s !== "CREDITED")
+    btns.push(`<button class="mini-btn danger" onclick="loyDeleteBatch(${b.id})">Suppr.</button>`);
+  return btns.join(" ");
+}
+
+function loyStatusBadge(s){
+  const u = String(s||"").toUpperCase();
+  const map = { IMPORTED:"b-info", CALCULATING:"b-warn", CALCULATED:"b-info", APPROVED:"b-warn",
+    CREDITED:"b-ok", REJECTED:"b-danger", FAILED:"b-danger",
+    PENDING:"b-warn", QUEUED:"b-info", CANCELLED:"b-muted", ACTIVE:"b-ok", INACTIVE:"b-muted" };
+  const label = { IMPORTED:"Importé", CALCULATING:"Calcul…", CALCULATED:"Calculé",
+    APPROVED:"Approuvé", CREDITED:"Crédité", REJECTED:"Rejeté", FAILED:"Échoué",
+    PENDING:"En attente", QUEUED:"En file", CANCELLED:"Annulé", ACTIVE:"Actif", INACTIVE:"Inactif" };
+  return `<span class="badge ${map[u]||"b-muted"}">${label[u]||u}</span>`;
+}
+
+async function loyUploadBatch(){
+  const name = document.getElementById("loyUpName").value.trim();
+  const fInput = document.getElementById("loyUpFile");
+  const file = fInput && fInput.files[0];
+  if (!file){ toast("Sélectionnez un fichier", "err"); return; }
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("name", name || file.name);
+  try{
+    toast("Import en cours…");
+    const res = await fetch("/api/loyalty/batches/upload", { method:"POST", credentials:"same-origin", body:fd });
+    if (!res.ok) throw new Error(await res.text() || res.status);
+    const b = await res.json();
+    toast(`Batch importé — ${b.parsedRows} lignes`, "ok");
+    await loyRefreshAll(); loyRenderKpis(); loyRenderBatches();
+  }catch(e){ toast("Erreur import: " + e.message, "err"); }
+}
+
+function loyOpenCalcModal(batchId){
+  const active = LOY.rules.filter(r => r.active);
+  if (active.length === 0){ toast("Aucune règle active. Créez-en une d'abord.", "err"); return; }
+  openModal("Appliquer une règle",
+    `<div style="margin-bottom:14px"><label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Règle de cashback</label>
+      <select id="loyCalcRuleId" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px">
+        ${active.map(r => `<option value="${r.id}">${esc(r.name)} — ${r.type}</option>`).join("")}
+      </select></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="loyRunCalc(${batchId})">Lancer le calcul</button>`);
+}
+
+async function loyRunCalc(batchId){
+  const ruleId = document.getElementById("loyCalcRuleId").value;
+  try{
+    toast("Calcul en cours…");
+    const b = await api(`/api/loyalty/batches/${batchId}/calculate?ruleId=${ruleId}`, { method:"POST" });
+    toast(`Calculé: ${money(b.totalCashback)} sur ${b.clientCount} clients`, "ok");
+    closeModal();
+    await loyRefreshAll(); loyRenderKpis(); loyRenderBatches();
+  }catch(e){ toast("Erreur calcul: " + e.message, "err"); }
+}
+
+async function loyApproveBatch(id){
+  if (!confirm("Approuver ce batch ?")) return;
+  try{
+    await api(`/api/loyalty/batches/${id}/approve`, { method:"POST" });
+    toast("Batch approuvé", "ok");
+    await loyRefreshAll(); loyRenderBatches();
+  }catch(e){ toast("Erreur: " + e.message, "err"); }
+}
+
+async function loyCreditBatch(id){
+  if (!confirm("Créditer les cashbacks sur les cartes des clients ? Action irréversible.")) return;
+  try{
+    toast("Crédit en cours…");
+    const b = await api(`/api/loyalty/batches/${id}/credit`, { method:"POST" });
+    toast("Crédité: " + (b.note||"OK"), "ok");
+    await loyRefreshAll(); loyRenderKpis(); loyRenderBatches();
+  }catch(e){ toast("Erreur crédit: " + e.message, "err"); }
+}
+
+async function loyDeleteBatch(id){
+  if (!confirm("Supprimer ce batch ? Résultats perdus.")) return;
+  try{
+    await api(`/api/loyalty/batches/${id}`, { method:"DELETE" });
+    toast("Batch supprimé", "ok");
+    await loyRefreshAll(); loyRenderKpis(); loyRenderBatches();
+  }catch(e){ toast("Erreur: " + e.message, "err"); }
+}
+
+async function loyOpenBatchDetails(id){
+  try{
+    const [b, results] = await Promise.all([
+      api(`/api/loyalty/batches/${id}`),
+      api(`/api/loyalty/batches/${id}/results`)
+    ]);
+    const top = (results||[]).slice(0, 100);
+    const rowsHtml = top.length === 0
+      ? `<tr><td colspan="5">${emptyMini("Pas encore de résultats — calculez le batch.")}</td></tr>`
+      : top.map(r => `<tr>
+          <td><strong>${esc(r.clientName||"—")}</strong><br><span class="mono" style="color:var(--muted);font-size:11px">${esc(r.accountNumber)}</span></td>
+          <td>${loyTypeBadge(r.entityType)}</td>
+          <td style="text-align:right" class="mono">${money(r.totalVolume)}</td>
+          <td style="text-align:right" class="mono"><strong>${money(r.cashbackAmount)}</strong></td>
+          <td>${loyStatusBadge(r.status)}</td></tr>`).join("");
+    openModal(`Batch #${b.id} — ${esc(b.name||"")}`,
+      `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;font-size:13px;margin-bottom:16px">
+        <div><span style="color:var(--muted)">Statut</span><br>${loyStatusBadge(b.status)}</div>
+        <div><span style="color:var(--muted)">Fichier</span><br><span class="mono" style="font-size:11px">${esc(b.sourceFilename||"—")}</span></div>
+        <div><span style="color:var(--muted)">Règle</span><br>${esc(b.ruleNameSnapshot||"—")}</div>
+        <div><span style="color:var(--muted)">Lignes</span><br>${num(b.parsedRows)} / ${num(b.totalRows)}</div>
+        <div><span style="color:var(--muted)">Volume</span><br><strong>${money(b.totalVolume)}</strong></div>
+        <div><span style="color:var(--muted)">Cashback</span><br><strong style="color:var(--brand)">${money(b.totalCashback)}</strong></div>
+      </div>
+      ${b.note ? `<div style="padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:12px;color:var(--text-2);margin-bottom:14px">${esc(b.note)}</div>` : ""}
+      <h4 style="font-size:13px;margin-bottom:10px">Top résultats (${(results||[]).length})</h4>
+      <div style="max-height:320px;overflow:auto;border:1px solid var(--border);border-radius:8px">
+        <table style="width:100%"><thead style="background:var(--surface-2);position:sticky;top:0">
+          <tr><th style="padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted)">Client</th>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted)">Type</th>
+              <th style="padding:8px 12px;text-align:right;font-size:11px;text-transform:uppercase;color:var(--muted)">Volume</th>
+              <th style="padding:8px 12px;text-align:right;font-size:11px;text-transform:uppercase;color:var(--muted)">Cashback</th>
+              <th style="padding:8px 12px;text-align:left;font-size:11px;text-transform:uppercase;color:var(--muted)">Statut</th></tr></thead>
+        <tbody>${rowsHtml}</tbody></table></div>`,
+      `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`);
+  }catch(e){ toast("Erreur: " + e.message, "err"); }
+}
+
+function loyTypeBadge(t){
+  const et = (t||"INDIVIDUAL").toUpperCase();
+  if (et === "COMPANY") return `<span class="badge b-info">🏢 Entreprise</span>`;
+  return `<span class="badge b-ok">👤 Particulier</span>`;
+}
+
+// ============================================================ RULES
+function loyRenderRules(){
+  const c = document.getElementById("loyContent"); if(!c) return;
+  const rows = LOY.rules;
+  c.innerHTML = `<div class="panel"><div class="panel-head"><h3>Règles de cashback</h3>
+    <button class="btn btn-primary" onclick="loyOpenRuleModal()">+ Nouvelle règle</button></div>
+    <div class="panel-body" style="padding:0">
+      <div class="table-wrap"><div class="table-scroll"><table>
+        <thead><tr><th>Nom</th><th>Type</th><th>Taux / Paliers</th>
+          <th style="text-align:right">Min tx</th><th style="text-align:right">Min période</th>
+          <th style="text-align:right">Cap client</th><th>Filtre</th><th>Statut</th><th style="width:150px">Actions</th></tr></thead>
+        <tbody>${rows.length === 0
+          ? `<tr><td colspan="9">${emptyMini("Aucune règle. Créez-en une pour appliquer un cashback.")}</td></tr>`
+          : rows.map(r => `<tr>
+              <td><strong>${esc(r.name)}</strong><br><span style="font-size:11px;color:var(--muted)">${esc(r.description||"")}</span></td>
+              <td><span class="badge b-info">${esc(r.type)}</span></td>
+              <td>${r.type === "TIERED_VOLUME" ? loyRenderTiers(r.tiersJson) : (r.percentage ? esc(r.percentage) + " %" : "—")}</td>
+              <td style="text-align:right" class="mono">${money(r.minTransactionAmount)}</td>
+              <td style="text-align:right" class="mono">${money(r.minPeriodVolume)}</td>
+              <td style="text-align:right" class="mono">${money(r.maxCashbackPerClient)}</td>
+              <td style="font-size:11px">${r.categoryFilter ? `Cat: <span class="mono">${esc(r.categoryFilter)}</span><br>` : ""}${r.tierFilter ? `Tier: <span class="mono">${esc(r.tierFilter)}</span>` : ""}${(!r.categoryFilter && !r.tierFilter) ? "—" : ""}</td>
+              <td>${loyStatusBadge(r.active ? "ACTIVE" : "INACTIVE")}</td>
+              <td>
+                <button class="mini-btn" onclick="loyOpenRuleModal(${r.id})">Modifier</button>
+                <button class="mini-btn danger" onclick="loyDeleteRule(${r.id})">Désactiver</button>
+              </td></tr>`).join("")}
+        </tbody></table></div></div>
+    </div></div>`;
+}
+
+function loyRenderTiers(json){
+  if (!json) return "—";
+  try{ const arr = JSON.parse(json); return arr.map(t => `${money(t.minVolume)} → ${t.percentage}%`).join("<br>"); }
+  catch(_){ return "<em style='color:var(--danger)'>Format invalide</em>"; }
+}
+
+function loyOpenRuleModal(id){
+  const r = id ? LOY.rules.find(x => x.id === id) : { type:"FLAT_PERCENTAGE", active:true };
+  const inp = (id_, label, value, placeholder, type) => `<div style="margin-bottom:12px">
+    <label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">${label}</label>
+    <input id="${id_}" type="${type||"text"}" value="${esc(value==null?"":value)}" placeholder="${esc(placeholder||"")}"
+      style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px"></div>`;
+  openModal(id ? "Modifier la règle" : "Nouvelle règle de cashback",
+    `${inp("loyRName","Nom", r.name, "Ex: Cashback GOLD 1%")}
+     ${inp("loyRDesc","Description", r.description, "")}
+     <div class="grid-2">
+      <div><label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Type</label>
+        <select id="loyRType" onchange="loyToggleRuleFields()" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px">
+          <option value="FLAT_PERCENTAGE" ${r.type==="FLAT_PERCENTAGE"?"selected":""}>Pourcentage fixe</option>
+          <option value="TIERED_VOLUME" ${r.type==="TIERED_VOLUME"?"selected":""}>Paliers par volume</option>
+          <option value="CATEGORY_BASED" ${r.type==="CATEGORY_BASED"?"selected":""}>Par catégorie</option>
+        </select></div>
+      <div><label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Statut</label>
+        <select id="loyRActive" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px">
+          <option value="true" ${r.active!==false?"selected":""}>Actif</option>
+          <option value="false" ${r.active===false?"selected":""}>Inactif</option>
+        </select></div>
+     </div>
+     <div id="loyFPct" style="margin-top:12px">${inp("loyRPct","Pourcentage (%)", r.percentage, "Ex: 1.5", "number")}</div>
+     <div id="loyFTiers" style="display:none;margin-top:12px">
+       <label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Paliers (JSON)</label>
+       <textarea id="loyRTiers" rows="4" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-family:monospace;font-size:12px">${esc(r.tiersJson||'[{"minVolume":0,"percentage":1.0},{"minVolume":1000000,"percentage":1.5},{"minVolume":10000000,"percentage":2.5}]')}</textarea>
+       <div style="font-size:11px;color:var(--muted);margin-top:4px">Trier par minVolume croissant.</div>
+     </div>
+     <div id="loyFCat" style="display:none;margin-top:12px">${inp("loyRCat","Catégorie", r.categoryFilter, "Ex: CARD_PURCHASE")}</div>
+     <div class="grid-2" style="margin-top:12px">
+       ${inp("loyRMinTx","Min. par transaction", r.minTransactionAmount, "", "number")}
+       ${inp("loyRMinPer","Min. volume période", r.minPeriodVolume, "Ex: 500000", "number")}
+     </div>
+     <div class="grid-2">
+       ${inp("loyRMax","Cap cashback / client", r.maxCashbackPerClient, "Ex: 100000", "number")}
+       ${inp("loyRTierFilter","Filtre tiers clients", r.tierFilter, "Ex: GOLD,PLATINUM")}
+     </div>
+     <div style="margin:14px 0 8px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--text-2);font-weight:600;text-transform:uppercase;letter-spacing:.5px">Critères bancaires avancés</div>
+     <div class="grid-2">
+       <div style="margin-bottom:12px">
+         <label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Segment</label>
+         <select id="loyREntity" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px">
+           <option value="" ${!r.entityTypeFilter?"selected":""}>Tous (particuliers + entreprises)</option>
+           <option value="INDIVIDUAL" ${r.entityTypeFilter==="INDIVIDUAL"?"selected":""}>Particuliers uniquement</option>
+           <option value="COMPANY" ${r.entityTypeFilter==="COMPANY"?"selected":""}>Entreprises uniquement</option>
+         </select>
+       </div>
+       ${inp("loyRMinTxCount","Nombre min. de transactions", r.minTransactionCount, "Ex: 5", "number")}
+     </div>
+     <div class="grid-2">
+       ${inp("loyRMinAvg","Valeur moyenne min. par tx (FCFA)", r.minAvgTransactionValue, "Ex: 50000", "number")}
+       ${inp("loyRMinTenure","Anciennete min. (mois)", r.minAccountAgeMonths, "Ex: 12", "number")}
+     </div>
+     `,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="loySaveRule(${id||"null"})">Enregistrer</button>`);
+  loyToggleRuleFields();
+}
+
+function loyToggleRuleFields(){
+  const t = document.getElementById("loyRType").value;
+  document.getElementById("loyFPct").style.display   = (t === "TIERED_VOLUME") ? "none" : "";
+  document.getElementById("loyFTiers").style.display = (t === "TIERED_VOLUME") ? "" : "none";
+  document.getElementById("loyFCat").style.display   = (t === "CATEGORY_BASED") ? "" : "none";
+}
+
+async function loySaveRule(id){
+  const body = {
+    name: val("loyRName"),
+    description: val("loyRDesc"),
+    type: document.getElementById("loyRType").value,
+    active: document.getElementById("loyRActive").value === "true"
+  };
+  const pct = val("loyRPct"); if (pct) body.percentage = parseFloat(pct);
+  const tiers = val("loyRTiers"); if (tiers) body.tiersJson = tiers;
+  const cat = val("loyRCat"); if (cat) body.categoryFilter = cat;
+  const minTx = val("loyRMinTx"); if (minTx) body.minTransactionAmount = parseFloat(minTx);
+  const minPer = val("loyRMinPer"); if (minPer) body.minPeriodVolume = parseFloat(minPer);
+  const max = val("loyRMax"); if (max) body.maxCashbackPerClient = parseFloat(max);
+  const tf = val("loyRTierFilter"); if (tf) body.tierFilter = tf;
+  const entSel = document.getElementById("loyREntity"); if (entSel && entSel.value) body.entityTypeFilter = entSel.value;
+  const mtc = val("loyRMinTxCount"); if (mtc) body.minTransactionCount = parseInt(mtc);
+  const mav = val("loyRMinAvg"); if (mav) body.minAvgTransactionValue = parseFloat(mav);
+  const mtn = val("loyRMinTenure"); if (mtn) body.minAccountAgeMonths = parseInt(mtn);
+  if (!body.name){ toast("Nom requis", "err"); return; }
+  try{
+    const method = id ? "PUT" : "POST";
+    const url = id ? `/api/loyalty/rules/${id}` : "/api/loyalty/rules";
+    await api(url, { method, body: JSON.stringify(body) });
+    toast("Règle enregistrée", "ok");
+    closeModal();
+    await loyRefreshAll(); loyRenderKpis(); loyRenderRules();
+  }catch(e){ toast("Erreur: " + e.message, "err"); }
+}
+
+async function loyDeleteRule(id){
+  if (!confirm("Désactiver cette règle ?")) return;
+  try{
+    await api(`/api/loyalty/rules/${id}`, { method:"DELETE" });
+    toast("Règle désactivée", "ok");
+    await loyRefreshAll(); loyRenderRules();
+  }catch(e){ toast("Erreur: " + e.message, "err"); }
+}
+
+// ============================================================ CLIENTS
+function loyRenderClients(){
+  const c = document.getElementById("loyContent"); if(!c) return;
+  const rows = LOY.clients;
+  c.innerHTML = `<div class="panel"><div class="panel-head"><h3>Clients fidélité</h3>
+    <button class="btn btn-primary" onclick="loyOpenClientModal()">+ Nouveau client</button></div>
+    <div class="panel-body">
+      <input id="loyClientSearch" placeholder="Rechercher: nom, compte, téléphone…" oninput="loyFilterClients()"
+        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px;margin-bottom:14px">
+      <div class="table-wrap"><div class="table-scroll"><table>
+        <thead><tr><th>Nom</th><th>Compte</th><th>Type</th><th>Tier</th><th>Ville</th><th>Téléphone</th>
+          <th style="text-align:right">Volume cumul.</th><th style="text-align:right">Cashback cumul.</th><th style="width:100px">Actions</th></tr></thead>
+        <tbody id="loyClientRows"></tbody></table></div></div>
+    </div></div>`;
+  loyDrawClientRows(rows);
+}
+
+function loyDrawClientRows(rows){
+  const tb = document.getElementById("loyClientRows"); if(!tb) return;
+  if (!rows.length){ tb.innerHTML = `<tr><td colspan="9">${emptyMini("Aucun client enrôlé. Ils seront auto-créés lors du premier upload.")}</td></tr>`; return; }
+  tb.innerHTML = rows.map(c => `<tr>
+    <td><strong>${esc(c.fullName||"—")}</strong></td>
+    <td><span class="mono">${esc(c.accountNumber)}</span></td>
+    <td>${loyTypeBadge(c.entityType)}</td>
+    <td><span class="badge b-info">${esc(c.tier||"CLASSIC")}</span></td>
+    <td>${esc(c.city||"—")}</td>
+    <td>${esc(c.phone||"—")}</td>
+    <td style="text-align:right" class="mono">${money(c.lifetimeVolume)}</td>
+    <td style="text-align:right" class="mono"><strong>${money(c.lifetimeCashback)}</strong></td>
+    <td><button class="mini-btn" onclick="loyOpenClientModal(${c.id})">Modifier</button></td>
+  </tr>`).join("");
+}
+
+function loyFilterClients(){
+  const q = document.getElementById("loyClientSearch").value.toLowerCase();
+  loyDrawClientRows(LOY.clients.filter(c =>
+    (c.fullName||"").toLowerCase().includes(q) ||
+    (c.accountNumber||"").toLowerCase().includes(q) ||
+    (c.phone||"").toLowerCase().includes(q) ||
+    (c.city||"").toLowerCase().includes(q)
+  ));
+}
+
+function loyOpenClientModal(id){
+  const c = id ? LOY.clients.find(x => x.id === id) : { tier:"CLASSIC", entityType:"INDIVIDUAL" };
+  const inp = (id_, label, value, readonly) => `<div style="margin-bottom:12px">
+    <label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">${label}</label>
+    <input id="${id_}" value="${esc(value==null?"":value)}" ${readonly?"readonly":""}
+      style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px"></div>`;
+  const sel = (id_, label, options, current) => `<div style="margin-bottom:12px">
+    <label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">${label}</label>
+    <select id="${id_}" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px">
+      ${options.map(o => `<option value="${o[0]}" ${current===o[0]?"selected":""}>${o[1]}</option>`).join("")}</select></div>`;
+  openModal(id ? "Modifier client" : "Nouveau client",
+    `<div class="grid-2">${inp("loyCAcc","N° compte bancaire *", c.accountNumber, id)}${inp("loyCName","Nom complet", c.fullName)}</div>
+     <div class="grid-2">${inp("loyCPhone","Téléphone", c.phone)}${inp("loyCEmail","Email", c.email)}</div>
+     <div class="grid-2">${inp("loyCCard","N° carte", c.cardNumber)}${sel("loyCTier","Tier",[["CLASSIC","CLASSIC"],["SILVER","SILVER"],["GOLD","GOLD"],["PLATINUM","PLATINUM"]], c.tier)}</div>
+     <div class="grid-2">${sel("loyCType","Type entité",[["INDIVIDUAL","Particulier"],["COMPANY","Entreprise"]], c.entityType||"INDIVIDUAL")}${inp("loyCCity","Ville", c.city)}</div>
+     ${inp("loyCBranch","Agence", c.branch)}
+     <div class="grid-2" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+       <div style="margin-bottom:12px">
+         <label style="font-size:12px;color:var(--text-2);font-weight:600;display:block;margin-bottom:6px">Client Afriland depuis</label>
+         <input id="loyCSince" type="date" value="${c.clientSinceDate||""}" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px">
+       </div>
+       ${inp("loyCProducts","Nombre de produits bancaires", c.productCount||1, "1-10", "number")}
+     </div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="loySaveClient(${id||"null"})">Enregistrer</button>`);
+}
+
+async function loySaveClient(id){
+  const body = {
+    accountNumber: val("loyCAcc"),
+    fullName: val("loyCName"),
+    phone: val("loyCPhone"),
+    email: val("loyCEmail"),
+    cardNumber: val("loyCCard"),
+    tier: document.getElementById("loyCTier").value,
+    entityType: document.getElementById("loyCType").value,
+    city: val("loyCCity"),
+    branch: val("loyCBranch"),
+    accountOpenedDate: val("loyCOpened") || null
+  };
+  const since = val("loyCSince"); if (since) body.clientSinceDate = since;
+  const products = val("loyCProducts"); if (products) body.productCount = parseInt(products);
+  if (!body.accountNumber){ toast("Numéro de compte requis", "err"); return; }
+  try{
+    const method = id ? "PUT" : "POST";
+    const url = id ? `/api/loyalty/clients/${id}` : "/api/loyalty/clients";
+    await api(url, { method, body: JSON.stringify(body) });
+    toast("Client enregistré", "ok");
+    closeModal();
+    await loyRefreshAll(); loyRenderKpis(); loyRenderClients();
+  }catch(e){ toast("Erreur: " + e.message, "err"); }
+}
+
+
 function kpiCard(k){return `<div class="kpi"><div class="kpi-top">
   <div><div class="kpi-label">${esc(k.label)}</div><div class="kpi-val" data-count="${(''+k.val).replace(/[^\d]/g,'')}" data-suffix="${(''+k.val).replace(/[\d\s.,]/g,'').trim()}">${esc(k.val)}</div></div>
   <div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">${IC[k.icon]}</svg></div>
@@ -941,16 +1409,120 @@ function paintRows(key,rows){
 
 /* ============ SECURITY / SETTINGS / PROFILE ============ */
 async function renderSecurity(){
-  const c=document.getElementById("content");
-  c.innerHTML=`<div class="page">${head(t("security"),t("sec_sub"),refreshBtn())}<div class="kpi-grid" id="kpis">${kpiSkeletons(4)}</div></div>`;
+  const el=document.getElementById("content");
+  el.innerHTML=`<div class="page">${head(t("security"),t("sec_sub"),refreshBtn())}
+    <div class="tabs" id="secTabs">
+      <div class="tab active" data-sectab="overview" onclick="secSwitchTab('overview')">${t("sec_overview")||"Vue d'ensemble"}</div>
+      <div class="tab" data-sectab="fraud" onclick="secSwitchTab('fraud')">${t("sec_fraud")||"Alertes fraude"}</div>
+      <div class="tab" data-sectab="audit" onclick="secSwitchTab('audit')">${t("sec_audit")||"Journaux d'audit"}</div>
+    </div>
+    <div id="secContent"></div></div>`;
+  secSwitchTab("overview");
+}
+
+function secSwitchTab(tab){
+  document.querySelectorAll("[data-sectab]").forEach(t => t.classList.toggle("active", t.dataset.sectab === tab));
+  const c = document.getElementById("secContent"); if(!c) return;
+  if(tab==="overview"){
+    c.innerHTML = `<div class="kpi-grid" id="secKpis">${kpiSkeletons(4)}</div>`;
+    api("/api/security-dashboard/summary").then(s=>{
+      const K=[{icon:"users",label:t("sec_failed"),val:num(s.loginFailed||0),sub:""},
+        {icon:"security",label:t("sec_locked"),val:num(s.lockedUsers||0),sub:`${num(s.totalUsers||0)} ${t("total_lc")}`},
+        {icon:"fraud",label:t("sec_disabled")||"Comptes désactivés",val:num(s.disabledUsers||0),sub:`${num(s.activeUsers||0)} ${t("sec_active_lc")||"actifs"}`},
+        {icon:"claims",label:t("sec_success"),val:num(s.loginSuccess||0),sub:""}];
+      document.getElementById("secKpis").innerHTML = K.map(kpiCard).join("");
+      animateCounters();
+    }).catch(()=>{document.getElementById("secKpis").innerHTML=emptyMini(t("err_load"));});
+  } else if(tab==="fraud"){
+    c.innerHTML = `<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="fCp">—</span></div>
+      <div class="table-scroll"><table><thead><tr><th>${t("f_ref")||"Ref"}</th><th>${t("f_type")||"Type"}</th><th>${t("f_score")||"Score"}</th><th>${t("m_status")}</th><th>${t("c_created")}</th></tr></thead>
+      <tbody id="fBody">${rowSkeleton(5,5)}</tbody></table></div></div>`;
+    api("/api/fraud-alerts").then(rows=>{
+      if(!Array.isArray(rows)) rows=[];
+      document.getElementById("fCp").textContent = rows.length + " " + t("items");
+      document.getElementById("fBody").innerHTML = rows.length ? rows.map(r=>`<tr>
+        <td><span class="mono">${esc(r.reference||r.id||"—")}</span></td>
+        <td>${esc(r.alertType||r.type||"—")}</td>
+        <td class="strong">${esc(r.riskScore||r.score||"—")}</td>
+        <td>${badge(r.status)}</td>
+        <td style="color:var(--text-2);font-size:12px">${dt(r.createdAt)}</td></tr>`).join("")
+        : `<tr><td colspan="5">${emptyFull()}</td></tr>`;
+    }).catch(()=>{document.getElementById("fBody").innerHTML=`<tr><td colspan="5">${emptyMini(t("err_load"))}</td></tr>`;});
+  } else if(tab==="audit"){
+    c.innerHTML = `<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="aCp">—</span></div>
+      <div class="table-scroll"><table><thead><tr><th>${t("f_action")||"Action"}</th><th>${t("f_module")||"Module"}</th><th>${t("f_actor")||"Utilisateur"}</th><th>${t("m_status")}</th><th>${t("f_message")||"Message"}</th><th>${t("c_created")}</th></tr></thead>
+      <tbody id="aBody">${rowSkeleton(6,8)}</tbody></table></div></div>`;
+    api("/api/audit-logs").then(rows=>{
+      if(!Array.isArray(rows)) rows=[];
+      const recent = rows.slice(-100).reverse();
+      document.getElementById("aCp").textContent = rows.length + " " + t("items");
+      document.getElementById("aBody").innerHTML = recent.length ? recent.map(r=>`<tr>
+        <td class="strong">${esc(r.action||"—")}</td>
+        <td>${esc(r.moduleName||r.module||"—")}</td>
+        <td>${esc(r.actor||"—")}</td>
+        <td>${badge(r.status)}</td>
+        <td style="color:var(--text-2);max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.message||"")}">${esc(r.message||"—")}</td>
+        <td style="color:var(--text-2);font-size:12px">${dt(r.createdAt)}</td></tr>`).join("")
+        : `<tr><td colspan="6">${emptyFull()}</td></tr>`;
+    }).catch(()=>{document.getElementById("aBody").innerHTML=`<tr><td colspan="6">${emptyMini(t("err_load"))}</td></tr>`;});
+  }
+}
+
+
+async function secSwitchTab(tab){
+  window.SEC_TAB=tab;
+  document.querySelectorAll("[data-sectab]").forEach(t=>t.classList.toggle("active",t.dataset.sectab===tab));
+  const el=document.getElementById("secContent");
+  if(!el) return;
+  if(tab==="overview"){ el.innerHTML=`<div class="kpi-grid" id="kpis">${kpiSkeletons(4)}</div>`; await secRenderOverview(); }
+  else if(tab==="fraud"){ el.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="fCp">—</span></div><div class="table-scroll"><table><thead><tr><th>#</th><th>Type</th><th>Score</th><th>Statut</th><th>Créé</th></tr></thead><tbody id="fBody">${rowSkeleton(5,5)}</tbody></table></div></div>`; await secRenderFraud(); }
+  else if(tab==="audit"){ el.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="aCp">—</span></div><div class="table-scroll"><table><thead><tr><th>#</th><th>Action</th><th>Module</th><th>Acteur</th><th>Statut</th><th>Message</th><th>Créé</th></tr></thead><tbody id="aBody">${rowSkeleton(7,8)}</tbody></table></div></div>`; await secRenderAudit(); }
+}
+
+async function secRenderOverview(){
   try{
     const s=await api("/api/security-dashboard/summary");
-    const K=[{icon:"users",label:t("sec_failed"),val:num(s.failedLoginAttempts||s.totalFailedLogins||0),sub:""},
-      {icon:"security",label:t("sec_locked"),val:num(s.lockedAccounts||0),sub:""},
-      {icon:"fraud",label:t("sec_open"),val:num(s.openFraudAlerts||0),sub:`${num(s.totalFraudAlerts||0)} ${t("total_lc")}`},
-      {icon:"claims",label:t("sec_success"),val:num(s.successfulLogins||0),sub:""}];
-    document.getElementById("kpis").innerHTML=K.map(kpiCard).join("");animateCounters();
-  }catch(e){document.getElementById("kpis").innerHTML=emptyMini(t("err_load"));}
+    const K=[{icon:"users",label:t("sec_failed"),val:num(s.loginFailed||0),sub:t("sec_total_lc")},
+      {icon:"security",label:t("sec_locked"),val:num(s.lockedUsers||0),sub:`${num(s.totalUsers||0)} ${t("total_lc")}`},
+      {icon:"fraud",label:t("sec_disabled"),val:num(s.disabledUsers||0),sub:`${num(s.activeUsers||0)} ${t("sec_active_lc")}`},
+      {icon:"claims",label:t("sec_success"),val:num(s.loginSuccess||0),sub:t("sec_total_lc")}];
+    const el=document.getElementById("kpis");
+    if(el){ el.innerHTML=K.map(kpiCard).join(""); animateCounters(); }
+  }catch(e){ const el=document.getElementById("kpis"); if(el) el.innerHTML=emptyMini(t("err_load")); }
+}
+
+async function secRenderFraud(){
+  try{
+    let rows=await api("/api/fraud-alerts").catch(()=>[]);
+    if(!Array.isArray(rows)) rows=[];
+    const cp=document.getElementById("fCp"); if(cp) cp.textContent=rows.length+" items";
+    const tb=document.getElementById("fBody"); if(!tb) return;
+    tb.innerHTML = rows.length ? rows.map(r=>`<tr>
+      <td><span class="mono">#${esc(r.id)}</span></td>
+      <td>${esc(r.alertType||r.type||"—")}</td>
+      <td><strong>${esc(r.riskScore??r.score??"—")}</strong></td>
+      <td>${badge(r.status)}</td>
+      <td style="color:var(--text-2);font-size:12px">${dt(r.createdAt)}</td>
+    </tr>`).join("") : `<tr><td colspan="5">${emptyFull()}</td></tr>`;
+  }catch(e){ const tb=document.getElementById("fBody"); if(tb) tb.innerHTML=`<tr><td colspan="5">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+async function secRenderAudit(){
+  try{
+    let rows=await api("/api/audit-logs").catch(()=>[]);
+    if(!Array.isArray(rows)) rows=[];
+    const cp=document.getElementById("aCp"); if(cp) cp.textContent=rows.length+" items";
+    const tb=document.getElementById("aBody"); if(!tb) return;
+    tb.innerHTML = rows.length ? rows.slice(0,200).map(r=>`<tr>
+      <td><span class="mono">#${esc(r.id)}</span></td>
+      <td class="strong">${esc(r.action||"—")}</td>
+      <td>${esc(r.moduleName||r.module||"—")}</td>
+      <td>${esc(r.actor||"—")}</td>
+      <td>${badge(r.status)}</td>
+      <td style="max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${esc(r.message||"—")}</td>
+      <td style="color:var(--text-2);font-size:12px">${dt(r.createdAt)}</td>
+    </tr>`).join("") : `<tr><td colspan="7">${emptyFull()}</td></tr>`;
+  }catch(e){ const tb=document.getElementById("aBody"); if(tb) tb.innerHTML=`<tr><td colspan="7">${emptyMini(t("err_load"))}</td></tr>`; }
 }
 async function renderSettings(){
   const c=document.getElementById("content");
@@ -1201,9 +1773,10 @@ async function renderProducts(){
       ${canManage?`<label class="btn btn-ghost" style="cursor:pointer">${t("mass_import")}<input type="file" accept=".csv" style="display:none" onchange="importMass(event)"></label>`:""}
       <div class="seg"><button onclick="exportProducts('csv')">CSV</button><button onclick="exportProducts('xls')">Excel</button><button onclick="window.print()">PDF</button></div>
     </div>
-    <div class="kpi-grid" style="grid-template-columns:repeat(2,minmax(0,320px))">
-      <div class="kpi"><div class="kpi-label">${t("kpi_prodfilter")}</div><div class="kpi-val" id="p_count">—</div></div>
-      <div class="kpi"><div class="kpi-label">${t("kpi_merchant")}</div><div class="kpi-val" id="p_merch_name" style="font-size:19px">—</div></div>
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;font-size:13px;color:var(--text-2)">
+      <span>${t("kpi_prodfilter")}:</span><strong id="p_count" style="color:var(--text)">—</strong>
+      <span style="width:1px;height:14px;background:var(--border)"></span>
+      <span>${t("kpi_merchant")}:</span><strong id="p_merch_name" style="color:var(--text)">—</strong>
     </div>
     <div class="table-wrap"><div class="table-scroll"><table><thead><tr>
       <th>${t("f_sku")}</th><th>${t("f_name")}</th><th>${t("f_category")}</th><th>${t("f_brand")}</th><th>${t("f_price")}</th><th>${t("col_group")}</th><th>${t("col_cashback")}</th><th style="text-align:right">${t("col_actions")}</th>
@@ -1358,22 +1931,23 @@ async function renderWebhooks(){
       <div class="field full" style="margin-top:14px"><label>${t("wh_payload")}</label>
         <textarea readonly rows="9" style="font-family:var(--font-mono);font-size:12.5px">${esc(payload)}</textarea></div>
     </div></div>
-        <details class="panel" style="margin-bottom:16px" open><summary style="padding:14px 18px;font-weight:600;cursor:pointer;list-style:none"><h3 style="display:inline;font-size:14px">ðŸ“š API Reference</h3></summary><div class="panel-body">
-      <div class="table-wrap"><div class="table-scroll"><table><thead><tr><th style="width:80px">MÃ©thode</th><th>Endpoint</th><th>Description</th></tr></thead>
+    <div class="grid-2">
+      <details class="panel" style="margin-bottom:16px" open><summary style="padding:14px 18px;font-weight:600;cursor:pointer;list-style:none"><h3 style="display:inline;font-size:14px">📚 API Reference</h3></summary><div class="panel-body">
+      <div class="table-wrap"><div class="table-scroll"><table><thead><tr><th style="width:80px">Méthode</th><th>Endpoint</th><th>Description</th></tr></thead>
       <tbody>
         <tr><td><span class="badge b-ok">POST</span></td><td><span class="mono">/api/auth/login</span></td><td style="color:var(--text-2)">Connexion (session)</td></tr>
-        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/merchants</span></td><td style="color:var(--text-2)">CommerÃ§ants</td></tr>
+        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/merchants</span></td><td style="color:var(--text-2)">Commerçants</td></tr>
         <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/products</span></td><td style="color:var(--text-2)">Catalogue produits</td></tr>
         <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/campaigns</span></td><td style="color:var(--text-2)">Campagnes</td></tr>
-        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/claims</span></td><td style="color:var(--text-2)">RÃ©clamations</td></tr>
+        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/claims</span></td><td style="color:var(--text-2)">Réclamations</td></tr>
         <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/cashback/payments</span></td><td style="color:var(--text-2)">Paiements cashback</td></tr>
-        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/loyalty/stats</span></td><td style="color:var(--text-2)">Statistiques fidÃ©litÃ©</td></tr>
-        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/loyalty/clients/top</span></td><td style="color:var(--text-2)">Top clients fidÃ©litÃ©</td></tr>
+        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/loyalty/stats</span></td><td style="color:var(--text-2)">Statistiques fidélité</td></tr>
+        <tr><td><span class="badge b-info">GET</span></td><td><span class="mono">/api/loyalty/clients/top</span></td><td style="color:var(--text-2)">Top clients fidélité</td></tr>
         <tr><td><span class="badge b-ok">POST</span></td><td><span class="mono">/api/webhook/transaction</span></td><td style="color:var(--text-2)">Webhook transaction POS</td></tr>
         <tr><td><span class="badge b-ok">POST</span></td><td><span class="mono">/api/mobile/ocr</span></td><td style="color:var(--text-2)">OCR ticket (mobile)</td></tr>
       </tbody></table></div></div>
-    </div></details><div class="grid-2">
-      <div class="panel"><div class="panel-head"><h3>${t("wh_recent")}</h3></div><div class="panel-body" id="whRecent">${skLines(4)}</div></div>
+    </div></details>
+    <div class="panel"><div class="panel-head"><h3>${t("wh_recent")}</h3></div><div class="panel-body" id="whRecent">${skLines(4)}</div></div>
       <div class="panel"><div class="panel-head"><h3>${t("wh_unmatched")}</h3></div><div class="panel-body" id="whUnmatched">${skLines(4)}</div></div>
     </div></div>`;
   try{const r=await api("/api/webhook/transactions").catch(()=>[]);document.getElementById("whRecent").innerHTML=miniTxTable(Array.isArray(r)?r:[]);}catch(e){document.getElementById("whRecent").innerHTML=emptyMini(t("err_load"));}
@@ -1472,8 +2046,8 @@ const CRUD={
    cols:[["name","c_name","strong"],["code","f_code","mono"],["monthlyFee","f_monthlyfee","money"],["commissionRate","f_commission","pct"],["includedInstances","f_instances"],["active","f_active","bool"]],
    fields:[["name","c_name","text"],["code","f_code","text"],["monthlyFee","f_monthlyfee","number"],["commissionRate","f_commission","number"],["includedInstances","f_instances","number"],["description","f_desc","text"],["active","f_active","bool"]]},
  ticketTemplate:{ep:"/api/ticket-templates",title:"ticketTemplate",sub:"tt_sub2",add:true,
-   cols:[["name","c_name","strong"],["storeNamePattern","tt_store"],["totalKeyword","tt_total","mono"],["dateFormat","tt_date","mono"],["active","f_active","bool"]],
-   fields:[["name","c_name","text"],["merchantId","f_merchant","merchant"],["storeNamePattern","tt_store","text"],["totalKeyword","tt_total","text"],["dateFormat","tt_date","text"],["sampleText","tt_sample","textarea"],["active","f_active","bool"]]}
+   cols:[["name","c_name","strong"],["storeNamePattern","tt_store"],["totalKeyword","tt_total","mono"],["dateFormat","tt_date","mono"],["sampleImageBase64","tt_sample_img","imgthumb"],["active","f_active","bool"]],
+   fields:[["name","c_name","text"],["merchantId","f_merchant","merchant"],["storeNamePattern","tt_store","text"],["totalKeyword","tt_total","text"],["dateFormat","tt_date","text"],["sampleText","tt_sample","textarea"],["sampleImageBase64","tt_sample_img","image"],["active","f_active","bool"]]}
 };
 async function renderCrud(key){
   const cfg=CRUD[key];await loadMerchants();
@@ -1490,7 +2064,13 @@ function crudCell(row,col){
   switch(type){case "strong":return `<span class="strong">${esc(v||"—")}</span>`;case "mono":return v?`<span class="mono">${esc(v)}</span>`:"—";
     case "money":return money(v);case "pct":return v!=null?esc(v)+" %":"—";
     case "bool":return v?`<span class="badge b-ok">${t("yes")}</span>`:`<span class="badge b-muted">${t("no")}</span>`;
+    case "imgthumb":return v?`<img src="${v.startsWith("data:")?v:"data:image/png;base64,"+v}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);cursor:pointer" onclick="event.stopPropagation();crudZoomImage(this.src)" title="Cliquer pour agrandir">`:'<span style="color:var(--muted)">-</span>';
     default:return esc(v==null||v===""?"—":v);}
+}
+function crudZoomImage(src){
+  openModal("Apercu du ticket",
+    `<div style="text-align:center"><img src="${src}" style="max-width:100%;max-height:70vh;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.3)"></div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`);
 }
 function paintCrud(key){
   const cfg=CRUD[key],rows=(window.__crud&&window.__crud[key])||[],tb=document.getElementById("cBody"),cp=document.getElementById("cCp");if(!tb)return;
@@ -1505,6 +2085,16 @@ function crudModal(key,id){
     if(type==="bool")return `<div class="field"><label>${t(lbl)}</label><select id="cf_${f}"><option value="true" ${cur!==false?"selected":""}>${t("yes")}</option><option value="false" ${cur===false?"selected":""}>${t("no")}</option></select></div>`;
     if(type==="merchant")return `<div class="field"><label>${t(lbl)}</label><select id="cf_${f}"><option value="">—</option>${MERCH.map(m=>`<option value="${m.id}" ${row&&row[f]===m.id?"selected":""}>${esc(m.name)}</option>`).join("")}</select></div>`;
     if(type==="textarea")return `<div class="field full"><label>${t(lbl)}</label><textarea id="cf_${f}" rows="3">${esc(cur||"")}</textarea></div>`;
+    if(type==="image")return `<div class="field full"><label>${t(lbl)}</label>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div id="cf_${f}_preview" style="width:96px;height:96px;border:2px dashed var(--border);border-radius:8px;display:grid;place-items:center;background:var(--surface-2);overflow:hidden;flex:0 0 96px">${cur?`<img src="${cur.startsWith("data:")?cur:"data:image/png;base64,"+cur}" style="width:100%;height:100%;object-fit:cover">`:'<span style="color:var(--muted);font-size:10px;text-align:center;padding:4px">Aucune image</span>'}</div>
+        <div style="flex:1">
+          <input id="cf_${f}" type="hidden" value="${esc(cur||"")}">
+          <input type="file" accept="image/*" onchange="crudReadImage(event,'cf_${f}')" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:12px">
+          <div style="font-size:11px;color:var(--muted);margin-top:6px">Uploadez un exemple de ticket. Reference visuelle et donnee pour ameliorer l\'OCR.</div>
+          ${cur?`<button type="button" class="mini-btn danger" onclick="crudClearImage('cf_${f}')" style="margin-top:6px">Retirer</button>`:""}
+        </div>
+      </div></div>`;
     return `<div class="field"><label>${t(lbl)}</label><input id="cf_${f}" type="${type==="number"?"number":"text"}" value="${esc(cur==null?"":cur)}"></div>`;
   }).join("")}</div>`;
   openModal(id?t("edit"):t("new_item"),body,`<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button><button class="btn btn-primary" onclick="crudSubmit('${key}',${id||0})">${t("save")}</button>`);
@@ -1513,6 +2103,7 @@ async function crudSubmit(key,id){
   const cfg=CRUD[key],body={};
   cfg.fields.forEach(fd=>{const [f,,type]=fd,el=document.getElementById("cf_"+f);if(!el)return;let v=el.value;
     if(type==="number")v=v===""?null:Number(v);else if(type==="bool")v=(v==="true");else if(type==="merchant")v=v===""?null:Number(v);
+    else if(type==="image")v=v===""?null:v;
     body[f]=v;});
   if(!body.name){toast(t("f_name"),"err");return;}
   try{
@@ -1520,6 +2111,24 @@ async function crudSubmit(key,id){
     else await api(cfg.ep,{method:"POST",body:JSON.stringify(body)});
     toast(t("saved_ok"),"ok");closeModal();renderCrud(key);
   }catch(e){toast(String(e.message||e).slice(0,140),"err");}
+}
+function crudReadImage(event,fieldId){
+  const file=event.target.files&&event.target.files[0];
+  if(!file){return;}
+  if(file.size>2*1024*1024){toast("Image trop grande (max 2MB)","err");event.target.value="";return;}
+  const reader=new FileReader();
+  reader.onload=function(){
+    const dataUrl=reader.result;
+    document.getElementById(fieldId).value=dataUrl;
+    const prev=document.getElementById(fieldId+"_preview");
+    if(prev) prev.innerHTML=`<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover">`;
+  };
+  reader.readAsDataURL(file);
+}
+function crudClearImage(fieldId){
+  document.getElementById(fieldId).value="";
+  const prev=document.getElementById(fieldId+"_preview");
+  if(prev) prev.innerHTML='<span style="color:var(--muted);font-size:10px;text-align:center;padding:4px">Aucune image</span>';
 }
 async function crudDelete(key,id){
   if(!confirm(t("confirm_del2")))return;const cfg=CRUD[key];
@@ -1691,8 +2300,8 @@ function cashbackLabel(type,value){if(!type||type==="NONE"||value==null||value==
 async function renderCampaigns(){
   await loadMerchants();
   const c=document.getElementById("content");
-  const canManage=ME.role==="ADMIN";
-  c.innerHTML=`<div class="page">${head(t("campaigns"),t("cmp_sub"),refreshBtn())}
+  const canManage=ME.role==="PARTNER";
+  c.innerHTML=`<div class="page">${head(t("campaigns"),t("cmp_sub"),(canManage?`<button class="btn btn-primary" onclick="campaignModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>${t("new_campaign")}</button>`:"")+refreshBtn())}
     <div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="cmpCp">—</span></div>
     <div class="table-scroll"><table><thead><tr><th>${t("c_campaign")}</th><th>${t("c_partner")}</th><th>${t("cmp_period")}</th><th>${t("col_cashback")}</th><th>${t("m_status")}</th><th style="text-align:right">${t("col_actions")}</th></tr></thead>
     <tbody id="cmpBody">${rowSkeleton(6,6)}</tbody></table></div></div></div>`;
@@ -1708,10 +2317,59 @@ async function renderCampaigns(){
         <td style="white-space:nowrap">${cm.startDate?dt(cm.startDate):"—"} → ${cm.endDate?dt(cm.endDate):"—"}</td>
         <td>${cashbackLabel(cm.cashbackType,cm.cashbackValue)}</td>
         <td>${badge(cm.status)}</td>
-        <td class="row-actions"><button class="mini-btn" onclick="campaignView(${cm.id})">${t("view")}</button>${canManage?`<button class="mini-btn danger" onclick="delCampaign(${cm.id},'${esc(nm)}')">${t("del")}</button>`:""}</td></tr>`;
+        <td class="row-actions"><button class="mini-btn" onclick="campaignView(${cm.id})">${t("view")}</button>${canManage?`<button class="mini-btn" onclick="campaignModal(${cm.id})">${t("edit")}</button><button class="mini-btn danger" onclick="delCampaign(${cm.id},'${esc(nm)}')">${t("del")}</button>`:""}</td></tr>`;
     }).join(""):`<tr><td colspan="6">${emptyFull()}</td></tr>`;
   }catch(e){document.getElementById("cmpBody").innerHTML=`<tr><td colspan="6">${emptyMini(t("err_load"))}</td></tr>`;}
 }
+function campaignModal(id){
+  const cm=id?(window.__campaigns||[]).find(x=>x.id===id):null;
+  const isEdit=!!cm;
+  openModal(isEdit?t("edit_campaign"):t("new_campaign"),
+    `<div class="form-grid">
+      <div class="field full"><label>${t("c_campaign")} *</label><input id="cmp_name" value="${esc(cm?cm.name||"":"")}" placeholder="Ex: Promo Rentrée 2026"></div>
+      <div class="field full"><label>${t("cmp_description")||"Description"}</label><input id="cmp_desc" value="${esc(cm?cm.description||"":"")}"></div>
+      <div class="field"><label>${t("cmp_start")||"Début"}</label><input id="cmp_start" type="date" value="${cm&&cm.startDate?cm.startDate.substring(0,10):""}"></div>
+      <div class="field"><label>${t("cmp_end")||"Fin"}</label><input id="cmp_end" type="date" value="${cm&&cm.endDate?cm.endDate.substring(0,10):""}"></div>
+      <div class="field"><label>${t("col_cashback")}</label>
+        <select id="cmp_cbtype">
+          <option value="PERCENTAGE" ${cm&&cm.cashbackType==="PERCENTAGE"?"selected":""}>${t("cb_pct")||"Pourcentage (%)"}</option>
+          <option value="FIXED_AMOUNT" ${cm&&cm.cashbackType==="FIXED_AMOUNT"?"selected":""}>${t("cb_fix")||"Montant fixe (FCFA)"}</option>
+        </select></div>
+      <div class="field"><label>${t("cmp_cbval")||"Valeur cashback"}</label><input id="cmp_cbval" type="number" step="0.01" value="${cm?cm.cashbackValue||"":""}"></div>
+      <div class="field"><label>${t("cmp_budget")||"Budget total (FCFA)"}</label><input id="cmp_budget" type="number" value="${cm?cm.totalBudget||"":""}"></div>
+      <div class="field"><label>${t("m_status")}</label>
+        <select id="cmp_status">
+          <option value="DRAFT" ${!cm||cm.status==="DRAFT"?"selected":""}>${t("st_draft")||"Brouillon"}</option>
+          <option value="ACTIVE" ${cm&&cm.status==="ACTIVE"?"selected":""}>${t("st_active")||"Active"}</option>
+          <option value="PAUSED" ${cm&&cm.status==="PAUSED"?"selected":""}>${t("st_paused")||"En pause"}</option>
+        </select></div>
+    </div>`,
+    `<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button>
+     <button class="btn btn-primary" onclick="saveCampaign(${isEdit?cm.id:"null"})">${t("save")}</button>`);
+}
+
+async function saveCampaign(id){
+  const body={
+    name:val("cmp_name"),
+    description:val("cmp_desc"),
+    startDate:val("cmp_start")||null,
+    endDate:val("cmp_end")||null,
+    cashbackType:document.getElementById("cmp_cbtype").value,
+    cashbackValue:parseFloat(val("cmp_cbval")||"0"),
+    totalBudget:val("cmp_budget")?parseFloat(val("cmp_budget")):null,
+    status:document.getElementById("cmp_status").value
+  };
+  if(!body.name){toast(t("c_campaign"),"err");return;}
+  try{
+    const method=id?"PUT":"POST";
+    const url=id?`/api/campaigns/${id}`:"/api/campaigns";
+    await api(url,{method,body:JSON.stringify(body)});
+    toast(t("saved_ok"),"ok");
+    closeModal();
+    renderCampaigns();
+  }catch(e){toast(String(e.message||e).slice(0,160),"err");}
+}
+
 function campaignView(id){
   const cm=(window.__campaigns||[]).find(x=>x.id===id);if(!cm)return;
   const mid=cm.merchant&&cm.merchant.id;
