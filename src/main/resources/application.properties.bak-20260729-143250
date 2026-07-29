@@ -22,6 +22,3 @@ spring.jpa.open-in-view=false
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.enabled=true
 server.servlet.encoding.force=true
-# Loyalty batch uploads
-spring.servlet.multipart.max-file-size=20MB
-spring.servlet.multipart.max-request-size=20MB

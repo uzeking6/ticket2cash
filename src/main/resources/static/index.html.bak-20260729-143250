@@ -399,7 +399,7 @@ const I18N={
   ak_endpoint:"Endpoint à communiquer",ak_header:"En-tête d'authentification",ak_revoke_confirm:"Révoquer cette clé ? Le système du partenaire ne pourra plus envoyer de transactions.",
   review:"File de révision",review_sub:"Réclamations en attente de validation manuelle.",rq_fraud:"Score fraude",rq_reason:"Motifs",approve:"Approuver",reject:"Rejeter",rq_approved:"Réclamation approuvée.",rq_rejected:"Réclamation rejetée.",rq_empty:"Aucune réclamation à réviser.",
   dashboard:"Tableau de bord",businessDashboard:"Dashboard métier",security:"Dashboard sécurité",
-  merchants:"Commerçants",loyalty:"Fidélité Afriland",products:"Produits",campaigns:"Campagnes",tickets:"Tickets",claims:"Réclamations",
+  merchants:"Commerçants",products:"Produits",campaigns:"Campagnes",tickets:"Tickets",claims:"Réclamations",
   payments:"Paiements",users:"Utilisateurs",fraud:"Alertes fraude",auditLogs:"Journaux",settings:"Paramètres",profile:"Mon profil",
   dash_sub:"Vue d'ensemble de l'activité cashback en temps réel.",
   kpi_cashback:"Cashback distribué",kpi_merchants:"Commerçants actifs",kpi_campaigns:"Campagnes actives",kpi_fraud:"Alertes fraude ouvertes",
@@ -502,7 +502,7 @@ const I18N={
   ak_endpoint:"Endpoint to share",ak_header:"Authentication header",ak_revoke_confirm:"Revoke this key? The partner system will no longer be able to send transactions.",
   review:"Review queue",review_sub:"Claims awaiting manual validation.",rq_fraud:"Fraud score",rq_reason:"Reasons",approve:"Approve",reject:"Reject",rq_approved:"Claim approved.",rq_rejected:"Claim rejected.",rq_empty:"No claims to review.",
   dashboard:"Dashboard",businessDashboard:"Business dashboard",security:"Security dashboard",
-  merchants:"Merchants",loyalty:"Afriland Loyalty",products:"Products",campaigns:"Campaigns",tickets:"Tickets",claims:"Claims",
+  merchants:"Merchants",products:"Products",campaigns:"Campaigns",tickets:"Tickets",claims:"Claims",
   payments:"Payments",users:"Users",fraud:"Fraud alerts",auditLogs:"Audit logs",settings:"Settings",profile:"My profile",
   dash_sub:"Real-time overview of cashback activity.",
   kpi_cashback:"Cashback distributed",kpi_merchants:"Active merchants",kpi_campaigns:"Active campaigns",kpi_fraud:"Open fraud alerts",
@@ -604,14 +604,13 @@ const IC={
  ocr:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h4M7 12h6M7 16h3"/><circle cx="17" cy="15" r="2.5"/>',
  pricing:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 15h3M15 15h1"/>',
  ticketTemplate:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/>',
- loyalty:'<path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
  subPartners:'<path d="M3 21V7l6-4 6 4v14"/><path d="M15 21V11l6 4v6"/><path d="M7 9h.01M7 13h.01M11 9h.01M11 13h.01"/>'
 };
 
 /* ============ NAV MODEL ============ */
 const NAV={
  ADMIN:[{group:"g_principal",items:["dashboard","businessDashboard","security","trends"]},
-        {group:"g_ops",items:["loyalty","merchants","products","campaigns","tickets","transactions","claims","review","payments","finance"]},
+        {group:"g_ops",items:["merchants","products","campaigns","tickets","transactions","claims","review","payments","finance"]},
         {group:"g_integration",items:["integration","webhooks","apiKeys","ocr","ticketTemplate","pricing"]},
         {group:"g_sys",items:["users","fraud","auditLogs"]}],
  PARTNER:[{group:"g_principal",items:["dashboard"]},
@@ -655,7 +654,6 @@ function buildNav(role){
 
 /* ============ ROUTER ============ */
 const ROUTES={
- loyalty:()=>{location.href="/loyalty.html";},
  dashboard:renderDashboard,businessDashboard:renderDashboard,security:renderSecurity,
  merchants:renderMerchants,products:renderProducts,campaigns:renderCampaigns,
  tickets:()=>renderTable("tickets"),transactions:()=>renderTable("transactions"),claims:()=>renderTable("claims"),review:renderReviewQueue,payments:()=>renderTable("payments"),
@@ -663,7 +661,6 @@ const ROUTES={
  settings:()=>renderAccount("settings"),profile:()=>renderAccount("profile"),account:renderAccount,
  trends:renderTrends,webhooks:renderWebhooks,integration:renderIntegration,apiKeys:renderApiKeys,
  finance:renderFinance,ocr:renderOcr,pricing:()=>renderCrud("pricing"),ticketTemplate:()=>renderCrud("ticketTemplate"),
- loyalty:'<path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
  subPartners:renderSubPartners
 };
 function go(id,silent){
