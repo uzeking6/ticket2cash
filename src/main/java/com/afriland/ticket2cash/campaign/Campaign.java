@@ -8,6 +8,27 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * A cashback campaign. The core entity of the "moteur d'animation de campagnes".
+ *
+ * <p>A campaign has a {@link CampaignTriggerType} that determines <b>what event
+ * triggers cashback computation</b>. The four possible triggers correspond to
+ * four data sources:
+ * <ul>
+ *   <li>{@code MERCHANT_TRANSACTION} — bank transaction upload / POS stream</li>
+ *   <li>{@code PRODUCT_PURCHASE}    — OCR ticket + product matching</li>
+ *   <li>{@code VOLUME_THRESHOLD}    — cumulative bank spend at a merchant</li>
+ *   <li>{@code POS_WEBHOOK_EVENT}   — real-time POS webhook</li>
+ * </ul>
+ *
+ * <p>Each trigger has its own configuration fields (e.g. {@code targetProductSkus}
+ * for {@code PRODUCT_PURCHASE}, {@code volumeThreshold} for {@code VOLUME_THRESHOLD}).
+ * Fields that aren't relevant to a given trigger are simply left null.
+ *
+ * <p>Existing pre-Phase-1 campaigns default to {@code MERCHANT_TRANSACTION} and
+ * keep working exactly as before — Hibernate {@code ddl-auto=update} adds the
+ * new columns as nullable, no data is lost.
+ */
 @Entity
 @Table(name = "campaigns")
 public class Campaign {
@@ -16,144 +37,188 @@ public class Campaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // -------------------------------------------------------------- identity
+
+    @Column(nullable = false, length = 200)
     private String name;
+
+    @Column(length = 500)
     private String description;
+
+    // -------------------------------------------------------------- ownership
+
+    /** Who owns this campaign. See {@link CampaignOwnerType}. */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 15)
+    private CampaignOwnerType ownerType;
+
+    /**
+     * The merchant this campaign targets:
+     *   - always set for MERCHANT-owned campaigns (forced to the partner's own merchant)
+     *   - may be null for ADMIN-owned "global" campaigns (rare — most bank campaigns
+     *     still target a specific merchant like Netflix or Total).
+     */
+    @ManyToOne
+    @JoinColumn(name = "merchant_id")
+    private Merchant merchant;
+
+    // -------------------------------------------------------------- trigger (THE KEY FIELD)
+
+    /** Which type of event triggers this campaign's cashback computation. */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private CampaignTriggerType triggerType;
+
+    // -------------------------------------------------------------- window
 
     private LocalDate startDate;
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
+    private CampaignStatus status;
+
+    // -------------------------------------------------------------- common filters
+
+    /**
+     * Target segment: INDIVIDUAL / COMPANY / null (all).
+     * Applies mainly to MERCHANT_TRANSACTION and VOLUME_THRESHOLD.
+     */
+    @Column(length = 15)
+    private String entityTypeFilter;
+
+    /**
+     * Optional client-tier restriction, comma-separated (e.g. "GOLD,PLATINUM").
+     */
+    @Column(length = 200)
+    private String tierFilter;
+
+    /** Only transactions with amount ≥ this count as qualifying. */
+    @Column(precision = 18, scale = 2)
+    private BigDecimal minTransactionAmount;
+
+    /** Cap cashback per single client for this campaign. Null = uncapped. */
+    @Column(precision = 15, scale = 2)
+    private BigDecimal maxCashbackPerClient;
+
+    // -------------------------------------------------------------- cashback config
+
+    @Enumerated(EnumType.STRING)
     private CashbackType cashbackType;
 
+    @Column(precision = 18, scale = 6)
     private BigDecimal cashbackValue;
+
     private BigDecimal dailyLimitPerClient;
     private BigDecimal monthlyLimitPerClient;
     private BigDecimal totalBudget;
 
-    @Enumerated(EnumType.STRING)
-    private CampaignStatus status;
+    // -------------------------------------------------------------- trigger-specific fields
+
+    /**
+     * For {@code PRODUCT_PURCHASE}: comma-separated SKUs that unlock cashback.
+     * Example: "SHAMP-01,SHAMP-02".
+     */
+    @Column(length = 2000)
+    private String targetProductSkus;
+
+    /**
+     * For {@code VOLUME_THRESHOLD}: minimum cumulative spend by a client at the
+     * merchant during the campaign window to earn cashback.
+     */
+    @Column(precision = 18, scale = 2)
+    private BigDecimal volumeThreshold;
+
+    /**
+     * For {@code POS_WEBHOOK_EVENT}: minimum single-transaction amount at the
+     * merchant POS to fire the cashback.
+     */
+    @Column(precision = 18, scale = 2)
+    private BigDecimal amountThreshold;
+
+    /**
+     * For {@code MERCHANT_TRANSACTION}: optional bank-side transaction category
+     * filter (e.g. "CARD_PURCHASE", "MOBILE_MONEY", "WIRE_TRANSFER"). Null = all.
+     */
+    @Column(length = 50)
+    private String categoryFilter;
+
+    // -------------------------------------------------------------- audit
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "merchant_id")
-    private Merchant merchant;
+    @Column(length = 60)
+    private String createdBy;
 
-    public Campaign() {
-    }
+    // -------------------------------------------------------------- lifecycle
+
+    public Campaign() {}
 
     @PrePersist
     public void prePersist() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-
-        if (this.status == null) {
-            this.status = CampaignStatus.DRAFT;
-        }
+        LocalDateTime now = LocalDateTime.now();
+        if (createdAt == null) createdAt = now;
+        updatedAt = now;
+        if (status == null) status = CampaignStatus.DRAFT;
+        if (triggerType == null) triggerType = CampaignTriggerType.MERCHANT_TRANSACTION;
+        if (ownerType == null) ownerType = CampaignOwnerType.MERCHANT;
     }
 
-    public Long getId() {
-        return id;
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
-    public String getName() {
-        return name;
-    }
+    // -------------------------------------------------------------- getters/setters
 
-    public String getDescription() {
-        return description;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public CashbackType getCashbackType() {
-        return cashbackType;
-    }
-
-    public BigDecimal getCashbackValue() {
-        return cashbackValue;
-    }
-
-    public BigDecimal getDailyLimitPerClient() {
-        return dailyLimitPerClient;
-    }
-
-    public BigDecimal getMonthlyLimitPerClient() {
-        return monthlyLimitPerClient;
-    }
-
-    public BigDecimal getTotalBudget() {
-        return totalBudget;
-    }
-
-    public CampaignStatus getStatus() {
-        return status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Merchant getMerchant() {
-        return merchant;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setCashbackType(CashbackType cashbackType) {
-        this.cashbackType = cashbackType;
-    }
-
-    public void setCashbackValue(BigDecimal cashbackValue) {
-        this.cashbackValue = cashbackValue;
-    }
-
-    public void setDailyLimitPerClient(BigDecimal dailyLimitPerClient) {
-        this.dailyLimitPerClient = dailyLimitPerClient;
-    }
-
-    public void setMonthlyLimitPerClient(BigDecimal monthlyLimitPerClient) {
-        this.monthlyLimitPerClient = monthlyLimitPerClient;
-    }
-
-    public void setTotalBudget(BigDecimal totalBudget) {
-        this.totalBudget = totalBudget;
-    }
-
-    public void setStatus(CampaignStatus status) {
-        this.status = status;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setMerchant(Merchant merchant) {
-        this.merchant = merchant;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+    public CampaignOwnerType getOwnerType() { return ownerType; }
+    public void setOwnerType(CampaignOwnerType ownerType) { this.ownerType = ownerType; }
+    public Merchant getMerchant() { return merchant; }
+    public void setMerchant(Merchant merchant) { this.merchant = merchant; }
+    public CampaignTriggerType getTriggerType() { return triggerType; }
+    public void setTriggerType(CampaignTriggerType triggerType) { this.triggerType = triggerType; }
+    public LocalDate getStartDate() { return startDate; }
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
+    public LocalDate getEndDate() { return endDate; }
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+    public CampaignStatus getStatus() { return status; }
+    public void setStatus(CampaignStatus status) { this.status = status; }
+    public String getEntityTypeFilter() { return entityTypeFilter; }
+    public void setEntityTypeFilter(String entityTypeFilter) { this.entityTypeFilter = entityTypeFilter; }
+    public String getTierFilter() { return tierFilter; }
+    public void setTierFilter(String tierFilter) { this.tierFilter = tierFilter; }
+    public BigDecimal getMinTransactionAmount() { return minTransactionAmount; }
+    public void setMinTransactionAmount(BigDecimal v) { this.minTransactionAmount = v; }
+    public BigDecimal getMaxCashbackPerClient() { return maxCashbackPerClient; }
+    public void setMaxCashbackPerClient(BigDecimal v) { this.maxCashbackPerClient = v; }
+    public CashbackType getCashbackType() { return cashbackType; }
+    public void setCashbackType(CashbackType cashbackType) { this.cashbackType = cashbackType; }
+    public BigDecimal getCashbackValue() { return cashbackValue; }
+    public void setCashbackValue(BigDecimal cashbackValue) { this.cashbackValue = cashbackValue; }
+    public BigDecimal getDailyLimitPerClient() { return dailyLimitPerClient; }
+    public void setDailyLimitPerClient(BigDecimal v) { this.dailyLimitPerClient = v; }
+    public BigDecimal getMonthlyLimitPerClient() { return monthlyLimitPerClient; }
+    public void setMonthlyLimitPerClient(BigDecimal v) { this.monthlyLimitPerClient = v; }
+    public BigDecimal getTotalBudget() { return totalBudget; }
+    public void setTotalBudget(BigDecimal totalBudget) { this.totalBudget = totalBudget; }
+    public String getTargetProductSkus() { return targetProductSkus; }
+    public void setTargetProductSkus(String targetProductSkus) { this.targetProductSkus = targetProductSkus; }
+    public BigDecimal getVolumeThreshold() { return volumeThreshold; }
+    public void setVolumeThreshold(BigDecimal volumeThreshold) { this.volumeThreshold = volumeThreshold; }
+    public BigDecimal getAmountThreshold() { return amountThreshold; }
+    public void setAmountThreshold(BigDecimal amountThreshold) { this.amountThreshold = amountThreshold; }
+    public String getCategoryFilter() { return categoryFilter; }
+    public void setCategoryFilter(String categoryFilter) { this.categoryFilter = categoryFilter; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
 }

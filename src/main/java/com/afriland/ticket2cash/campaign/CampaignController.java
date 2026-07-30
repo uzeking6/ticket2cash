@@ -1,6 +1,7 @@
 package com.afriland.ticket2cash.campaign;
 
 import com.afriland.ticket2cash.audit.AuditLogService;
+import com.afriland.ticket2cash.common.ValidationUtils;
 import com.afriland.ticket2cash.merchant.Merchant;
 import com.afriland.ticket2cash.merchant.MerchantRepository;
 import com.afriland.ticket2cash.product.CashbackType;
@@ -15,16 +16,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Campaign management with role-scoped access:
+ * Campaign management for the unified "moteur d'animation de campagnes".
+ * See {@code Architecture_Moteur_Campagnes.md} for the full design.
+ *
+ * <p><b>Role scoping:</b>
  * <ul>
- *   <li><b>PARTNER</b>: owns campaigns. Can create/edit/delete only their own
- *       merchant's campaigns. Sees only their own in listings.</li>
- *   <li><b>ADMIN / OPERATEUR / LECTEUR</b>: read-only oversight. Sees all
- *       campaigns across all merchants. Cannot create/edit/delete.</li>
+ *   <li><b>ADMIN</b> creates campaigns on any merchant. Owns them as ADMIN.</li>
+ *   <li><b>PARTNER (merchant)</b> creates campaigns only for their own merchant.
+ *       Owns them as MERCHANT. The merchantId in the request body is ignored —
+ *       always forced to the partner's own session merchantId.</li>
+ *   <li><b>OPERATEUR / LECTEUR</b> read-only.</li>
  * </ul>
- * The merchant a campaign belongs to is derived from the logged-in PARTNER's
- * session; the request body's merchantId is ignored for security (prevents a
- * partner from posting campaigns on behalf of someone else).
+ *
+ * <p><b>Trigger types:</b> each campaign has a {@link CampaignTriggerType} that
+ * determines what data source will trigger cashback computation. Different
+ * trigger types require different fields — the controller validates that
+ * trigger-specific fields are consistent with the chosen trigger.
  */
 @RestController
 @RequestMapping("/api/campaigns")
@@ -45,55 +52,86 @@ public class CampaignController {
     // ---------------------------------------------------------------- helpers
 
     private String currentRole(HttpServletRequest http) {
-        HttpSession session = http.getSession(false);
-        if (session == null) return null;
-        Object r = session.getAttribute("AUTH_ROLE");
-        return r == null ? null : String.valueOf(r);
+        HttpSession s = http.getSession(false);
+        return s == null ? null : String.valueOf(s.getAttribute("AUTH_ROLE"));
     }
 
     private Long currentMerchantId(HttpServletRequest http) {
-        HttpSession session = http.getSession(false);
-        if (session == null) return null;
-        Object mid = session.getAttribute("AUTH_MERCHANT_ID");
+        HttpSession s = http.getSession(false);
+        if (s == null) return null;
+        Object mid = s.getAttribute("AUTH_MERCHANT_ID");
         if (mid == null) return null;
-        try {
-            return Long.valueOf(String.valueOf(mid));
-        } catch (NumberFormatException e) {
-            return null;
-        }
+        try { return Long.valueOf(String.valueOf(mid)); }
+        catch (NumberFormatException e) { return null; }
     }
 
     private String currentActor(HttpServletRequest http) {
-        HttpSession session = http.getSession(false);
-        if (session == null) return "ANONYMOUS";
-        Object u = session.getAttribute("AUTH_USERNAME");
+        HttpSession s = http.getSession(false);
+        if (s == null) return "ANONYMOUS";
+        Object u = s.getAttribute("AUTH_USERNAME");
         return u == null ? "ANONYMOUS" : String.valueOf(u);
     }
 
-    /** Returns true if the request is authenticated and can WRITE (only PARTNER). */
-    private boolean canWrite(HttpServletRequest http) {
+    private boolean isAdmin(HttpServletRequest http) {
+        return "ADMIN".equalsIgnoreCase(currentRole(http));
+    }
+
+    private boolean isPartner(HttpServletRequest http) {
         return "PARTNER".equalsIgnoreCase(currentRole(http));
     }
 
-    /** Returns true if the given campaign belongs to the currently logged-in PARTNER. */
+    private boolean canWrite(HttpServletRequest http) {
+        return isAdmin(http) || isPartner(http);
+    }
+
     private boolean isMine(Campaign c, HttpServletRequest http) {
+        if (isAdmin(http)) return true;
         Long me = currentMerchantId(http);
         if (me == null) return false;
         Merchant m = c.getMerchant();
         return m != null && m.getId() != null && m.getId().equals(me);
     }
 
+    /**
+     * Validates trigger-specific fields are consistent with the chosen trigger.
+     * Returns null when valid, or a human-readable error message otherwise.
+     */
+    private String validateTriggerSpecific(CampaignTriggerType trigger, CampaignRequest req) {
+        if (trigger == null) return null;
+        switch (trigger) {
+            case PRODUCT_PURCHASE:
+                if (req.getTargetProductSkus() == null || req.getTargetProductSkus().trim().isEmpty()) {
+                    return "Pour un cashback produit, précisez au moins un SKU cible";
+                }
+                break;
+            case VOLUME_THRESHOLD:
+                if (req.getVolumeThreshold() == null || req.getVolumeThreshold().signum() <= 0) {
+                    return "Pour un cashback volume, précisez un seuil de volume strictement positif";
+                }
+                break;
+            case POS_WEBHOOK_EVENT:
+                if (req.getAmountThreshold() == null || req.getAmountThreshold().signum() <= 0) {
+                    return "Pour un cashback événement POS, précisez un seuil par transaction strictement positif";
+                }
+                if (req.getCashbackType() == CashbackType.PERCENTAGE) {
+                    return "Le cashback événement POS doit être un montant fixe, pas un pourcentage";
+                }
+                break;
+            case MERCHANT_TRANSACTION:
+                break;
+        }
+        return null;
+    }
+
     // ---------------------------------------------------------------- READ
 
     @GetMapping
     public List<Campaign> getAllCampaigns(HttpServletRequest http) {
-        String role = currentRole(http);
-        if ("PARTNER".equalsIgnoreCase(role)) {
+        if (isPartner(http)) {
             Long me = currentMerchantId(http);
             if (me == null) return Collections.emptyList();
             return campaignRepository.findByMerchantId(me);
         }
-        // ADMIN / OPERATEUR / LECTEUR / anonymous — see all
         return campaignRepository.findAll();
     }
 
@@ -101,8 +139,7 @@ public class CampaignController {
     public ResponseEntity<?> getCampaignById(@PathVariable Long id, HttpServletRequest http) {
         return campaignRepository.findById(id)
                 .map(c -> {
-                    // Partners can only see their own campaigns
-                    if ("PARTNER".equalsIgnoreCase(currentRole(http)) && !isMine(c, http)) {
+                    if (isPartner(http) && !isMine(c, http)) {
                         return ResponseEntity.status(403).body((Object) "Not your campaign");
                     }
                     return ResponseEntity.ok((Object) c);
@@ -112,8 +149,8 @@ public class CampaignController {
 
     @GetMapping("/merchant/{merchantId}")
     public ResponseEntity<?> getCampaignsByMerchant(@PathVariable Long merchantId,
-                                                    HttpServletRequest http) {
-        if ("PARTNER".equalsIgnoreCase(currentRole(http))) {
+                                                     HttpServletRequest http) {
+        if (isPartner(http)) {
             Long me = currentMerchantId(http);
             if (me == null || !me.equals(merchantId)) {
                 return ResponseEntity.status(403).body("Not your merchant");
@@ -125,8 +162,7 @@ public class CampaignController {
     @GetMapping("/status/{status}")
     public List<Campaign> getCampaignsByStatus(@PathVariable CampaignStatus status,
                                                 HttpServletRequest http) {
-        String role = currentRole(http);
-        if ("PARTNER".equalsIgnoreCase(role)) {
+        if (isPartner(http)) {
             Long me = currentMerchantId(http);
             if (me == null) return Collections.emptyList();
             return campaignRepository.findByMerchantId(me).stream()
@@ -136,91 +172,200 @@ public class CampaignController {
         return campaignRepository.findByStatus(status);
     }
 
-    // ---------------------------------------------------------------- WRITE (PARTNER only)
+    /** New: filter campaigns by trigger type — used by the admin "Campagnes par type" view. */
+    @GetMapping("/trigger/{triggerType}")
+    public List<Campaign> getCampaignsByTrigger(@PathVariable CampaignTriggerType triggerType,
+                                                 HttpServletRequest http) {
+        List<Campaign> all;
+        if (isPartner(http)) {
+            Long me = currentMerchantId(http);
+            if (me == null) return Collections.emptyList();
+            all = campaignRepository.findByMerchantId(me);
+        } else {
+            all = campaignRepository.findAll();
+        }
+        return all.stream().filter(c -> c.getTriggerType() == triggerType).toList();
+    }
+
+    // ---------------------------------------------------------------- CREATE
 
     @PostMapping
     public ResponseEntity<?> createCampaign(@RequestBody CampaignRequest request,
                                              HttpServletRequest http) {
         if (!canWrite(http)) {
-            return ResponseEntity.status(403).body("Only PARTNER accounts can create campaigns");
-        }
-        Long myMid = currentMerchantId(http);
-        if (myMid == null) {
-            return ResponseEntity.status(403).body("No merchant linked to this account");
-        }
-        Merchant merchant = merchantRepository.findById(myMid).orElse(null);
-        if (merchant == null) {
-            auditLogService.log("CREATE_CAMPAIGN_FAILED", "CAMPAIGN", "Campaign", null,
-                    currentActor(http), "FAILED", "Linked merchant not found: " + myMid);
-            return ResponseEntity.badRequest().body("Linked merchant not found");
+            return ResponseEntity.status(403).body(Map.of("error", "Seuls ADMIN et PARTNER peuvent créer des campagnes"));
         }
 
+        // Resolve owner + target merchant based on role
+        CampaignOwnerType ownerType;
+        Long targetMerchantId;
+
+        if (isPartner(http)) {
+            ownerType = CampaignOwnerType.MERCHANT;
+            targetMerchantId = currentMerchantId(http);
+            if (targetMerchantId == null) {
+                return ResponseEntity.status(403).body(Map.of("error", "Aucun commerçant lié à votre compte"));
+            }
+        } else {
+            ownerType = CampaignOwnerType.ADMIN;
+            targetMerchantId = request.getMerchantId();
+            if (targetMerchantId == null) {
+                return ResponseEntity.badRequest().body(Map.of(
+                        "error", "L'ADMIN doit préciser le commerçant cible",
+                        "field", "merchantId"));
+            }
+        }
+
+        Merchant merchant = merchantRepository.findById(targetMerchantId).orElse(null);
+        if (merchant == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Commerçant introuvable"));
+        }
+
+        // Validate common fields
+        String err = ValidationUtils.validateName(request.getName(), "nom de la campagne");
+        if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "name"));
+
+        err = ValidationUtils.validateDescription(request.getDescription(), "description", 500);
+        if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "description"));
+
+        err = ValidationUtils.validateDateRange(request.getStartDate(), request.getEndDate());
+        if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "endDate"));
+
+        if (request.getCashbackValue() != null) {
+            CashbackType ct = request.getCashbackType() != null ? request.getCashbackType() : CashbackType.NONE;
+            err = (ct == CashbackType.PERCENTAGE)
+                    ? ValidationUtils.validatePercentage(request.getCashbackValue(), "pourcentage cashback")
+                    : ValidationUtils.validatePositiveOrZero(request.getCashbackValue(), "montant cashback");
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "cashbackValue"));
+        }
+
+        err = ValidationUtils.validatePositive(request.getTotalBudget(), "budget total");
+        if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "totalBudget"));
+
+        CampaignTriggerType trigger = request.getTriggerType() != null
+                ? request.getTriggerType() : CampaignTriggerType.MERCHANT_TRANSACTION;
+        String triggerErr = validateTriggerSpecific(trigger, request);
+        if (triggerErr != null) {
+            return ResponseEntity.badRequest().body(Map.of("error", triggerErr, "field", "triggerType"));
+        }
+
+        // Build entity
         Campaign campaign = new Campaign();
-        // Force merchant to the logged-in partner — never trust request body's merchantId
+        campaign.setOwnerType(ownerType);
         campaign.setMerchant(merchant);
-        campaign.setName(request.getName());
+        campaign.setTriggerType(trigger);
+        campaign.setName(request.getName().trim());
         campaign.setDescription(request.getDescription());
         campaign.setStartDate(request.getStartDate());
         campaign.setEndDate(request.getEndDate());
+        campaign.setStatus(request.getStatus() != null ? request.getStatus() : CampaignStatus.DRAFT);
+
+        campaign.setEntityTypeFilter(request.getEntityTypeFilter());
+        campaign.setTierFilter(request.getTierFilter());
+        campaign.setMinTransactionAmount(request.getMinTransactionAmount());
+        campaign.setMaxCashbackPerClient(request.getMaxCashbackPerClient());
+
         campaign.setCashbackType(request.getCashbackType() != null ? request.getCashbackType() : CashbackType.NONE);
         campaign.setCashbackValue(request.getCashbackValue() != null ? request.getCashbackValue() : BigDecimal.ZERO);
         campaign.setDailyLimitPerClient(request.getDailyLimitPerClient());
         campaign.setMonthlyLimitPerClient(request.getMonthlyLimitPerClient());
         campaign.setTotalBudget(request.getTotalBudget());
-        campaign.setStatus(request.getStatus() != null ? request.getStatus() : CampaignStatus.DRAFT);
+
+        campaign.setTargetProductSkus(request.getTargetProductSkus());
+        campaign.setVolumeThreshold(request.getVolumeThreshold());
+        campaign.setAmountThreshold(request.getAmountThreshold());
+        campaign.setCategoryFilter(request.getCategoryFilter());
+
+        campaign.setCreatedBy(currentActor(http));
 
         Campaign saved = campaignRepository.save(campaign);
 
         auditLogService.log("CREATE_CAMPAIGN", "CAMPAIGN", "Campaign", saved.getId(),
                 currentActor(http), "SUCCESS",
-                "Campaign created: " + saved.getName() + " for merchant " + merchant.getName());
+                String.format("Campaign %s [%s] created on merchant %s",
+                        saved.getName(), trigger, merchant.getName()));
 
         return ResponseEntity.ok(saved);
     }
 
+    // ---------------------------------------------------------------- UPDATE
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCampaign(@PathVariable Long id,
-                                             @RequestBody Map<String, Object> body,
+                                             @RequestBody CampaignRequest patch,
                                              HttpServletRequest http) {
         if (!canWrite(http)) {
-            return ResponseEntity.status(403).body("Only PARTNER accounts can edit campaigns");
+            return ResponseEntity.status(403).body(Map.of("error", "Non autorisé"));
         }
-        return campaignRepository.findById(id)
-                .map(campaign -> {
-                    if (!isMine(campaign, http)) {
-                        return ResponseEntity.status(403).body((Object) "Not your campaign");
-                    }
-                    if (body.containsKey("name")) campaign.setName((String) body.get("name"));
-                    if (body.containsKey("description")) campaign.setDescription((String) body.get("description"));
-                    if (body.containsKey("status")) campaign.setStatus(CampaignStatus.valueOf((String) body.get("status")));
-                    if (body.containsKey("cashbackType")) campaign.setCashbackType(CashbackType.valueOf((String) body.get("cashbackType")));
-                    if (body.containsKey("cashbackValue")) campaign.setCashbackValue(java.math.BigDecimal.valueOf(((Number) body.get("cashbackValue")).doubleValue()));
-                    if (body.containsKey("totalBudget") && body.get("totalBudget") != null)
-                        campaign.setTotalBudget(java.math.BigDecimal.valueOf(((Number) body.get("totalBudget")).doubleValue()));
-                    if (body.containsKey("startDate")) campaign.setStartDate(java.time.LocalDate.parse((String) body.get("startDate")));
-                    if (body.containsKey("endDate")) campaign.setEndDate(java.time.LocalDate.parse((String) body.get("endDate")));
 
-                    Campaign updated = campaignRepository.save(campaign);
+        Campaign existing = campaignRepository.findById(id).orElse(null);
+        if (existing == null) return ResponseEntity.notFound().build();
 
-                    auditLogService.log("UPDATE_CAMPAIGN", "CAMPAIGN", "Campaign",
-                            updated.getId(), currentActor(http), "SUCCESS",
-                            "Campaign updated: " + updated.getName());
-                    return ResponseEntity.ok((Object) updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        if (isPartner(http) && !isMine(existing, http)) {
+            return ResponseEntity.status(403).body(Map.of("error", "Ce n'est pas votre campagne"));
+        }
+
+        if (patch.getName() != null) {
+            String err = ValidationUtils.validateName(patch.getName(), "nom de la campagne");
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "name"));
+            existing.setName(patch.getName().trim());
+        }
+        if (patch.getDescription() != null) {
+            String err = ValidationUtils.validateDescription(patch.getDescription(), "description", 500);
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "description"));
+            existing.setDescription(patch.getDescription());
+        }
+        if (patch.getStartDate() != null) existing.setStartDate(patch.getStartDate());
+        if (patch.getEndDate() != null) existing.setEndDate(patch.getEndDate());
+        String dateErr = ValidationUtils.validateDateRange(existing.getStartDate(), existing.getEndDate());
+        if (dateErr != null) return ResponseEntity.badRequest().body(Map.of("error", dateErr, "field", "endDate"));
+
+        if (patch.getStatus() != null) existing.setStatus(patch.getStatus());
+        if (patch.getTriggerType() != null) existing.setTriggerType(patch.getTriggerType());
+
+        if (patch.getCashbackType() != null) existing.setCashbackType(patch.getCashbackType());
+        if (patch.getCashbackValue() != null) {
+            CashbackType ct = existing.getCashbackType() != null ? existing.getCashbackType() : CashbackType.NONE;
+            String err = (ct == CashbackType.PERCENTAGE)
+                    ? ValidationUtils.validatePercentage(patch.getCashbackValue(), "pourcentage cashback")
+                    : ValidationUtils.validatePositiveOrZero(patch.getCashbackValue(), "montant cashback");
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "cashbackValue"));
+            existing.setCashbackValue(patch.getCashbackValue());
+        }
+        if (patch.getTotalBudget() != null) {
+            String err = ValidationUtils.validatePositive(patch.getTotalBudget(), "budget total");
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "totalBudget"));
+            existing.setTotalBudget(patch.getTotalBudget());
+        }
+
+        if (patch.getEntityTypeFilter() != null) existing.setEntityTypeFilter(patch.getEntityTypeFilter());
+        if (patch.getTierFilter() != null) existing.setTierFilter(patch.getTierFilter());
+        if (patch.getMinTransactionAmount() != null) existing.setMinTransactionAmount(patch.getMinTransactionAmount());
+        if (patch.getMaxCashbackPerClient() != null) existing.setMaxCashbackPerClient(patch.getMaxCashbackPerClient());
+        if (patch.getDailyLimitPerClient() != null) existing.setDailyLimitPerClient(patch.getDailyLimitPerClient());
+        if (patch.getMonthlyLimitPerClient() != null) existing.setMonthlyLimitPerClient(patch.getMonthlyLimitPerClient());
+
+        if (patch.getTargetProductSkus() != null) existing.setTargetProductSkus(patch.getTargetProductSkus());
+        if (patch.getVolumeThreshold() != null) existing.setVolumeThreshold(patch.getVolumeThreshold());
+        if (patch.getAmountThreshold() != null) existing.setAmountThreshold(patch.getAmountThreshold());
+        if (patch.getCategoryFilter() != null) existing.setCategoryFilter(patch.getCategoryFilter());
+
+        Campaign updated = campaignRepository.save(existing);
+        auditLogService.log("UPDATE_CAMPAIGN", "CAMPAIGN", "Campaign",
+                updated.getId(), currentActor(http), "SUCCESS",
+                "Campaign updated: " + updated.getName());
+        return ResponseEntity.ok(updated);
     }
 
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateCampaignStatus(@PathVariable Long id,
-                                                    @RequestParam CampaignStatus status,
-                                                    HttpServletRequest http) {
-        if (!canWrite(http)) {
-            return ResponseEntity.status(403).body("Only PARTNER accounts can change campaign status");
-        }
+                                                   @RequestParam CampaignStatus status,
+                                                   HttpServletRequest http) {
+        if (!canWrite(http)) return ResponseEntity.status(403).body("Non autorisé");
         return campaignRepository.findById(id)
                 .map(campaign -> {
-                    if (!isMine(campaign, http)) {
-                        return ResponseEntity.status(403).body((Object) "Not your campaign");
+                    if (isPartner(http) && !isMine(campaign, http)) {
+                        return ResponseEntity.status(403).body((Object) "Ce n'est pas votre campagne");
                     }
                     campaign.setStatus(status);
                     Campaign updated = campaignRepository.save(campaign);
@@ -232,14 +377,14 @@ public class CampaignController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // ---------------------------------------------------------------- DELETE
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCampaign(@PathVariable Long id, HttpServletRequest http) {
-        if (!canWrite(http)) {
-            return ResponseEntity.status(403).body("Only PARTNER accounts can delete campaigns");
-        }
+        if (!canWrite(http)) return ResponseEntity.status(403).body("Non autorisé");
         return campaignRepository.findById(id).map(campaign -> {
-            if (!isMine(campaign, http)) {
-                return ResponseEntity.status(403).body((Object) "Not your campaign");
+            if (isPartner(http) && !isMine(campaign, http)) {
+                return ResponseEntity.status(403).body((Object) "Ce n'est pas votre campagne");
             }
             campaignRepository.deleteById(id);
             auditLogService.log("DELETE_CAMPAIGN", "CAMPAIGN", "Campaign", id,

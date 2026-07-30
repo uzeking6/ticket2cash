@@ -2300,11 +2300,11 @@ function cashbackLabel(type,value){if(!type||type==="NONE"||value==null||value==
 async function renderCampaigns(){
   await loadMerchants();
   const c=document.getElementById("content");
-  const canManage=ME.role==="PARTNER";
+  const canManage=ME.role==="PARTNER"||ME.role==="ADMIN";
   c.innerHTML=`<div class="page">${head(t("campaigns"),t("cmp_sub"),(canManage?`<button class="btn btn-primary" onclick="campaignModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>${t("new_campaign")}</button>`:"")+refreshBtn())}
     <div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="cmpCp">—</span></div>
-    <div class="table-scroll"><table><thead><tr><th>${t("c_campaign")}</th><th>${t("c_partner")}</th><th>${t("cmp_period")}</th><th>${t("col_cashback")}</th><th>${t("m_status")}</th><th style="text-align:right">${t("col_actions")}</th></tr></thead>
-    <tbody id="cmpBody">${rowSkeleton(6,6)}</tbody></table></div></div></div>`;
+    <div class="table-scroll"><table><thead><tr><th>${t("c_campaign")}</th><th>Type</th><th>${t("c_partner")}</th><th>${t("cmp_period")}</th><th>${t("col_cashback")}</th><th>${t("m_status")}</th><th style="text-align:right">${t("col_actions")}</th></tr></thead>
+    <tbody id="cmpBody">${rowSkeleton(7,6)}</tbody></table></div></div></div>`;
   try{let rows=await api("/api/campaigns");if(!Array.isArray(rows))rows=[];window.__campaigns=rows;
     document.getElementById("cmpCp").textContent=rows.length+" "+t("items");
     const today=new Date();today.setHours(0,0,0,0);
@@ -2313,61 +2313,343 @@ async function renderCampaigns(){
       const expired=cm.endDate&&(new Date(cm.endDate)<today);
       const nm=(cm.name||"").replace(/'/g,"’");
       return `<tr><td class="strong">${esc(cm.name||"—")}${expired?` <span class="badge b-muted" style="margin-left:6px">${t("cmp_expired")}</span>`:""}</td>
+        <td>${triggerBadge(cm.triggerType)}</td>
         <td>${mid?merchantChain(mid):(cm.merchant&&cm.merchant.name?esc(cm.merchant.name):"—")}</td>
         <td style="white-space:nowrap">${cm.startDate?dt(cm.startDate):"—"} → ${cm.endDate?dt(cm.endDate):"—"}</td>
         <td>${cashbackLabel(cm.cashbackType,cm.cashbackValue)}</td>
         <td>${badge(cm.status)}</td>
         <td class="row-actions"><button class="mini-btn" onclick="campaignView(${cm.id})">${t("view")}</button>${canManage?`<button class="mini-btn" onclick="campaignModal(${cm.id})">${t("edit")}</button><button class="mini-btn danger" onclick="delCampaign(${cm.id},'${esc(nm)}')">${t("del")}</button>`:""}</td></tr>`;
-    }).join(""):`<tr><td colspan="6">${emptyFull()}</td></tr>`;
-  }catch(e){document.getElementById("cmpBody").innerHTML=`<tr><td colspan="6">${emptyMini(t("err_load"))}</td></tr>`;}
-}
-function campaignModal(id){
-  const cm=id?(window.__campaigns||[]).find(x=>x.id===id):null;
-  const isEdit=!!cm;
-  openModal(isEdit?t("edit_campaign"):t("new_campaign"),
-    `<div class="form-grid">
-      <div class="field full"><label>${t("c_campaign")} *</label><input id="cmp_name" value="${esc(cm?cm.name||"":"")}" placeholder="Ex: Promo Rentrée 2026"></div>
-      <div class="field full"><label>${t("cmp_description")||"Description"}</label><input id="cmp_desc" value="${esc(cm?cm.description||"":"")}"></div>
-      <div class="field"><label>${t("cmp_start")||"Début"}</label><input id="cmp_start" type="date" value="${cm&&cm.startDate?cm.startDate.substring(0,10):""}"></div>
-      <div class="field"><label>${t("cmp_end")||"Fin"}</label><input id="cmp_end" type="date" value="${cm&&cm.endDate?cm.endDate.substring(0,10):""}"></div>
-      <div class="field"><label>${t("col_cashback")}</label>
-        <select id="cmp_cbtype">
-          <option value="PERCENTAGE" ${cm&&cm.cashbackType==="PERCENTAGE"?"selected":""}>${t("cb_pct")||"Pourcentage (%)"}</option>
-          <option value="FIXED_AMOUNT" ${cm&&cm.cashbackType==="FIXED_AMOUNT"?"selected":""}>${t("cb_fix")||"Montant fixe (FCFA)"}</option>
-        </select></div>
-      <div class="field"><label>${t("cmp_cbval")||"Valeur cashback"}</label><input id="cmp_cbval" type="number" step="0.01" value="${cm?cm.cashbackValue||"":""}"></div>
-      <div class="field"><label>${t("cmp_budget")||"Budget total (FCFA)"}</label><input id="cmp_budget" type="number" value="${cm?cm.totalBudget||"":""}"></div>
-      <div class="field"><label>${t("m_status")}</label>
-        <select id="cmp_status">
-          <option value="DRAFT" ${!cm||cm.status==="DRAFT"?"selected":""}>${t("st_draft")||"Brouillon"}</option>
-          <option value="ACTIVE" ${cm&&cm.status==="ACTIVE"?"selected":""}>${t("st_active")||"Active"}</option>
-          <option value="PAUSED" ${cm&&cm.status==="PAUSED"?"selected":""}>${t("st_paused")||"En pause"}</option>
-        </select></div>
-    </div>`,
-    `<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button>
-     <button class="btn btn-primary" onclick="saveCampaign(${isEdit?cm.id:"null"})">${t("save")}</button>`);
+    }).join(""):`<tr><td colspan="7">${emptyFull()}</td></tr>`;
+  }catch(e){document.getElementById("cmpBody").innerHTML=`<tr><td colspan="7">${emptyMini(t("err_load"))}</td></tr>`;}
 }
 
-async function saveCampaign(id){
+function triggerBadge(tt){
+  const map={
+    MERCHANT_TRANSACTION:{icon:"🏪",label:"Marchand",cls:"b-info"},
+    PRODUCT_PURCHASE:{icon:"📦",label:"Produit",cls:"b-ok"},
+    VOLUME_THRESHOLD:{icon:"📊",label:"Volume",cls:"b-warn"},
+    POS_WEBHOOK_EVENT:{icon:"⚡",label:"Événement POS",cls:"b-danger"}
+  };
+  const m=map[tt]||{icon:"❓",label:"—",cls:"b-muted"};
+  return `<span class="badge ${m.cls}" style="white-space:nowrap">${m.icon} ${m.label}</span>`;
+}
+/* ============ CAMPAIGN MODAL (Phase 1 — unified trigger engine) ============ */
+
+function campaignModal(id){
+  const cm=id?(window.__campaigns||[]).find(x=>x.id===id):null;
+  window.__cmpDraft={
+    id: cm?cm.id:null,
+    triggerType: cm?cm.triggerType||"MERCHANT_TRANSACTION":null,
+    isEdit: !!cm,
+    source: cm||{}
+  };
+  // Edit: skip step 1, directly to form
+  if(cm){ cmpOpenForm(); }
+  else { cmpOpenStep1(); }
+}
+
+function cmpOpenStep1(){
+  const triggers=[
+    {code:"MERCHANT_TRANSACTION",icon:"🏪",title:"Cashback marchand",desc:"Chaque transaction bancaire chez ce marchand déclenche le cashback.",ex:"Ex: 5% pour toute facture Netflix payée par carte Afriland",color:"var(--info)"},
+    {code:"PRODUCT_PURCHASE",icon:"📦",title:"Cashback produit",desc:"L'achat d'un produit précis (via scan ticket + OCR) déclenche le cashback.",ex:"Ex: 10% sur le shampoing X chez Santa Lucia",color:"var(--ok)"},
+    {code:"VOLUME_THRESHOLD",icon:"📊",title:"Cashback volume",desc:"Le client doit atteindre un seuil de dépense chez le marchand pour déclencher.",ex:"Ex: Clients >100k FCFA chez Total = 3% cashback",color:"var(--warn)"},
+    {code:"POS_WEBHOOK_EVENT",icon:"⚡",title:"Cashback événement POS",desc:"Chaque transaction POS en temps réel déclenche un cashback fixe immédiat.",ex:"Ex: Chaque achat >50k chez Santa Lucia = 500 FCFA",color:"var(--danger)"}
+  ];
+  const body=`<div style="margin-bottom:16px;padding:12px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;color:var(--text-2)">
+    <strong>Étape 1 sur 2 :</strong> quel type de campagne voulez-vous créer ?
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    ${triggers.map(tr=>`
+      <div onclick="cmpPickTrigger('${tr.code}')" style="cursor:pointer;padding:16px;border:2px solid var(--border);border-radius:12px;transition:all .15s" onmouseover="this.style.borderColor='${tr.color}';this.style.background='var(--surface-2)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="font-size:28px">${tr.icon}</div>
+          <div><h4 style="margin:0;font-size:15px;color:${tr.color}">${tr.title}</h4></div>
+        </div>
+        <p style="margin:0 0 6px 0;font-size:12.5px;color:var(--text-2);line-height:1.5">${tr.desc}</p>
+        <p style="margin:6px 0 0 0;font-size:11px;color:var(--muted);font-style:italic">${tr.ex}</p>
+      </div>
+    `).join("")}
+  </div>`;
+  openModal(t("new_campaign"), body,
+    `<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button>`);
+}
+
+function cmpPickTrigger(triggerCode){
+  window.__cmpDraft.triggerType=triggerCode;
+  cmpOpenForm();
+}
+
+function cmpOpenForm(){
+  const draft=window.__cmpDraft, cm=draft.source, tt=draft.triggerType;
+  const isEdit=draft.isEdit;
+  const triggerLabels={
+    MERCHANT_TRANSACTION:"🏪 Cashback marchand",
+    PRODUCT_PURCHASE:"📦 Cashback produit",
+    VOLUME_THRESHOLD:"📊 Cashback volume",
+    POS_WEBHOOK_EVENT:"⚡ Cashback événement POS"
+  };
+  const merchantOptions=(window.__merchants||[]).map(m=>`<option value="${m.id}" ${cm&&cm.merchant&&cm.merchant.id===m.id?"selected":""}>${esc(m.brandName||m.name)}</option>`).join("");
+  const isAdmin=ME.role==="ADMIN";
+
+  const merchantField=isAdmin?`
+    <div class="field full"><label>Commerçant cible *</label>
+      <select id="cmp_merchant">
+        <option value="">— choisir un commerçant —</option>
+        ${merchantOptions}
+      </select>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Le commerçant Afriland dont les clients recevront le cashback</div>
+    </div>`:'';
+
+  // Trigger-specific fields
+  let triggerFields="";
+  if(tt==="PRODUCT_PURCHASE"){
+    triggerFields=`
+      <div class="field full"><label>SKUs cibles * <span style="color:var(--muted);font-weight:400">(séparés par des virgules)</span></label>
+        <input id="cmp_skus" value="${esc(cm.targetProductSkus||"")}" placeholder="Ex: SHAMP-01,SHAMP-02,DENT-05">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Le cashback ne s'applique qu'à l'achat de ces produits (identifiés par OCR sur le ticket)</div>
+      </div>`;
+  } else if(tt==="VOLUME_THRESHOLD"){
+    triggerFields=`
+      <div class="field"><label>Seuil de volume (FCFA) *</label>
+        <input id="cmp_volumeThreshold" type="number" min="0" step="1000" value="${cm.volumeThreshold||""}" placeholder="Ex: 100000">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Le client doit dépenser au moins ce montant cumulé pour recevoir le cashback</div>
+      </div>
+      <div class="field"><label>Catégorie de transaction (optionnel)</label>
+        <input id="cmp_categoryFilter" value="${esc(cm.categoryFilter||"")}" placeholder="Ex: CARD_PURCHASE">
+      </div>`;
+  } else if(tt==="POS_WEBHOOK_EVENT"){
+    triggerFields=`
+      <div class="field"><label>Seuil par transaction (FCFA) *</label>
+        <input id="cmp_amountThreshold" type="number" min="0" step="1000" value="${cm.amountThreshold||""}" placeholder="Ex: 50000">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Chaque transaction ≥ ce montant déclenche immédiatement le cashback</div>
+      </div>
+      <div class="field">
+        <label style="color:var(--warn)">⚠️ Note</label>
+        <div style="font-size:12px;color:var(--text-2);padding:8px 10px;background:var(--surface-2);border-radius:6px;border-left:3px solid var(--warn)">Le cashback événement POS doit être un <strong>montant fixe</strong> (pas un pourcentage).</div>
+      </div>`;
+  } else {
+    // MERCHANT_TRANSACTION
+    triggerFields=`
+      <div class="field full"><label>Catégorie de transaction (optionnel)</label>
+        <input id="cmp_categoryFilter" value="${esc(cm.categoryFilter||"")}" placeholder="Ex: CARD_PURCHASE, MOBILE_MONEY">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Laissez vide pour appliquer à toutes les transactions</div>
+      </div>`;
+  }
+
+  const cashbackTypeOptions=tt==="POS_WEBHOOK_EVENT"
+    ? `<option value="FIXED_AMOUNT" selected>Montant fixe (FCFA)</option>`
+    : `<option value="PERCENTAGE" ${cm.cashbackType==="PERCENTAGE"?"selected":""}>Pourcentage (%)</option>
+       <option value="FIXED_AMOUNT" ${cm.cashbackType==="FIXED_AMOUNT"?"selected":""}>Montant fixe (FCFA)</option>`;
+
+  const backBtn=isEdit?"":`<button class="btn btn-ghost" onclick="cmpOpenStep1()">← Retour</button>`;
+
+  const body=`
+    <div style="margin-bottom:16px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;color:var(--text-2);display:flex;align-items:center;justify-content:space-between">
+      <div><strong>${isEdit?"Édition":"Étape 2 sur 2"} :</strong> ${triggerLabels[tt]}</div>
+      ${isEdit?"":`<button class="mini-btn" onclick="cmpOpenStep1()">Changer le type</button>`}
+    </div>
+
+    <div class="form-grid">
+      <div class="field full"><label>Nom de la campagne *</label>
+        <input id="cmp_name" value="${esc(cm.name||"")}" placeholder="Ex: Promo Rentrée 2026">
+      </div>
+      <div class="field full"><label>Description</label>
+        <input id="cmp_desc" value="${esc(cm.description||"")}" placeholder="Décrivez brièvement la campagne">
+      </div>
+
+      ${merchantField}
+
+      <!-- Trigger-specific fields -->
+      ${triggerFields}
+
+      <!-- Period section with calendar shortcuts -->
+      <div class="field full">
+        <label>Période de la campagne *</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <button type="button" class="mini-btn" onclick="cmpApplyPeriod('thisMonth')">Ce mois</button>
+          <button type="button" class="mini-btn" onclick="cmpApplyPeriod('nextMonth')">Mois prochain</button>
+          <button type="button" class="mini-btn" onclick="cmpApplyPeriod('thisQuarter')">Ce trimestre</button>
+          <button type="button" class="mini-btn" onclick="cmpApplyPeriod('thisYear')">Cette année</button>
+          <button type="button" class="mini-btn" onclick="cmpApplyPeriod('next30')">30 jours</button>
+          <button type="button" class="mini-btn" onclick="cmpApplyPeriod('next90')">90 jours</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Début</div>
+            <input id="cmp_start" type="date" value="${cm.startDate?cm.startDate.substring(0,10):""}">
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Fin</div>
+            <input id="cmp_end" type="date" value="${cm.endDate?cm.endDate.substring(0,10):""}">
+          </div>
+        </div>
+        <div id="cmp_period_hint" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+      </div>
+
+      <!-- Cashback config -->
+      <div class="field"><label>Type de cashback *</label>
+        <select id="cmp_cbtype" onchange="cmpUpdateCashbackHint()">
+          ${cashbackTypeOptions}
+        </select>
+      </div>
+      <div class="field"><label id="cmp_cbval_label">Valeur *</label>
+        <input id="cmp_cbval" type="number" step="0.01" min="0" value="${cm.cashbackValue||""}">
+        <div id="cmp_cbval_hint" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
+      </div>
+      <div class="field"><label>Budget total (FCFA)</label>
+        <input id="cmp_budget" type="number" min="0" step="1000" value="${cm.totalBudget||""}" placeholder="Ex: 5000000">
+      </div>
+      <div class="field"><label>Statut</label>
+        <select id="cmp_status">
+          <option value="DRAFT" ${!cm.status||cm.status==="DRAFT"?"selected":""}>Brouillon</option>
+          <option value="ACTIVE" ${cm.status==="ACTIVE"?"selected":""}>Active</option>
+          <option value="PAUSED" ${cm.status==="PAUSED"?"selected":""}>En pause</option>
+        </select>
+      </div>
+
+      <!-- Advanced filters (collapsible) -->
+      <details class="field full" style="border:1px solid var(--border);border-radius:8px;padding:8px 14px;background:var(--surface-2)">
+        <summary style="cursor:pointer;font-weight:600;font-size:13px;color:var(--text-2)">⚙️ Filtres avancés (segments, plafonds)</summary>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+          <div>
+            <label style="font-size:12px;color:var(--text-2);font-weight:600">Segment cible</label>
+            <select id="cmp_entityFilter" style="width:100%;margin-top:4px">
+              <option value="" ${!cm.entityTypeFilter?"selected":""}>🎯 Tous</option>
+              <option value="INDIVIDUAL" ${cm.entityTypeFilter==="INDIVIDUAL"?"selected":""}>👤 Particuliers</option>
+              <option value="COMPANY" ${cm.entityTypeFilter==="COMPANY"?"selected":""}>🏢 Entreprises</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text-2);font-weight:600">Tiers clients</label>
+            <input id="cmp_tierFilter" value="${esc(cm.tierFilter||"")}" placeholder="Ex: GOLD,PLATINUM" style="width:100%;margin-top:4px">
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text-2);font-weight:600">Min. par transaction (FCFA)</label>
+            <input id="cmp_minTx" type="number" min="0" step="100" value="${cm.minTransactionAmount||""}" style="width:100%;margin-top:4px">
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text-2);font-weight:600">Cap cashback par client (FCFA)</label>
+            <input id="cmp_maxCb" type="number" min="0" step="100" value="${cm.maxCashbackPerClient||""}" style="width:100%;margin-top:4px">
+          </div>
+        </div>
+      </details>
+    </div>`;
+
+  openModal(isEdit?t("edit_campaign"):t("new_campaign"), body,
+    `${backBtn}<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button>
+     <button class="btn btn-primary" onclick="saveCampaign()">${t("save")}</button>`);
+
+  // Wire live hints
+  setTimeout(()=>{ cmpUpdateCashbackHint(); cmpUpdatePeriodHint();
+    ["cmp_start","cmp_end"].forEach(id=>document.getElementById(id)?.addEventListener("change",cmpUpdatePeriodHint));
+  },50);
+}
+
+function cmpUpdateCashbackHint(){
+  const t=document.getElementById("cmp_cbtype")?.value;
+  const lbl=document.getElementById("cmp_cbval_label");
+  const hint=document.getElementById("cmp_cbval_hint");
+  if(!lbl||!hint) return;
+  if(t==="PERCENTAGE"){ lbl.textContent="Pourcentage (0-100) *"; hint.textContent="Ex: 2.5 pour 2.5%"; }
+  else { lbl.textContent="Montant fixe (FCFA) *"; hint.textContent="Ex: 500 pour 500 FCFA par transaction"; }
+}
+
+function cmpUpdatePeriodHint(){
+  const s=document.getElementById("cmp_start")?.value;
+  const e=document.getElementById("cmp_end")?.value;
+  const hint=document.getElementById("cmp_period_hint");
+  if(!hint) return;
+  if(!s||!e){ hint.textContent=""; return; }
+  const d1=new Date(s), d2=new Date(e);
+  if(d2<d1){ hint.style.color="var(--danger)"; hint.textContent="⚠️ La date de fin doit être après le début"; return; }
+  const days=Math.round((d2-d1)/86400000)+1;
+  hint.style.color="var(--muted)";
+  hint.textContent=`Durée : ${days} jour${days>1?"s":""}`;
+}
+
+function cmpApplyPeriod(preset){
+  const s=document.getElementById("cmp_start"), e=document.getElementById("cmp_end");
+  const today=new Date(); today.setHours(0,0,0,0);
+  const fmt=d=>d.toISOString().substring(0,10);
+  let start, end;
+  if(preset==="thisMonth"){
+    start=new Date(today.getFullYear(),today.getMonth(),1);
+    end=new Date(today.getFullYear(),today.getMonth()+1,0);
+  } else if(preset==="nextMonth"){
+    start=new Date(today.getFullYear(),today.getMonth()+1,1);
+    end=new Date(today.getFullYear(),today.getMonth()+2,0);
+  } else if(preset==="thisQuarter"){
+    const q=Math.floor(today.getMonth()/3);
+    start=new Date(today.getFullYear(),q*3,1);
+    end=new Date(today.getFullYear(),q*3+3,0);
+  } else if(preset==="thisYear"){
+    start=new Date(today.getFullYear(),0,1);
+    end=new Date(today.getFullYear(),11,31);
+  } else if(preset==="next30"){
+    start=new Date(today); end=new Date(today); end.setDate(end.getDate()+29);
+  } else if(preset==="next90"){
+    start=new Date(today); end=new Date(today); end.setDate(end.getDate()+89);
+  } else return;
+  s.value=fmt(start); e.value=fmt(end);
+  cmpUpdatePeriodHint();
+}
+
+async function saveCampaign(){
+  const draft=window.__cmpDraft;
+  if(!draft){ toast("Session expirée","err"); return; }
+  const tt=draft.triggerType;
+
   const body={
     name:val("cmp_name"),
-    description:val("cmp_desc"),
+    description:val("cmp_desc")||null,
+    triggerType:tt,
     startDate:val("cmp_start")||null,
     endDate:val("cmp_end")||null,
     cashbackType:document.getElementById("cmp_cbtype").value,
-    cashbackValue:parseFloat(val("cmp_cbval")||"0"),
+    cashbackValue:val("cmp_cbval")?parseFloat(val("cmp_cbval")):null,
     totalBudget:val("cmp_budget")?parseFloat(val("cmp_budget")):null,
-    status:document.getElementById("cmp_status").value
+    status:document.getElementById("cmp_status").value,
+    entityTypeFilter:val("cmp_entityFilter")||null,
+    tierFilter:val("cmp_tierFilter")||null,
+    minTransactionAmount:val("cmp_minTx")?parseFloat(val("cmp_minTx")):null,
+    maxCashbackPerClient:val("cmp_maxCb")?parseFloat(val("cmp_maxCb")):null
   };
-  if(!body.name){toast(t("c_campaign"),"err");return;}
+
+  // ADMIN provides merchantId; PARTNER doesn't (forced server-side)
+  if(ME.role==="ADMIN"){
+    const mid=val("cmp_merchant");
+    if(!mid && !draft.isEdit){ toast("Choisissez un commerçant","err"); return; }
+    if(mid) body.merchantId=parseInt(mid,10);
+  }
+
+  // Trigger-specific fields
+  if(tt==="PRODUCT_PURCHASE"){ body.targetProductSkus=val("cmp_skus")||null; }
+  if(tt==="VOLUME_THRESHOLD"){
+    body.volumeThreshold=val("cmp_volumeThreshold")?parseFloat(val("cmp_volumeThreshold")):null;
+    body.categoryFilter=val("cmp_categoryFilter")||null;
+  }
+  if(tt==="POS_WEBHOOK_EVENT"){
+    body.amountThreshold=val("cmp_amountThreshold")?parseFloat(val("cmp_amountThreshold")):null;
+  }
+  if(tt==="MERCHANT_TRANSACTION"){
+    body.categoryFilter=val("cmp_categoryFilter")||null;
+  }
+
+  if(!body.name){ toast("Nom de la campagne requis","err"); return; }
+
   try{
-    const method=id?"PUT":"POST";
-    const url=id?`/api/campaigns/${id}`:"/api/campaigns";
+    const method=draft.id?"PUT":"POST";
+    const url=draft.id?`/api/campaigns/${draft.id}`:"/api/campaigns";
     await api(url,{method,body:JSON.stringify(body)});
     toast(t("saved_ok"),"ok");
     closeModal();
+    window.__cmpDraft=null;
     renderCampaigns();
-  }catch(e){toast(String(e.message||e).slice(0,160),"err");}
+  }catch(e){
+    let msg=String(e.message||e);
+    try{ const parsed=JSON.parse(msg); if(parsed.error) msg=parsed.error; }catch(_){}
+    toast(msg.slice(0,200),"err");
+  }
 }
 
 function campaignView(id){
