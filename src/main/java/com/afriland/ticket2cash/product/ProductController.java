@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -37,6 +38,46 @@ public class ProductController {
         return null;
     }
 
+    // ---------------------------------------------------------------- validation
+
+    /**
+     * Validates a product name against the "real product name" heuristic.
+     * A product name must:
+     *   - be non-blank
+     *   - be at least 2 characters after trimming
+     *   - contain at least one letter (a-z or accented) — rejects "@", "?", "!", "123"
+     *   - not exceed 200 characters
+     * Returns null when valid, or a human-readable error message otherwise.
+     */
+    private String validateProductName(String raw) {
+        if (raw == null || raw.trim().isEmpty()) {
+            return "Le nom du produit est requis";
+        }
+        String trimmed = raw.trim();
+        if (trimmed.length() < 2) {
+            return "Le nom doit contenir au moins 2 caractères";
+        }
+        if (trimmed.length() > 200) {
+            return "Le nom ne doit pas dépasser 200 caractères";
+        }
+        // Must contain at least one letter (Latin or accented). Prevents "@@", "###", "42".
+        if (!trimmed.matches(".*[\\p{L}].*")) {
+            return "Le nom doit contenir au moins une lettre (ex: 'Shampoing', pas '@' ou '?')";
+        }
+        return null;
+    }
+
+    /** SKU validation — must be non-blank if provided, but SKU itself is optional. */
+    private String validateSku(String raw) {
+        if (raw == null) return null;
+        String trimmed = raw.trim();
+        if (trimmed.isEmpty()) return null;
+        if (trimmed.length() > 60) return "Le SKU ne doit pas dépasser 60 caractères";
+        return null;
+    }
+
+    // ---------------------------------------------------------------- read
+
     @GetMapping
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -47,8 +88,20 @@ public class ProductController {
         return productRepository.findByMerchantId(merchantId);
     }
 
+    // ---------------------------------------------------------------- create
+
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest request, HttpServletRequest http) {
+
+        // Validate the name FIRST — before touching merchant / DB / audit
+        String nameError = validateProductName(request.getName());
+        if (nameError != null) {
+            return ResponseEntity.badRequest().body(Map.of("error", nameError, "field", "name"));
+        }
+        String skuError = validateSku(request.getSku());
+        if (skuError != null) {
+            return ResponseEntity.badRequest().body(Map.of("error", skuError, "field", "sku"));
+        }
 
         // A partner can only create products for their own merchant (enforced server-side).
         Long effMerchantId = request.getMerchantId();
@@ -60,13 +113,13 @@ public class ProductController {
         if (merchant == null) {
             auditLogService.log("CREATE_PRODUCT_FAILED", "PRODUCT", "Product", null,
                     "ADMIN_DEMO", "FAILED", "Merchant not found: " + effMerchantId);
-            return ResponseEntity.badRequest().body("Merchant not found with id = " + effMerchantId);
+            return ResponseEntity.badRequest().body(Map.of("error", "Commerçant introuvable"));
         }
 
         Product product = new Product();
         product.setMerchant(merchant);
-        product.setSku(request.getSku());
-        product.setName(request.getName());
+        product.setSku(request.getSku() != null ? request.getSku().trim() : null);
+        product.setName(request.getName().trim());
         product.setTicketDesignation(request.getTicketDesignation());
         product.setSynonyms(request.getSynonyms());
         product.setCategory(request.getCategory());
@@ -85,6 +138,8 @@ public class ProductController {
         return ResponseEntity.ok(savedProduct);
     }
 
+    // ---------------------------------------------------------------- update
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductRequest request, HttpServletRequest http) {
 
@@ -98,18 +153,28 @@ public class ProductController {
         if (partnerMid != null) {
             Long owner = product.getMerchant() != null ? product.getMerchant().getId() : null;
             if (!partnerMid.equals(owner)) {
-                return ResponseEntity.status(403).body("This product does not belong to your merchant.");
+                return ResponseEntity.status(403).body(Map.of("error", "Ce produit n'appartient pas à votre commerçant."));
             }
         } else if (request.getMerchantId() != null) {
             Merchant merchant = merchantRepository.findById(request.getMerchantId()).orElse(null);
             if (merchant == null) {
-                return ResponseEntity.badRequest().body("Merchant not found with id = " + request.getMerchantId());
+                return ResponseEntity.badRequest().body(Map.of("error", "Commerçant introuvable"));
             }
             product.setMerchant(merchant);
         }
 
-        if (request.getSku() != null) product.setSku(request.getSku());
-        if (request.getName() != null) product.setName(request.getName());
+        // Validate name if it's being updated (not just partial patch)
+        if (request.getName() != null) {
+            String err = validateProductName(request.getName());
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "name"));
+            product.setName(request.getName().trim());
+        }
+        if (request.getSku() != null) {
+            String err = validateSku(request.getSku());
+            if (err != null) return ResponseEntity.badRequest().body(Map.of("error", err, "field", "sku"));
+            product.setSku(request.getSku().trim());
+        }
+
         if (request.getTicketDesignation() != null) product.setTicketDesignation(request.getTicketDesignation());
         if (request.getSynonyms() != null) product.setSynonyms(request.getSynonyms());
         if (request.getCategory() != null) product.setCategory(request.getCategory());
@@ -128,6 +193,8 @@ public class ProductController {
         return ResponseEntity.ok(saved);
     }
 
+    // ---------------------------------------------------------------- delete
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id, HttpServletRequest http) {
 
@@ -140,7 +207,7 @@ public class ProductController {
         if (partnerMid != null) {
             Long owner = product.getMerchant() != null ? product.getMerchant().getId() : null;
             if (!partnerMid.equals(owner)) {
-                return ResponseEntity.status(403).body("This product does not belong to your merchant.");
+                return ResponseEntity.status(403).body(Map.of("error", "Ce produit n'appartient pas à votre commerçant."));
             }
         }
 
