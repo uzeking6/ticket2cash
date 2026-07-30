@@ -272,13 +272,6 @@ public class CampaignController {
         campaign.setAmountThreshold(request.getAmountThreshold());
         campaign.setCategoryFilter(request.getCategoryFilter());
 
-        // GL-01 filters
-        campaign.setMccCode(request.getMccCode());
-        campaign.setChannelFilter(request.getChannelFilter());
-        campaign.setCorridorFilter(request.getCorridorFilter());
-        campaign.setCardBinStart(request.getCardBinStart());
-        campaign.setCardBinEnd(request.getCardBinEnd());
-
         campaign.setCreatedBy(currentActor(http));
 
         Campaign saved = campaignRepository.save(campaign);
@@ -352,13 +345,6 @@ public class CampaignController {
         if (patch.getVolumeThreshold() != null) existing.setVolumeThreshold(patch.getVolumeThreshold());
         if (patch.getAmountThreshold() != null) existing.setAmountThreshold(patch.getAmountThreshold());
         if (patch.getCategoryFilter() != null) existing.setCategoryFilter(patch.getCategoryFilter());
-
-        // GL-01 filters
-        if (patch.getMccCode() != null) existing.setMccCode(patch.getMccCode());
-        if (patch.getChannelFilter() != null) existing.setChannelFilter(patch.getChannelFilter());
-        if (patch.getCorridorFilter() != null) existing.setCorridorFilter(patch.getCorridorFilter());
-        if (patch.getCardBinStart() != null) existing.setCardBinStart(patch.getCardBinStart());
-        if (patch.getCardBinEnd() != null) existing.setCardBinEnd(patch.getCardBinEnd());
 
         Campaign updated = campaignRepository.save(existing);
         auditLogService.log("UPDATE_CAMPAIGN", "CAMPAIGN", "Campaign",

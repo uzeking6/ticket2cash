@@ -468,7 +468,7 @@ const I18N={
   user_created:"Utilisateur créé.",users_list:"Comptes existants",
   set_saved:"Paramètre enregistré.",set_edit:"Modifier",
   cat_products:"Catalogue produits",cat_sub:"Créer ou modifier un produit, ou importer en masse.",
-  new_product:"Nouveau produit",new_campaign:"Nouvelle campagne",edit_campaign:"Modifier la campagne",adminInbox:"Boîte de réception",inbox_sub:"Demandes des partenaires.",partnerRequests:"Demandes",req_sub:"Contactez Afriland pour créer une campagne, poser une question ou signaler un problème.",loyaltyTiers:"Niveaux fidélité",tiers_sub:"Gestion des paliers Essentiel/Premium/Prestige/Elite avec règles de progression automatique.",vouchers:"Vouchers",vou_sub:"Bons et coupons de réduction — 5 typologies : fidélité progressif, bienvenue, anniversaire, one-shot, campagne partenaire.",tpl_import:"Modèle import",mass_import:"Import masse",
+  new_product:"Nouveau produit",new_campaign:"Nouvelle campagne",edit_campaign:"Modifier la campagne",adminInbox:"Boîte de réception",inbox_sub:"Demandes des partenaires.",partnerRequests:"Demandes",req_sub:"Contactez Afriland pour créer une campagne, poser une question ou signaler un problème.",tpl_import:"Modèle import",mass_import:"Import masse",
   f_sku:"SKU",f_name:"Nom du produit",f_category:"Catégorie",f_brand:"Marque",f_price:"Prix",f_group:"Clé groupe",
   f_cbtype:"Type cashback",f_cbvalue:"Valeur cashback",f_designation:"Désignation ticket",f_synonyms:"Synonymes",
   col_group:"Groupe",col_cashback:"Cashback",col_actions:"Actions",edit:"Modifier",del:"Supprimer",
@@ -571,7 +571,7 @@ const I18N={
   user_created:"User created.",users_list:"Existing accounts",
   set_saved:"Setting saved.",set_edit:"Edit",
   cat_products:"Product catalog",cat_sub:"Create or edit a product, or bulk import.",
-  new_product:"New product",new_campaign:"New campaign",edit_campaign:"Edit campaign",adminInbox:"Inbox",inbox_sub:"Partner requests.",partnerRequests:"Requests",req_sub:"Contact Afriland to request a campaign, ask a question, or report an issue.",loyaltyTiers:"Loyalty Tiers",tiers_sub:"Manage Essentiel/Premium/Prestige/Elite tiers with auto-progression.",vouchers:"Vouchers",vou_sub:"Voucher & coupon engine with 5 typologies.",tpl_import:"Import template",mass_import:"Bulk import",
+  new_product:"New product",new_campaign:"New campaign",edit_campaign:"Edit campaign",adminInbox:"Inbox",inbox_sub:"Partner requests.",partnerRequests:"Requests",req_sub:"Contact Afriland to request a campaign, ask a question, or report an issue.",tpl_import:"Import template",mass_import:"Bulk import",
   f_sku:"SKU",f_name:"Product name",f_category:"Category",f_brand:"Brand",f_price:"Price",f_group:"Group key",
   f_cbtype:"Cashback type",f_cbvalue:"Cashback value",f_designation:"Ticket designation",f_synonyms:"Synonyms",
   col_group:"Group",col_cashback:"Cashback",col_actions:"Actions",edit:"Edit",del:"Delete",
@@ -626,8 +626,6 @@ const IC={
  ticketTemplate:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/>',
  adminInbox:'<path d="M4 4h16v12H5.17L4 17.17V4z"/><path d="M8 9h8M8 13h5"/>',
  partnerRequests:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
- loyaltyTiers:'<path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>',
- vouchers:'<path d="M12 2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.41L12 21l8.41-8.59A2 2 0 0 0 21 11V4a2 2 0 0 0-2-2h-7z"/><circle cx="8" cy="8" r="1.5"/>',
  loyalty:'<path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
  subPartners:'<path d="M3 21V7l6-4 6 4v14"/><path d="M15 21V11l6 4v6"/><path d="M7 9h.01M7 13h.01M11 9h.01M11 13h.01"/>'
 };
@@ -635,11 +633,11 @@ const IC={
 /* ============ NAV MODEL ============ */
 const NAV={
  ADMIN:[{group:"g_principal",items:["dashboard","businessDashboard","security","trends"]},
-        {group:"g_ops",items:["loyalty","loyaltyTiers","vouchers","merchants","products","campaigns","adminInbox","tickets","transactions","claims","review","payments","finance"]},
+        {group:"g_ops",items:["loyalty","merchants","products","campaigns","adminInbox","tickets","transactions","claims","review","payments","finance"]},
         {group:"g_integration",items:["webhooks","apiKeys","ocr","ticketTemplate"]},
         {group:"g_sys",items:["users"]}],
  PARTNER:[{group:"g_principal",items:["dashboard"]},
-          {group:"g_ops",items:["campaigns","products","vouchers","partnerRequests","claims","payments"]}],
+          {group:"g_ops",items:["campaigns","products","partnerRequests","claims","payments"]}],
  DEFAULT:[{group:"g_principal",items:["dashboard"]},{group:"g_ops",items:["claims","payments"]}]
 };
 
@@ -688,8 +686,7 @@ const ROUTES={
  trends:renderTrends,webhooks:renderWebhooks,apiKeys:renderApiKeys,
  finance:renderFinance,ocr:renderOcr,pricing:()=>renderCrud("pricing"),ticketTemplate:()=>renderCrud("ticketTemplate"),
  subPartners:renderSubPartners,
- adminInbox:renderAdminInbox,partnerRequests:renderPartnerRequests,
- loyaltyTiers:renderLoyaltyTiers,vouchers:renderVouchers
+ adminInbox:renderAdminInbox,partnerRequests:renderPartnerRequests
 };
 function go(id,silent){
   if(!ROUTES[id])id="dashboard";
@@ -1597,41 +1594,6 @@ function openModal(title,bodyHTML,footerHTML){
   document.body.appendChild(b);
 }
 function closeModal(){const m=document.getElementById("modalBack");if(m)m.remove();}
-
-const __MCC_LIST_DATA = [
-  {code:"MCC_5411",label:"Supermarchés / Épiceries"},
-  {code:"MCC_5541",label:"Stations-service"},
-  {code:"MCC_5812",label:"Restaurants"},
-  {code:"MCC_5813",label:"Bars et lounges"},
-  {code:"MCC_5814",label:"Restauration rapide"},
-  {code:"MCC_5912",label:"Pharmacies / Drugstores"},
-  {code:"MCC_5921",label:"Vente d'alcool"},
-  {code:"MCC_5941",label:"Articles de sport"},
-  {code:"MCC_5942",label:"Librairies"},
-  {code:"MCC_5945",label:"Jeux, jouets"},
-  {code:"MCC_5947",label:"Cadeaux, cartes de vœux"},
-  {code:"MCC_5977",label:"Cosmétique et parfumerie"},
-  {code:"MCC_5992",label:"Fleuristes"},
-  {code:"MCC_5999",label:"Commerce de détail divers"},
-  {code:"MCC_6011",label:"Retrait DAB (cash)"},
-  {code:"MCC_6300",label:"Assurances"},
-  {code:"MCC_7011",label:"Hôtels / Hébergement"},
-  {code:"MCC_7230",label:"Salons de beauté / Coiffure"},
-  {code:"MCC_7538",label:"Réparation automobile"},
-  {code:"MCC_7995",label:"Casinos / Jeux d'argent"},
-  {code:"MCC_8062",label:"Hôpitaux"},
-  {code:"MCC_8099",label:"Services médicaux divers"},
-  {code:"MCC_4111",label:"Transport local"},
-  {code:"MCC_4121",label:"Taxis"},
-  {code:"MCC_4511",label:"Compagnies aériennes"},
-  {code:"MCC_4722",label:"Agences de voyage"},
-  {code:"MCC_4814",label:"Télécoms / Factures téléphone"},
-  {code:"MCC_4900",label:"Utilities (eau, électricité)"},
-  {code:"MCC_5045",label:"Informatique et périphériques"},
-  {code:"MCC_5732",label:"Électronique grand public"},
-  {code:"OTHER",label:"Autre / Non catégorisé"}
-];
-window.__MCC_LIST = __MCC_LIST_DATA.map(m=>({code:m.code,label:m.code!=="OTHER"?m.code.replace("MCC_","")+" — "+m.label:m.label}));
 function val(id){const e=document.getElementById(id);return e?e.value.trim():"";}
 
 /* --- Field validation library (V7) --- */
@@ -2593,42 +2555,10 @@ function cmpOpenForm(){
       </div>`;
   } else {
     // MERCHANT_TRANSACTION
-    const mccOptions = window.__MCC_LIST.map(m => `<option value="${m.code}" ${cm.mccCode===m.code?"selected":""}>${m.code!=="OTHER"?m.code+" — ":""}${m.label}</option>`).join("");
     triggerFields=`
-      <div class="field"><label>Code MCC (catégorie marchand)</label>
-        <select id="cmp_mccCode">
-          <option value="">— Aucun filtre MCC —</option>
-          ${mccOptions}
-        </select>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Ne cible que les transactions dans cette catégorie</div>
-      </div>
-      <div class="field"><label>Canal de paiement</label>
-        <select id="cmp_channelFilter">
-          <option value="ALL" ${!cm.channelFilter||cm.channelFilter==="ALL"?"selected":""}>Tous canaux</option>
-          <option value="ECOMM" ${cm.channelFilter==="ECOMM"?"selected":""}>🌐 E-commerce</option>
-          <option value="F2F" ${cm.channelFilter==="F2F"?"selected":""}>🏪 En magasin (F2F)</option>
-          <option value="MOBILE_WALLET" ${cm.channelFilter==="MOBILE_WALLET"?"selected":""}>📱 Mobile Wallet</option>
-          <option value="CNP" ${cm.channelFilter==="CNP"?"selected":""}>📞 CNP (téléphone/mail)</option>
-          <option value="ATM" ${cm.channelFilter==="ATM"?"selected":""}>💳 DAB / ATM</option>
-        </select>
-      </div>
-      <div class="field"><label>Corridor géographique</label>
-        <select id="cmp_corridorFilter">
-          <option value="ALL" ${!cm.corridorFilter||cm.corridorFilter==="ALL"?"selected":""}>Tous corridors</option>
-          <option value="DOMESTIC" ${cm.corridorFilter==="DOMESTIC"?"selected":""}>🇨🇲 Domestique</option>
-          <option value="INTERNATIONAL" ${cm.corridorFilter==="INTERNATIONAL"?"selected":""}>🌍 International</option>
-          <option value="CROSS_BORDER" ${cm.corridorFilter==="CROSS_BORDER"?"selected":""}>🌐 CEMEA transfrontalier</option>
-        </select>
-      </div>
-      <div class="field"><label>Plage BIN carte (optionnel)</label>
-        <div style="display:flex;gap:8px">
-          <input id="cmp_binStart" value="${esc(cm.cardBinStart||"")}" placeholder="Début BIN" maxlength="10">
-          <input id="cmp_binEnd" value="${esc(cm.cardBinEnd||"")}" placeholder="Fin BIN" maxlength="10">
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Cible un produit carte spécifique (ex: 456120-456129 pour Gold Business)</div>
-      </div>
       <div class="field full"><label>Catégorie de transaction (optionnel)</label>
         <input id="cmp_categoryFilter" value="${esc(cm.categoryFilter||"")}" placeholder="Ex: CARD_PURCHASE, MOBILE_MONEY">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Laissez vide pour appliquer à toutes les transactions</div>
       </div>`;
   }
 
@@ -2831,11 +2761,6 @@ async function saveCampaign(){
   }
   if(tt==="MERCHANT_TRANSACTION"){
     body.categoryFilter=val("cmp_categoryFilter")||null;
-    body.mccCode=val("cmp_mccCode")||null;
-    body.channelFilter=val("cmp_channelFilter")||null;
-    body.corridorFilter=val("cmp_corridorFilter")||null;
-    body.cardBinStart=val("cmp_binStart")||null;
-    body.cardBinEnd=val("cmp_binEnd")||null;
   }
 
   if(!body.name){ toast("Nom de la campagne requis","err"); return; }
@@ -2977,434 +2902,6 @@ async function merchantModal(){
   openModal(t("merchant_create"),merchantFormFields(null,{}),
     `<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button><button class="btn btn-primary" onclick="submitMerchant()">${t("save")}</button>`);
 }
-/* =========== LOYALTY TIERS (V8 — GL-07) =========== */
-
-async function renderLoyaltyTiers(){
-  const el=document.getElementById("content");
-  const canManage=ME.role==="ADMIN";
-  el.innerHTML=`<div class="page">${head(t("loyaltyTiers"),t("tiers_sub"),
-    (canManage?`<button class="btn btn-primary" onclick="tierModal()">+ Nouveau niveau</button>`:"")+refreshBtn())}
-    <div id="tiersGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:20px">
-      ${rowSkeleton(4,1)}
-    </div></div>`;
-  try{
-    const rows = await api("/api/loyalty/tiers");
-    window.__tiers = Array.isArray(rows)?rows:[];
-    document.getElementById("tiersGrid").innerHTML = window.__tiers.length ? window.__tiers.map(tier => `
-      <div style="padding:20px;background:var(--surface);border:2px solid ${esc(tier.colorHex||"#94A3B8")};border-radius:14px;position:relative">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-          <div style="font-size:36px;line-height:1">${esc(tier.icon||"⭐")}</div>
-          <div style="flex:1">
-            <h3 style="margin:0;color:${esc(tier.colorHex||"#94A3B8")};font-size:18px">${esc(tier.name)}</h3>
-            <div style="font-size:12px;color:var(--muted);margin-top:2px">Ordre #${tier.sortOrder+1} · ${tier.active?"Actif":"Inactif"}</div>
-          </div>
-        </div>
-        <p style="margin:0 0 12px 0;font-size:13px;color:var(--text-2);line-height:1.5">${esc(tier.description||"—")}</p>
-        <div style="padding:10px 12px;background:var(--surface-2);border-radius:8px;margin-bottom:10px">
-          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">SEUILS D'ACCÈS</div>
-          <div style="font-size:13px">Dépense cumulée : <strong>${(tier.minCumulativeSpend||0).toLocaleString("fr-FR")} FCFA</strong></div>
-          <div style="font-size:13px">Transactions : <strong>${tier.minTransactionCount||0}</strong> min · sur <strong>${tier.evaluationMonths||12} mois</strong></div>
-        </div>
-        <div style="padding:10px 12px;background:var(--surface-2);border-radius:8px;margin-bottom:10px">
-          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">AVANTAGES</div>
-          <div style="font-size:13px"><strong style="color:${esc(tier.colorHex||"#94A3B8")}">+${tier.cashbackBonusPercent||0}%</strong> cashback bonus</div>
-          <div style="font-size:12px;color:var(--text-2);white-space:pre-wrap;margin-top:4px">${esc(tier.benefitsSummary||"")}</div>
-        </div>
-        ${canManage?`<div style="display:flex;gap:6px;margin-top:12px">
-          <button class="mini-btn" onclick="tierModal(${tier.id})" style="flex:1">Modifier</button>
-          <button class="mini-btn danger" onclick="tierDelete(${tier.id})">Supprimer</button>
-        </div>`:""}
-      </div>
-    `).join("") : `<div style="grid-column:1/-1">${emptyFull()}</div>`;
-  }catch(e){ document.getElementById("tiersGrid").innerHTML = `<div>${emptyMini(t("err_load"))}</div>`; }
-}
-
-function tierModal(id){
-  const tier = id ? (window.__tiers||[]).find(t=>t.id===id) : {};
-  const isEdit = !!id;
-  const body = `
-    <div class="form-grid">
-      <div class="field"><label>Nom du niveau *</label>
-        <input id="tier_name" data-validate="name" value="${esc(tier.name||"")}" placeholder="Ex: Prestige">
-        <div class="field-error"></div>
-      </div>
-      <div class="field"><label>Icône / Emoji</label>
-        <input id="tier_icon" value="${esc(tier.icon||"")}" placeholder="🥇" maxlength="4">
-      </div>
-      <div class="field full"><label>Description</label>
-        <input id="tier_desc" value="${esc(tier.description||"")}" placeholder="Description courte du niveau">
-      </div>
-      <div class="field"><label>Ordre (0 = base)</label>
-        <input id="tier_sort" type="number" min="0" value="${tier.sortOrder!=null?tier.sortOrder:0}">
-      </div>
-      <div class="field"><label>Couleur (hex)</label>
-        <input id="tier_color" type="color" value="${esc(tier.colorHex||"#94A3B8")}">
-      </div>
-      <div class="field"><label>Seuil dépense cumulée (FCFA) *</label>
-        <input id="tier_minSpend" type="number" min="0" step="1000" data-validate="positiveOrZero" value="${tier.minCumulativeSpend||0}">
-        <div class="field-error"></div>
-      </div>
-      <div class="field"><label>Nb transactions min</label>
-        <input id="tier_minTx" type="number" min="0" value="${tier.minTransactionCount||0}">
-      </div>
-      <div class="field"><label>Fenêtre évaluation (mois)</label>
-        <input id="tier_evalMonths" type="number" min="1" value="${tier.evaluationMonths||12}">
-      </div>
-      <div class="field"><label>Grâce déclassement (mois)</label>
-        <input id="tier_grace" type="number" min="0" value="${tier.graceMonths||6}">
-      </div>
-      <div class="field"><label>Bonus cashback (%) *</label>
-        <input id="tier_bonus" type="number" min="0" max="100" step="0.1" data-validate="percentage" value="${tier.cashbackBonusPercent||0}">
-        <div class="field-error"></div>
-      </div>
-      <div class="field"><label>Actif</label>
-        <select id="tier_active">
-          <option value="true" ${tier.active!==false?"selected":""}>Oui</option>
-          <option value="false" ${tier.active===false?"selected":""}>Non</option>
-        </select>
-      </div>
-      <div class="field full"><label>Avantages (une ligne par avantage)</label>
-        <textarea id="tier_benefits" rows="5" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-size:14px;font-family:inherit;resize:vertical" placeholder="• Cashback bonus\n• Accès offres exclusives\n• Support prioritaire">${esc(tier.benefitsSummary||"")}</textarea>
-      </div>
-    </div>`;
-  openModal(isEdit?"Modifier le niveau":"Nouveau niveau de fidélité", body,
-    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-     <button class="btn btn-primary" onclick="tierSave(${id||"null"})">Enregistrer</button>`);
-  setTimeout(()=>wireLiveValidation("#modalBack"),50);
-}
-
-async function tierSave(id){
-  const body = {
-    name: val("tier_name"),
-    description: val("tier_desc"),
-    sortOrder: parseInt(val("tier_sort")||"0",10),
-    colorHex: val("tier_color"),
-    icon: val("tier_icon"),
-    minCumulativeSpend: parseFloat(val("tier_minSpend")||"0"),
-    minTransactionCount: parseInt(val("tier_minTx")||"0",10),
-    evaluationMonths: parseInt(val("tier_evalMonths")||"12",10),
-    graceMonths: parseInt(val("tier_grace")||"6",10),
-    cashbackBonusPercent: parseFloat(val("tier_bonus")||"0"),
-    active: val("tier_active")==="true",
-    benefitsSummary: document.getElementById("tier_benefits").value
-  };
-  if(!body.name){ toast("Nom requis","err"); return; }
-  try{
-    await api(id?`/api/loyalty/tiers/${id}`:"/api/loyalty/tiers",
-      { method: id?"PUT":"POST", body: JSON.stringify(body) });
-    toast("Niveau enregistré","ok");
-    closeModal();
-    renderLoyaltyTiers();
-  }catch(e){ let m=String(e.message||e); try{const j=JSON.parse(m);if(j.error)m=j.error}catch(_){} toast(m.slice(0,200),"err"); }
-}
-
-async function tierDelete(id){
-  if(!confirm("Supprimer ce niveau ? Les clients à ce niveau seront réévalués.")) return;
-  try{
-    await api("/api/loyalty/tiers/"+id, { method:"DELETE" });
-    toast("Niveau supprimé","ok");
-    renderLoyaltyTiers();
-  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
-}
-
-
-/* =========== VOUCHERS (V8 — GL-06) =========== */
-
-async function renderVouchers(){
-  const el=document.getElementById("content");
-  const canManage=ME.role==="ADMIN";
-  el.innerHTML=`<div class="page">${head(t("vouchers"),t("vou_sub"),
-    (canManage?`<button class="btn btn-primary" onclick="vouModal()">+ Créer un voucher</button>
-     <button class="btn btn-ghost" onclick="vouBulkModal()">Génération en masse</button>`:"")+refreshBtn())}
-    <div class="kpi-grid" style="margin-bottom:16px">
-      <div class="kpi-card"><div class="kpi-label">Total</div><div class="kpi-value" id="vouKpiTotal">—</div></div>
-      <div class="kpi-card"><div class="kpi-label">Émis</div><div class="kpi-value" id="vouKpiIssued">—</div></div>
-      <div class="kpi-card"><div class="kpi-label">Consommés</div><div class="kpi-value" id="vouKpiConsumed">—</div></div>
-      <div class="kpi-card"><div class="kpi-label">Taux redemption</div><div class="kpi-value" id="vouKpiRate">—</div></div>
-    </div>
-    <div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="vouCp">—</span></div>
-    <div class="table-scroll"><table><thead><tr><th>Code</th><th>Nom</th><th>Type</th><th>Valeur</th><th>Bénéficiaire</th><th>Validité</th><th>Statut</th><th style="text-align:right">Actions</th></tr></thead>
-    <tbody id="vouBody">${rowSkeleton(8,6)}</tbody></table></div></div></div>`;
-  try{
-    const [rows, stats] = await Promise.all([
-      api("/api/vouchers"),
-      api("/api/vouchers/stats")
-    ]);
-    window.__vouchers = Array.isArray(rows)?rows:[];
-    document.getElementById("vouCp").textContent = window.__vouchers.length + " voucher(s)";
-    document.getElementById("vouKpiTotal").textContent = stats.total||0;
-    document.getElementById("vouKpiIssued").textContent = stats.issued||0;
-    document.getElementById("vouKpiConsumed").textContent = stats.consumed||0;
-    document.getElementById("vouKpiRate").textContent = (stats.redemptionRate||0).toFixed(1)+" %";
-    document.getElementById("vouBody").innerHTML = window.__vouchers.length ? window.__vouchers.map(v => `
-      <tr>
-        <td><code style="background:var(--surface-2);padding:2px 6px;border-radius:4px;font-size:12px">${esc(v.code)}</code></td>
-        <td class="strong">${esc(v.name||"—")}</td>
-        <td>${vouTypeBadge(v.type)}</td>
-        <td>${vouValueLabel(v)}</td>
-        <td style="font-size:12px;color:var(--text-2)">${v.ownerAccountNumber?esc(v.ownerAccountNumber):"—"}${v.ownerName?"<br>"+esc(v.ownerName):""}</td>
-        <td style="font-size:12px;white-space:nowrap">${v.validFrom?dt(v.validFrom):"—"}<br>→ ${v.validTo?dt(v.validTo):"—"}</td>
-        <td>${vouStatusBadge(v.status)}</td>
-        <td class="row-actions"><button class="mini-btn" onclick="vouView(${v.id})">Voir</button>${canManage&&v.status==="ISSUED"?`<button class="mini-btn" onclick="vouConsume(${v.id})">Consommer</button><button class="mini-btn danger" onclick="vouCancel(${v.id})">Annuler</button>`:""}</td>
-      </tr>`).join("") : `<tr><td colspan="8">${emptyFull()}</td></tr>`;
-  }catch(e){ document.getElementById("vouBody").innerHTML = `<tr><td colspan="8">${emptyMini(t("err_load"))}</td></tr>`; }
-}
-
-function vouTypeBadge(t){
-  const map = {
-    PROGRESSIVE_LOYALTY: {label:"Fidélité progressive", cls:"b-info", icon:"🎯"},
-    ONE_SHOT: {label:"One-shot", cls:"b-ok", icon:"⚡"},
-    WELCOME: {label:"Bienvenue", cls:"b-info", icon:"👋"},
-    BIRTHDAY: {label:"Anniversaire", cls:"b-warn", icon:"🎂"},
-    PARTNER_CAMPAIGN: {label:"Partenaire", cls:"b-muted", icon:"🤝"}
-  };
-  const m = map[t] || {label:t, cls:"b-muted", icon:"?"};
-  return `<span class="badge ${m.cls}">${m.icon} ${m.label}</span>`;
-}
-
-function vouStatusBadge(s){
-  const map = {
-    ISSUED: {label:"Émis", cls:"b-info"},
-    CONSUMED: {label:"Consommé", cls:"b-ok"},
-    EXPIRED: {label:"Expiré", cls:"b-muted"},
-    CANCELLED: {label:"Annulé", cls:"b-danger"}
-  };
-  const m = map[s] || {label:s, cls:"b-muted"};
-  return `<span class="badge ${m.cls}">${m.label}</span>`;
-}
-
-function vouValueLabel(v){
-  if(!v.valueType) return "—";
-  if(v.valueType==="FREE_PRODUCT") return "🎁 Gratuit";
-  if(v.valueType==="PERCENTAGE_DISCOUNT") return `${v.value||0} %`;
-  return `${(v.value||0).toLocaleString("fr-FR")} FCFA`;
-}
-
-function vouModal(){
-  const merchantOptions = (window.__merchants||[]).map(m=>`<option value="${m.id}">${esc(m.brandName||m.name)}</option>`).join("");
-  const body = `
-    <div class="form-grid">
-      <div class="field full"><label>Nom du voucher *</label>
-        <input id="vou_name" data-validate="name" placeholder="Ex: Bonus rentrée 2026">
-        <div class="field-error"></div>
-      </div>
-      <div class="field"><label>Type de voucher *</label>
-        <select id="vou_type">
-          <option value="ONE_SHOT">⚡ One-shot (immédiat)</option>
-          <option value="PROGRESSIVE_LOYALTY">🎯 Fidélité progressive</option>
-          <option value="WELCOME">👋 Bienvenue (activation carte)</option>
-          <option value="BIRTHDAY">🎂 Anniversaire client</option>
-          <option value="PARTNER_CAMPAIGN">🤝 Campagne partenaire</option>
-        </select>
-      </div>
-      <div class="field"><label>Type de valeur *</label>
-        <select id="vou_valueType" onchange="vouUpdateValueHint()">
-          <option value="PERCENTAGE_DISCOUNT">Pourcentage %</option>
-          <option value="FIXED_AMOUNT">Montant fixe FCFA</option>
-          <option value="FREE_PRODUCT">Produit gratuit</option>
-        </select>
-      </div>
-      <div class="field"><label id="vou_value_label">Valeur *</label>
-        <input id="vou_value" type="number" min="0" step="0.01" data-validate="positive">
-        <div class="field-error"></div>
-      </div>
-      <div class="field"><label>Mode d'utilisation</label>
-        <select id="vou_usageMode">
-          <option value="SINGLE_USE">Single-use</option>
-          <option value="MULTI_USE">Multi-use</option>
-        </select>
-      </div>
-      <div class="field"><label>Utilisations max (multi-use)</label>
-        <input id="vou_maxUses" type="number" min="1" placeholder="Illimité si vide">
-      </div>
-      <div class="field"><label>Commerçant (optionnel)</label>
-        <select id="vou_merchant">
-          <option value="">— Aucun (tout marchand) —</option>
-          ${merchantOptions}
-        </select>
-      </div>
-      <div class="field"><label>N° compte bénéficiaire (optionnel)</label>
-        <input id="vou_owner" placeholder="Ex: 400123456789">
-      </div>
-      <div class="field"><label>Nom bénéficiaire (optionnel)</label>
-        <input id="vou_ownerName" placeholder="Ex: Marie Nkeng">
-      </div>
-      <div class="field"><label>Valable du</label>
-        <input id="vou_validFrom" type="date">
-      </div>
-      <div class="field"><label>Valable au</label>
-        <input id="vou_validTo" type="date">
-      </div>
-      <div class="field full"><label>Description</label>
-        <input id="vou_description" placeholder="Ex: 15% de remise sur tout achat >5000 FCFA">
-      </div>
-    </div>`;
-  openModal("Nouveau voucher", body,
-    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-     <button class="btn btn-primary" onclick="vouSave()">Générer</button>`);
-  setTimeout(()=>{ wireLiveValidation("#modalBack"); vouUpdateValueHint(); },50);
-}
-
-function vouUpdateValueHint(){
-  const t = document.getElementById("vou_valueType")?.value;
-  const lbl = document.getElementById("vou_value_label");
-  const inp = document.getElementById("vou_value");
-  if(!lbl||!inp) return;
-  if(t==="FREE_PRODUCT"){ lbl.textContent="Valeur (ignorée pour produit gratuit)"; inp.disabled=true; }
-  else if(t==="PERCENTAGE_DISCOUNT"){ lbl.textContent="Pourcentage (0-100) *"; inp.disabled=false; inp.setAttribute("data-validate","percentage"); }
-  else { lbl.textContent="Montant fixe (FCFA) *"; inp.disabled=false; inp.setAttribute("data-validate","positive"); }
-}
-
-async function vouSave(){
-  const merchantId = val("vou_merchant");
-  const body = {
-    name: val("vou_name"),
-    description: val("vou_description"),
-    type: document.getElementById("vou_type").value,
-    valueType: document.getElementById("vou_valueType").value,
-    value: val("vou_value")?parseFloat(val("vou_value")):null,
-    usageMode: document.getElementById("vou_usageMode").value,
-    maxUses: val("vou_maxUses")?parseInt(val("vou_maxUses"),10):null,
-    ownerAccountNumber: val("vou_owner")||null,
-    ownerName: val("vou_ownerName")||null,
-    validFrom: val("vou_validFrom")||null,
-    validTo: val("vou_validTo")||null,
-    merchant: merchantId?{id:parseInt(merchantId,10)}:null
-  };
-  if(!body.name){ toast("Nom requis","err"); return; }
-  try{
-    await api("/api/vouchers",{method:"POST",body:JSON.stringify(body)});
-    toast("Voucher généré","ok");
-    closeModal();
-    renderVouchers();
-  }catch(e){ let m=String(e.message||e); try{const j=JSON.parse(m);if(j.error)m=j.error}catch(_){} toast(m.slice(0,200),"err"); }
-}
-
-function vouBulkModal(){
-  const merchantOptions = (window.__merchants||[]).map(m=>`<option value="${m.id}">${esc(m.brandName||m.name)}</option>`).join("");
-  const body = `
-    <div style="margin-bottom:14px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;color:var(--text-2)">
-      Génère plusieurs vouchers identiques d'un coup. Chacun aura son propre code unique.
-    </div>
-    <div class="form-grid">
-      <div class="field"><label>Nombre à générer *</label>
-        <input id="bulk_count" type="number" min="1" max="1000" value="10">
-      </div>
-      <div class="field"><label>Type *</label>
-        <select id="bulk_type">
-          <option value="ONE_SHOT">One-shot</option>
-          <option value="WELCOME">Bienvenue</option>
-          <option value="BIRTHDAY">Anniversaire</option>
-          <option value="PARTNER_CAMPAIGN">Partenaire</option>
-        </select>
-      </div>
-      <div class="field full"><label>Nom (identique pour tous) *</label>
-        <input id="bulk_name" data-validate="name" placeholder="Ex: Cadeaux entreprise 2026">
-        <div class="field-error"></div>
-      </div>
-      <div class="field"><label>Type valeur *</label>
-        <select id="bulk_valueType">
-          <option value="PERCENTAGE_DISCOUNT">Pourcentage %</option>
-          <option value="FIXED_AMOUNT">Montant FCFA</option>
-          <option value="FREE_PRODUCT">Produit gratuit</option>
-        </select>
-      </div>
-      <div class="field"><label>Valeur *</label>
-        <input id="bulk_value" type="number" min="0" step="0.01">
-      </div>
-      <div class="field"><label>Valable du</label>
-        <input id="bulk_validFrom" type="date">
-      </div>
-      <div class="field"><label>Valable au</label>
-        <input id="bulk_validTo" type="date">
-      </div>
-      <div class="field full"><label>Commerçant (optionnel)</label>
-        <select id="bulk_merchant">
-          <option value="">— Aucun —</option>
-          ${merchantOptions}
-        </select>
-      </div>
-    </div>`;
-  openModal("Génération en masse", body,
-    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-     <button class="btn btn-primary" onclick="vouBulkSave()">Générer</button>`);
-  setTimeout(()=>wireLiveValidation("#modalBack"),50);
-}
-
-async function vouBulkSave(){
-  const body = {
-    count: parseInt(val("bulk_count")||"0",10),
-    name: val("bulk_name"),
-    type: document.getElementById("bulk_type").value,
-    valueType: document.getElementById("bulk_valueType").value,
-    value: val("bulk_value")?parseFloat(val("bulk_value")):null,
-    validFrom: val("bulk_validFrom")||null,
-    validTo: val("bulk_validTo")||null,
-    merchantId: val("bulk_merchant")?parseInt(val("bulk_merchant"),10):null
-  };
-  if(!body.name || body.count<1){ toast("Nom + nombre requis","err"); return; }
-  try{
-    const r = await api("/api/vouchers/bulk",{method:"POST",body:JSON.stringify(body)});
-    toast(`${r.created} vouchers générés`,"ok");
-    closeModal();
-    renderVouchers();
-  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
-}
-
-async function vouView(id){
-  try{
-    const v = await api("/api/vouchers/"+id);
-    if(!v) return;
-    const isAdmin = ME.role==="ADMIN";
-    // Generate QR code as data URI via a simple text encoding trick (use goqr.me placeholder → but we can't hit external; use text-based)
-    const qrText = v.code;
-    const body = `
-      <div style="display:flex;gap:20px;margin-bottom:16px">
-        <div style="flex:0 0 160px;display:flex;flex-direction:column;align-items:center;gap:8px">
-          <div id="vou_qr" style="width:160px;height:160px;background:#fff;padding:8px;border-radius:8px;display:flex;align-items:center;justify-content:center">
-            <div style="font-family:monospace;font-size:10px;color:#000;text-align:center;line-height:1.3;word-break:break-all">${esc(qrText)}<br><br><small>[QR code]</small></div>
-          </div>
-          <code style="background:var(--surface-2);padding:4px 8px;border-radius:4px;font-size:13px">${esc(v.code)}</code>
-        </div>
-        <div style="flex:1">
-          <h2 style="margin:0 0 8px 0;font-size:20px">${esc(v.name)}</h2>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-bottom:16px">
-            <div><span style="color:var(--muted);font-size:11px">Type</span><br>${vouTypeBadge(v.type)}</div>
-            <div><span style="color:var(--muted);font-size:11px">Statut</span><br>${vouStatusBadge(v.status)}</div>
-            <div><span style="color:var(--muted);font-size:11px">Valeur</span><br><strong>${vouValueLabel(v)}</strong></div>
-            <div><span style="color:var(--muted);font-size:11px">Mode</span><br>${v.usageMode||"—"}${v.currentUses>0?" ("+v.currentUses+"/"+(v.maxUses||"∞")+")":""}</div>
-            <div><span style="color:var(--muted);font-size:11px">Validité</span><br>${v.validFrom?dt(v.validFrom):"—"} → ${v.validTo?dt(v.validTo):"—"}</div>
-            <div><span style="color:var(--muted);font-size:11px">Bénéficiaire</span><br>${v.ownerAccountNumber?esc(v.ownerAccountNumber):"—"}${v.ownerName?"<br>"+esc(v.ownerName):""}</div>
-            ${v.merchant?`<div><span style="color:var(--muted);font-size:11px">Commerçant</span><br>${esc(v.merchant.name)}</div>`:""}
-          </div>
-          <div style="color:var(--muted);font-size:11px">Description</div>
-          <div style="padding:10px;background:var(--surface-2);border-radius:8px;margin-top:4px;font-size:13px">${esc(v.description||"—")}</div>
-        </div>
-      </div>`;
-    openModal("Voucher #"+v.id, body,
-      `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>${isAdmin&&v.status==="ISSUED"?`<button class="btn btn-primary" onclick="vouConsume(${v.id})">Marquer consommé</button>`:""}`);
-  }catch(e){ toast("Erreur: "+e.message,"err"); }
-}
-
-async function vouConsume(id){
-  if(!confirm("Marquer ce voucher comme consommé ?")) return;
-  try{
-    await api(`/api/vouchers/${id}/consume`,{method:"POST"});
-    toast("Voucher consommé","ok");
-    closeModal();
-    renderVouchers();
-  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
-}
-
-async function vouCancel(id){
-  if(!confirm("Annuler ce voucher ? Il ne pourra plus être consommé.")) return;
-  try{
-    await api(`/api/vouchers/${id}/cancel`,{method:"POST"});
-    toast("Voucher annulé","ok");
-    renderVouchers();
-  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
-}
-
 /* =========== PARTNER REQUESTS / ADMIN INBOX (V7) =========== */
 
 async function renderPartnerRequests(){

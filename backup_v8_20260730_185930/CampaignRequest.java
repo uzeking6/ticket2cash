@@ -51,13 +51,6 @@ public class CampaignRequest {
     private BigDecimal amountThreshold;
     private String categoryFilter;
 
-    // GL-01 filters (MCC / channel / corridor / BIN)
-    private MccCode mccCode;
-    private PaymentChannel channelFilter;
-    private PaymentCorridor corridorFilter;
-    private String cardBinStart;
-    private String cardBinEnd;
-
     // Getters/Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -101,14 +94,4 @@ public class CampaignRequest {
     public void setAmountThreshold(BigDecimal amountThreshold) { this.amountThreshold = amountThreshold; }
     public String getCategoryFilter() { return categoryFilter; }
     public void setCategoryFilter(String categoryFilter) { this.categoryFilter = categoryFilter; }
-    public MccCode getMccCode() { return mccCode; }
-    public void setMccCode(MccCode mccCode) { this.mccCode = mccCode; }
-    public PaymentChannel getChannelFilter() { return channelFilter; }
-    public void setChannelFilter(PaymentChannel channelFilter) { this.channelFilter = channelFilter; }
-    public PaymentCorridor getCorridorFilter() { return corridorFilter; }
-    public void setCorridorFilter(PaymentCorridor corridorFilter) { this.corridorFilter = corridorFilter; }
-    public String getCardBinStart() { return cardBinStart; }
-    public void setCardBinStart(String cardBinStart) { this.cardBinStart = cardBinStart; }
-    public String getCardBinEnd() { return cardBinEnd; }
-    public void setCardBinEnd(String cardBinEnd) { this.cardBinEnd = cardBinEnd; }
 }

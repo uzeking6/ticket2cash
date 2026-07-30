@@ -142,45 +142,6 @@ public class Campaign {
     @Column(length = 50)
     private String categoryFilter;
 
-    // -------------------------------------------------------------- MCC / channel / corridor (GL-01)
-
-    /**
-     * Merchant Category Code filter (e.g. MCC_5411 = supermarkets, MCC_5541 = gas stations).
-     * Only transactions matching this MCC qualify. Null = no MCC filter.
-     * Relevant for {@code MERCHANT_TRANSACTION} campaigns.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private MccCode mccCode;
-
-    /**
-     * Payment channel filter (E-commerce, in-store, mobile wallet, CNP, ATM).
-     * Null or ALL = no channel filter.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private PaymentChannel channelFilter;
-
-    /**
-     * Geographic corridor filter (domestic / international / cross-border CEMEA).
-     * Null or ALL = no corridor filter.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20)
-    private PaymentCorridor corridorFilter;
-
-    /**
-     * Card BIN range start (first 6-8 digits of card number). Used to target
-     * specific card products (e.g. only "Gold Business" cards in BIN 456120-456129).
-     * Null = no BIN restriction.
-     */
-    @Column(length = 10)
-    private String cardBinStart;
-
-    /** Card BIN range end (inclusive). Null = no BIN restriction. */
-    @Column(length = 10)
-    private String cardBinEnd;
-
     // -------------------------------------------------------------- audit
 
     private LocalDateTime createdAt;
@@ -254,16 +215,6 @@ public class Campaign {
     public void setAmountThreshold(BigDecimal amountThreshold) { this.amountThreshold = amountThreshold; }
     public String getCategoryFilter() { return categoryFilter; }
     public void setCategoryFilter(String categoryFilter) { this.categoryFilter = categoryFilter; }
-    public MccCode getMccCode() { return mccCode; }
-    public void setMccCode(MccCode mccCode) { this.mccCode = mccCode; }
-    public PaymentChannel getChannelFilter() { return channelFilter; }
-    public void setChannelFilter(PaymentChannel channelFilter) { this.channelFilter = channelFilter; }
-    public PaymentCorridor getCorridorFilter() { return corridorFilter; }
-    public void setCorridorFilter(PaymentCorridor corridorFilter) { this.corridorFilter = corridorFilter; }
-    public String getCardBinStart() { return cardBinStart; }
-    public void setCardBinStart(String cardBinStart) { this.cardBinStart = cardBinStart; }
-    public String getCardBinEnd() { return cardBinEnd; }
-    public void setCardBinEnd(String cardBinEnd) { this.cardBinEnd = cardBinEnd; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
