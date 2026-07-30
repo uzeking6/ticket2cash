@@ -80,12 +80,19 @@ public class CampaignController {
         return "PARTNER".equalsIgnoreCase(currentRole(http));
     }
 
+    /**
+     * Only ADMIN can create/edit campaigns. Partners must send a request
+     * via {@code /api/partner-requests} with type CAMPAIGN_REQUEST, and admin
+     * creates the campaign after review.
+     */
     private boolean canWrite(HttpServletRequest http) {
-        return isAdmin(http) || isPartner(http);
+        return isAdmin(http);
     }
 
     private boolean isMine(Campaign c, HttpServletRequest http) {
+        // Admin owns visibility to all campaigns
         if (isAdmin(http)) return true;
+        // Partner may still be a legitimate viewer of campaigns targeting their merchant
         Long me = currentMerchantId(http);
         if (me == null) return false;
         Merchant m = c.getMerchant();
@@ -193,33 +200,22 @@ public class CampaignController {
     public ResponseEntity<?> createCampaign(@RequestBody CampaignRequest request,
                                              HttpServletRequest http) {
         if (!canWrite(http)) {
-            return ResponseEntity.status(403).body(Map.of("error", "Seuls ADMIN et PARTNER peuvent créer des campagnes"));
+            return ResponseEntity.status(403).body(Map.of("error",
+                    "Seul l'administrateur Afriland peut créer des campagnes. Les partenaires peuvent soumettre une demande via l'onglet Demandes."));
         }
 
-        // Resolve owner + target merchant based on role
-        CampaignOwnerType ownerType;
-        Long targetMerchantId;
-
-        if (isPartner(http)) {
-            ownerType = CampaignOwnerType.MERCHANT;
-            targetMerchantId = currentMerchantId(http);
-            if (targetMerchantId == null) {
-                return ResponseEntity.status(403).body(Map.of("error", "Aucun commerçant lié à votre compte"));
-            }
-        } else {
-            ownerType = CampaignOwnerType.ADMIN;
-            targetMerchantId = request.getMerchantId();
-            if (targetMerchantId == null) {
-                return ResponseEntity.badRequest().body(Map.of(
-                        "error", "L'ADMIN doit préciser le commerçant cible",
-                        "field", "merchantId"));
-            }
+        // ADMIN always chooses the target merchant
+        Long targetMerchantId = request.getMerchantId();
+        if (targetMerchantId == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Précisez le commerçant cible",
+                    "field", "merchantId"));
         }
-
         Merchant merchant = merchantRepository.findById(targetMerchantId).orElse(null);
         if (merchant == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "Commerçant introuvable"));
         }
+        CampaignOwnerType ownerType = CampaignOwnerType.ADMIN;
 
         // Validate common fields
         String err = ValidationUtils.validateName(request.getName(), "nom de la campagne");

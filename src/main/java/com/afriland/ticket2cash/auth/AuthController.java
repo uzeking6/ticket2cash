@@ -1,6 +1,7 @@
 package com.afriland.ticket2cash.auth;
 
 import com.afriland.ticket2cash.audit.AuditLogService;
+import com.afriland.ticket2cash.common.ValidationUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,9 @@ public class AuthController {
     private final PasswordPolicyService passwordPolicyService;
 
     public AuthController(AppUserRepository userRepository,
-                          AuthService authService,
-                          AuditLogService auditLogService,
-                          PasswordPolicyService passwordPolicyService) {
+            AuthService authService,
+            AuditLogService auditLogService,
+            PasswordPolicyService passwordPolicyService) {
         this.userRepository = userRepository;
         this.authService = authService;
         this.auditLogService = auditLogService;
@@ -34,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request,
-                                   HttpServletRequest httpRequest) {
+            HttpServletRequest httpRequest) {
 
         AppUser user = userRepository.findByUsername(request.getUsername()).orElse(null);
 
@@ -46,8 +47,7 @@ public class AuthController {
                     null,
                     request.getUsername(),
                     "FAILED",
-                    "Unknown username"
-            );
+                    "Unknown username");
 
             return ResponseEntity.status(401).body("Invalid username or password");
         }
@@ -60,8 +60,7 @@ public class AuthController {
                     user.getId(),
                     user.getUsername(),
                     "FAILED",
-                    "User disabled"
-            );
+                    "User disabled");
 
             return ResponseEntity.status(403).body("User disabled");
         }
@@ -74,8 +73,7 @@ public class AuthController {
                     user.getId(),
                     user.getUsername(),
                     "FAILED",
-                    "User account is locked"
-            );
+                    "User account is locked");
 
             return ResponseEntity.status(423).body("User account locked. Contact ADMIN.");
         }
@@ -97,8 +95,7 @@ public class AuthController {
                             user.getId(),
                             user.getUsername(),
                             "FAILED",
-                            "Last active ADMIN was not locked despite too many failed login attempts"
-                    );
+                            "Last active ADMIN was not locked despite too many failed login attempts");
 
                     return ResponseEntity.status(401).body("Invalid username or password");
                 }
@@ -114,8 +111,7 @@ public class AuthController {
                         user.getId(),
                         user.getUsername(),
                         "FAILED",
-                        "Account locked after " + attempts + " failed login attempts"
-                );
+                        "Account locked after " + attempts + " failed login attempts");
 
                 return ResponseEntity.status(423).body("User account locked after too many failed login attempts");
             }
@@ -129,8 +125,7 @@ public class AuthController {
                     user.getId(),
                     user.getUsername(),
                     "FAILED",
-                    "Invalid password. Failed attempts: " + attempts
-            );
+                    "Invalid password. Failed attempts: " + attempts);
 
             return ResponseEntity.status(401).body("Invalid username or password. Failed attempts: " + attempts);
         }
@@ -155,8 +150,7 @@ public class AuthController {
                 user.getId(),
                 user.getUsername(),
                 "SUCCESS",
-                "User logged in"
-        );
+                "User logged in");
 
         return ResponseEntity.ok(toUserMap(user, true));
     }
@@ -179,8 +173,7 @@ public class AuthController {
                 null,
                 username,
                 "SUCCESS",
-                "User logged out"
-        );
+                "User logged out");
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("message", "Logged out");
@@ -210,7 +203,7 @@ public class AuthController {
 
     @PutMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request,
-                                            HttpServletRequest httpRequest) {
+            HttpServletRequest httpRequest) {
 
         HttpSession session = httpRequest.getSession(false);
 
@@ -245,8 +238,7 @@ public class AuthController {
                     user.getId(),
                     user.getUsername(),
                     "FAILED",
-                    policyError
-            );
+                    policyError);
 
             return ResponseEntity.badRequest().body(policyError);
         }
@@ -259,8 +251,7 @@ public class AuthController {
                     user.getId(),
                     user.getUsername(),
                     "FAILED",
-                    "Invalid old password"
-            );
+                    "Invalid old password");
 
             return ResponseEntity.status(400).body("Invalid old password");
         }
@@ -283,8 +274,7 @@ public class AuthController {
                 updatedUser.getId(),
                 updatedUser.getUsername(),
                 "SUCCESS",
-                "Password changed by user"
-        );
+                "Password changed by user");
 
         return ResponseEntity.ok(toUserMap(updatedUser, true));
     }
@@ -305,17 +295,32 @@ public class AuthController {
 
     @PostMapping("/users")
     public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request,
-                                        HttpServletRequest httpRequest) {
+            HttpServletRequest httpRequest) {
         if (!isAdmin(httpRequest)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
-
-        if (request.getUsername() == null || request.getUsername().isBlank()) {
-            return ResponseEntity.badRequest().body("Username is required");
+        String usernameErr = ValidationUtils.validateUsername(request.getUsername());
+        if (usernameErr != null) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("error", usernameErr, "field", "username"));
         }
 
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
-            return ResponseEntity.badRequest().body("Password is required");
+        String passwordErr = ValidationUtils.validatePassword(request.getPassword());
+        if (passwordErr != null) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("error", passwordErr, "field", "password"));
+        }
+
+        if (request.getFullName() != null && !request.getFullName().isBlank()) {
+            String fullNameErr = ValidationUtils.validateName(request.getFullName(), "nom complet");
+            if (fullNameErr != null) {
+                return ResponseEntity.badRequest().body(java.util.Map.of("error", fullNameErr, "field", "fullName"));
+            }
+        }
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()) {
+            String emailErr = ValidationUtils.validateEmail(request.getEmail());
+            if (emailErr != null) {
+                return ResponseEntity.badRequest().body(java.util.Map.of("error", emailErr, "field", "email"));
+            }
         }
 
         String policyError = passwordPolicyService.validate(request.getPassword(), request.getUsername());
@@ -328,8 +333,7 @@ public class AuthController {
                     null,
                     getCurrentUsername(httpRequest),
                     "FAILED",
-                    policyError
-            );
+                    policyError);
 
             return ResponseEntity.badRequest().body(policyError);
         }
@@ -347,8 +351,7 @@ public class AuthController {
                 request.getFullName(),
                 request.getEmail(),
                 request.getPassword(),
-                request.getRole() != null ? request.getRole() : UserRole.LECTEUR
-        );
+                request.getRole() != null ? request.getRole() : UserRole.LECTEUR);
 
         user.setFailedLoginAttempts(0);
         user.setAccountLocked(false);
@@ -362,16 +365,15 @@ public class AuthController {
                 user.getId(),
                 getCurrentUsername(httpRequest),
                 "SUCCESS",
-                "User created: " + user.getUsername()
-        );
+                "User created: " + user.getUsername());
 
         return ResponseEntity.ok(toUserMap(user, false));
     }
 
     @PutMapping("/users/{id}/reset-password")
     public ResponseEntity<?> resetUserPasswordByAdmin(@PathVariable Long id,
-                                                      @RequestBody AdminResetPasswordRequest request,
-                                                      HttpServletRequest httpRequest) {
+            @RequestBody AdminResetPasswordRequest request,
+            HttpServletRequest httpRequest) {
         if (!isAdmin(httpRequest)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
@@ -396,8 +398,7 @@ public class AuthController {
                     user.getId(),
                     getCurrentUsername(httpRequest),
                     "FAILED",
-                    policyError
-            );
+                    policyError);
 
             return ResponseEntity.badRequest().body(policyError);
         }
@@ -416,15 +417,14 @@ public class AuthController {
                 updatedUser.getId(),
                 getCurrentUsername(httpRequest),
                 "SUCCESS",
-                "Password reset by admin for user: " + updatedUser.getUsername()
-        );
+                "Password reset by admin for user: " + updatedUser.getUsername());
 
         return ResponseEntity.ok(toUserMap(updatedUser, false));
     }
 
     @PutMapping("/users/{id}/unlock")
     public ResponseEntity<?> unlockUserByAdmin(@PathVariable Long id,
-                                               HttpServletRequest request) {
+            HttpServletRequest request) {
         if (!isAdmin(request)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
@@ -449,16 +449,15 @@ public class AuthController {
                 updated.getId(),
                 getCurrentUsername(request),
                 "SUCCESS",
-                "User account unlocked by admin: " + updated.getUsername()
-        );
+                "User account unlocked by admin: " + updated.getUsername());
 
         return ResponseEntity.ok(toUserMap(updated, false));
     }
 
     @PutMapping("/users/{id}/role")
     public ResponseEntity<?> updateUserRole(@PathVariable Long id,
-                                            @RequestParam UserRole role,
-                                            HttpServletRequest request) {
+            @RequestParam UserRole role,
+            HttpServletRequest request) {
         if (!isAdmin(request)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
@@ -479,8 +478,7 @@ public class AuthController {
                     user.getId(),
                     getCurrentUsername(request),
                     "FAILED",
-                    "Admin cannot remove own ADMIN role"
-            );
+                    "Admin cannot remove own ADMIN role");
 
             return ResponseEntity.badRequest().body("You cannot remove your own ADMIN role");
         }
@@ -493,8 +491,7 @@ public class AuthController {
                     user.getId(),
                     getCurrentUsername(request),
                     "FAILED",
-                    "Cannot remove role from last active ADMIN"
-            );
+                    "Cannot remove role from last active ADMIN");
 
             return ResponseEntity.badRequest().body("Cannot remove role from the last active ADMIN");
         }
@@ -509,16 +506,15 @@ public class AuthController {
                 updated.getId(),
                 getCurrentUsername(request),
                 "SUCCESS",
-                "User role changed to " + role
-        );
+                "User role changed to " + role);
 
         return ResponseEntity.ok(toUserMap(updated, false));
     }
 
     @PutMapping("/users/{id}/merchant")
     public ResponseEntity<?> setUserMerchant(@PathVariable Long id,
-                                              @RequestParam Long merchantId,
-                                              HttpServletRequest request) {
+            @RequestParam Long merchantId,
+            HttpServletRequest request) {
         if (!isAdmin(request)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
@@ -538,16 +534,15 @@ public class AuthController {
                 updated.getId(),
                 getCurrentUsername(request),
                 "SUCCESS",
-                "User " + updated.getUsername() + " linked to merchantId=" + merchantId
-        );
+                "User " + updated.getUsername() + " linked to merchantId=" + merchantId);
 
         return ResponseEntity.ok(toUserMap(updated, false));
     }
 
     @PutMapping("/users/{id}/enabled")
     public ResponseEntity<?> updateUserEnabled(@PathVariable Long id,
-                                               @RequestParam Boolean enabled,
-                                               HttpServletRequest request) {
+            @RequestParam Boolean enabled,
+            HttpServletRequest request) {
         if (!isAdmin(request)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
@@ -568,8 +563,7 @@ public class AuthController {
                     user.getId(),
                     getCurrentUsername(request),
                     "FAILED",
-                    "Admin cannot disable own account"
-            );
+                    "Admin cannot disable own account");
 
             return ResponseEntity.badRequest().body("You cannot disable your own account");
         }
@@ -586,8 +580,7 @@ public class AuthController {
                     user.getId(),
                     getCurrentUsername(request),
                     "FAILED",
-                    "Cannot disable last active ADMIN"
-            );
+                    "Cannot disable last active ADMIN");
 
             return ResponseEntity.badRequest().body("Cannot disable the last active ADMIN");
         }
@@ -602,8 +595,7 @@ public class AuthController {
                 updated.getId(),
                 getCurrentUsername(request),
                 "SUCCESS",
-                "User enabled changed to " + enabled
-        );
+                "User enabled changed to " + enabled);
 
         return ResponseEntity.ok(toUserMap(updated, false));
     }
@@ -674,7 +666,7 @@ public class AuthController {
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id,
-                                         HttpServletRequest request) {
+            HttpServletRequest request) {
         if (!isAdmin(request)) {
             return ResponseEntity.status(403).body("ADMIN role required");
         }
@@ -704,8 +696,7 @@ public class AuthController {
                 id,
                 getCurrentUsername(request),
                 "SUCCESS",
-                "User deleted: " + username
-        );
+                "User deleted: " + username);
 
         return ResponseEntity.ok(Map.of("message", "Utilisateur " + username + " supprime avec succes"));
     }
