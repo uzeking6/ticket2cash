@@ -1,36 +1,44 @@
-HELP.md
+# Build artifacts
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+*.jar
+*.war
+*.class
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Backups locaux (jamais committes)
+backup_*/
+*.bak
+*.bak-*
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# Zips de deploiement (jamais committes)
+ticket2cash-deployment-*.zip
+
+# Base de donnees locale H2
+data/
+*.db
+*.trace.db
+*.lock.db
+*.mv.db
+
+# IDE
+.idea/
 *.iml
 *.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+*.iws
 .vscode/
+.settings/
+.project
+.classpath
 
-# Patch script backups
-*.bak-*
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*~

@@ -468,7 +468,7 @@ const I18N={
   user_created:"Utilisateur créé.",users_list:"Comptes existants",
   set_saved:"Paramètre enregistré.",set_edit:"Modifier",
   cat_products:"Catalogue produits",cat_sub:"Créer ou modifier un produit, ou importer en masse.",
-  new_product:"Nouveau produit",new_campaign:"Nouvelle campagne",edit_campaign:"Modifier la campagne",adminInbox:"Boîte de réception",inbox_sub:"Demandes des partenaires.",partnerRequests:"Demandes",req_sub:"Contactez Afriland pour créer une campagne, poser une question ou signaler un problème.",loyaltyTiers:"Niveaux fidélité",tiers_sub:"Gestion des paliers Essentiel/Premium/Prestige/Elite avec règles de progression automatique.",vouchers:"Vouchers",vou_sub:"Bons et coupons de réduction — 5 typologies : fidélité progressif, bienvenue, anniversaire, one-shot, campagne partenaire.",tpl_import:"Modèle import",mass_import:"Import masse",
+  new_product:"Nouveau produit",new_campaign:"Nouvelle campagne",edit_campaign:"Modifier la campagne",adminInbox:"Boîte de réception",inbox_sub:"Demandes des partenaires.",partnerRequests:"Demandes",req_sub:"Contactez Afriland pour créer une campagne, poser une question ou signaler un problème.",loyaltyTiers:"Niveaux fidélité",tiers_sub:"Gestion des paliers Essentiel/Premium/Prestige/Elite avec règles de progression automatique.",vouchers:"Vouchers",vou_sub:"Bons et coupons de réduction — 5 typologies : fidélité progressif, bienvenue, anniversaire, one-shot, campagne partenaire.",points:"Points de fidélité",pts_sub:"Programme de points : X points par tranche de FCFA dépensés. Règles configurables par marchand, MCC ou produit.",prepaidCards:"Cartes prépayées",pc_sub:"Cartes prépayées Afriland (Classique, Gold, Jeunes, Corporate, Cadeau). Un porteur peut détenir plusieurs cartes.",cloOffers:"Offres CLO",clo_sub:"Card-Linked Offers : offres merchant-funded ciblant les porteurs de cartes prépayées Afriland.",tpl_import:"Modèle import",mass_import:"Import masse",
   f_sku:"SKU",f_name:"Nom du produit",f_category:"Catégorie",f_brand:"Marque",f_price:"Prix",f_group:"Clé groupe",
   f_cbtype:"Type cashback",f_cbvalue:"Valeur cashback",f_designation:"Désignation ticket",f_synonyms:"Synonymes",
   col_group:"Groupe",col_cashback:"Cashback",col_actions:"Actions",edit:"Modifier",del:"Supprimer",
@@ -571,7 +571,7 @@ const I18N={
   user_created:"User created.",users_list:"Existing accounts",
   set_saved:"Setting saved.",set_edit:"Edit",
   cat_products:"Product catalog",cat_sub:"Create or edit a product, or bulk import.",
-  new_product:"New product",new_campaign:"New campaign",edit_campaign:"Edit campaign",adminInbox:"Inbox",inbox_sub:"Partner requests.",partnerRequests:"Requests",req_sub:"Contact Afriland to request a campaign, ask a question, or report an issue.",loyaltyTiers:"Loyalty Tiers",tiers_sub:"Manage Essentiel/Premium/Prestige/Elite tiers with auto-progression.",vouchers:"Vouchers",vou_sub:"Voucher & coupon engine with 5 typologies.",tpl_import:"Import template",mass_import:"Bulk import",
+  new_product:"New product",new_campaign:"New campaign",edit_campaign:"Edit campaign",adminInbox:"Inbox",inbox_sub:"Partner requests.",partnerRequests:"Requests",req_sub:"Contact Afriland to request a campaign, ask a question, or report an issue.",loyaltyTiers:"Loyalty Tiers",tiers_sub:"Manage Essentiel/Premium/Prestige/Elite tiers with auto-progression.",vouchers:"Vouchers",vou_sub:"Voucher & coupon engine with 5 typologies.",points:"Loyalty Points",pts_sub:"Points programme with configurable rules per merchant, MCC or SKU.",prepaidCards:"Prepaid Cards",pc_sub:"Afriland prepaid cards portfolio.",cloOffers:"CLO Offers",clo_sub:"Card-Linked Offers — merchant-funded rewards for prepaid cardholders.",tpl_import:"Import template",mass_import:"Bulk import",
   f_sku:"SKU",f_name:"Product name",f_category:"Category",f_brand:"Brand",f_price:"Price",f_group:"Group key",
   f_cbtype:"Cashback type",f_cbvalue:"Cashback value",f_designation:"Ticket designation",f_synonyms:"Synonyms",
   col_group:"Group",col_cashback:"Cashback",col_actions:"Actions",edit:"Edit",del:"Delete",
@@ -628,6 +628,9 @@ const IC={
  partnerRequests:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
  loyaltyTiers:'<path d="M12 2l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/>',
  vouchers:'<path d="M12 2H5a2 2 0 0 0-2 2v7a2 2 0 0 0 .59 1.41L12 21l8.41-8.59A2 2 0 0 0 21 11V4a2 2 0 0 0-2-2h-7z"/><circle cx="8" cy="8" r="1.5"/>',
+ points:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4a2 2 0 0 1 0 4H9"/>',
+ prepaidCards:'<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+ cloOffers:'<path d="M20.59 13.41 12 22l-9-9V4a1 1 0 0 1 1-1h9z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
  loyalty:'<path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
  subPartners:'<path d="M3 21V7l6-4 6 4v14"/><path d="M15 21V11l6 4v6"/><path d="M7 9h.01M7 13h.01M11 9h.01M11 13h.01"/>'
 };
@@ -635,11 +638,11 @@ const IC={
 /* ============ NAV MODEL ============ */
 const NAV={
  ADMIN:[{group:"g_principal",items:["dashboard","businessDashboard","security","trends"]},
-        {group:"g_ops",items:["loyalty","loyaltyTiers","vouchers","merchants","products","campaigns","adminInbox","tickets","transactions","claims","review","payments","finance"]},
+        {group:"g_ops",items:["loyalty","loyaltyTiers","points","vouchers","prepaidCards","cloOffers","merchants","products","campaigns","adminInbox","tickets","transactions","claims","review","payments","finance"]},
         {group:"g_integration",items:["webhooks","apiKeys","ocr","ticketTemplate"]},
         {group:"g_sys",items:["users"]}],
  PARTNER:[{group:"g_principal",items:["dashboard"]},
-          {group:"g_ops",items:["campaigns","products","vouchers","partnerRequests","claims","payments"]}],
+          {group:"g_ops",items:["campaigns","products","vouchers","cloOffers","partnerRequests","claims","payments"]}],
  DEFAULT:[{group:"g_principal",items:["dashboard"]},{group:"g_ops",items:["claims","payments"]}]
 };
 
@@ -689,7 +692,8 @@ const ROUTES={
  finance:renderFinance,ocr:renderOcr,pricing:()=>renderCrud("pricing"),ticketTemplate:()=>renderCrud("ticketTemplate"),
  subPartners:renderSubPartners,
  adminInbox:renderAdminInbox,partnerRequests:renderPartnerRequests,
- loyaltyTiers:renderLoyaltyTiers,vouchers:renderVouchers
+ loyaltyTiers:renderLoyaltyTiers,vouchers:renderVouchers,
+ points:renderPoints,prepaidCards:renderPrepaidCards,cloOffers:renderCloOffers
 };
 function go(id,silent){
   if(!ROUTES[id])id="dashboard";
@@ -2977,6 +2981,803 @@ async function merchantModal(){
   openModal(t("merchant_create"),merchantFormFields(null,{}),
     `<button class="btn btn-ghost" onclick="closeModal()">${t("cancel")}</button><button class="btn btn-primary" onclick="submitMerchant()">${t("save")}</button>`);
 }
+/* =========== POINTS (V9 — GL-02) =========== */
+
+async function renderPoints(){
+  const el=document.getElementById("content");
+  const canManage=ME.role==="ADMIN";
+  el.innerHTML=`<div class="page">${head(t("points"),t("pts_sub"),
+    (canManage?`<button class="btn btn-primary" onclick="ptsCreditModal()">+ Créditer un compte</button>
+     <button class="btn btn-ghost" onclick="ptsRuleModal()">Nouvelle règle</button>
+     <button class="btn btn-ghost" onclick="ptsExpireCheck()">Lancer expiration</button>`:"")+refreshBtn())}
+    <div class="kpi-grid" style="margin-bottom:16px">
+      <div class="kpi-card"><div class="kpi-label">Comptes</div><div class="kpi-value" id="ptsKpiAcc">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Points en circulation</div><div class="kpi-value" id="ptsKpiCirc">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Total gagnés</div><div class="kpi-value" id="ptsKpiEarned">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Taux redemption</div><div class="kpi-value" id="ptsKpiRate">—</div></div>
+    </div>
+    <div class="tabs" style="margin-bottom:12px">
+      <button class="tab active" onclick="ptsSubTab('accounts')" id="ptsTab_accounts">Comptes points</button>
+      <button class="tab" onclick="ptsSubTab('rules')" id="ptsTab_rules">Règles d'acquisition</button>
+      <button class="tab" onclick="ptsSubTab('history')" id="ptsTab_history">Historique global</button>
+    </div>
+    <div id="ptsSubContent"></div>
+  </div>`;
+  try{
+    const stats = await api("/api/points/stats");
+    document.getElementById("ptsKpiAcc").textContent = stats.totalAccounts||0;
+    document.getElementById("ptsKpiCirc").textContent = (stats.totalPointsCirculating||0).toLocaleString("fr-FR");
+    document.getElementById("ptsKpiEarned").textContent = (stats.totalPointsEarned||0).toLocaleString("fr-FR");
+    document.getElementById("ptsKpiRate").textContent = (stats.redemptionRate||0).toFixed(1)+" %";
+  }catch(e){}
+  ptsSubTab('accounts');
+}
+
+function ptsSubTab(name){
+  ["accounts","rules","history"].forEach(n=>{
+    const el=document.getElementById("ptsTab_"+n); if(el) el.classList.toggle("active", n===name);
+  });
+  if(name==="accounts") ptsRenderAccounts();
+  else if(name==="rules") ptsRenderRules();
+  else ptsRenderHistory();
+}
+
+async function ptsRenderAccounts(){
+  const box=document.getElementById("ptsSubContent");
+  box.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="ptsAccCp">—</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Compte</th><th>Porteur</th><th>Solde</th><th>Total gagnés</th><th>Total brûlés</th><th>Expirés</th><th style="text-align:right">Actions</th></tr></thead>
+    <tbody id="ptsAccBody">${rowSkeleton(6,5)}</tbody></table></div></div>`;
+  try{
+    const rows = await api("/api/points/accounts");
+    window.__ptsAccounts = Array.isArray(rows)?rows:[];
+    document.getElementById("ptsAccCp").textContent = window.__ptsAccounts.length + " compte(s)";
+    document.getElementById("ptsAccBody").innerHTML = window.__ptsAccounts.length ? window.__ptsAccounts.map(a=>`
+      <tr>
+        <td><code>${esc(a.accountNumber)}</code></td>
+        <td>${esc(a.ownerName||"—")}</td>
+        <td class="strong" style="color:var(--brand)">${(a.balance||0).toLocaleString("fr-FR")}</td>
+        <td>${(a.totalEarned||0).toLocaleString("fr-FR")}</td>
+        <td>${(a.totalBurned||0).toLocaleString("fr-FR")}</td>
+        <td style="color:var(--muted)">${(a.totalExpired||0).toLocaleString("fr-FR")}</td>
+        <td class="row-actions">
+          <button class="mini-btn" onclick="ptsHistory('${esc(a.accountNumber)}')">Historique</button>
+          ${ME.role==="ADMIN"?`<button class="mini-btn" onclick="ptsCreditModal('${esc(a.accountNumber)}')">Créditer</button>
+          <button class="mini-btn danger" onclick="ptsBurnModal('${esc(a.accountNumber)}',${a.balance||0})">Brûler</button>`:""}
+        </td>
+      </tr>`).join("") : `<tr><td colspan="7">${emptyFull()}</td></tr>`;
+  }catch(e){ document.getElementById("ptsAccBody").innerHTML=`<tr><td colspan="7">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+async function ptsRenderRules(){
+  const box=document.getElementById("ptsSubContent");
+  const canManage=ME.role==="ADMIN";
+  box.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="ptsRuleCp">—</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Nom</th><th>Taux (pts/1000 FCFA)</th><th>Multiplicateur</th><th>Marchand</th><th>MCC</th><th>SKU</th><th>Validité (mois)</th><th>Actif</th><th style="text-align:right">Actions</th></tr></thead>
+    <tbody id="ptsRuleBody">${rowSkeleton(5,7)}</tbody></table></div></div>`;
+  try{
+    const rows = await api("/api/points/rules");
+    window.__ptsRules = Array.isArray(rows)?rows:[];
+    document.getElementById("ptsRuleCp").textContent = window.__ptsRules.length + " règle(s)";
+    document.getElementById("ptsRuleBody").innerHTML = window.__ptsRules.length ? window.__ptsRules.map(r=>`
+      <tr>
+        <td class="strong">${esc(r.name)}</td>
+        <td>${r.pointsPer1000Fcfa}</td>
+        <td>×${r.multiplier||1}</td>
+        <td>${r.merchant?esc(r.merchant.brandName||r.merchant.name):"—"}</td>
+        <td>${r.mccCode?esc(r.mccCode.replace("MCC_","")):"—"}</td>
+        <td>${r.productSku?esc(r.productSku):"—"}</td>
+        <td>${r.validityMonths||12}</td>
+        <td>${r.active?'<span class="badge b-ok">Actif</span>':'<span class="badge b-muted">Inactif</span>'}</td>
+        <td class="row-actions">${canManage?`<button class="mini-btn" onclick="ptsRuleModal(${r.id})">Modifier</button>
+          <button class="mini-btn danger" onclick="ptsRuleDelete(${r.id})">Supprimer</button>`:""}</td>
+      </tr>`).join("") : `<tr><td colspan="9">${emptyFull()}</td></tr>`;
+  }catch(e){ document.getElementById("ptsRuleBody").innerHTML=`<tr><td colspan="9">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+async function ptsRenderHistory(){
+  const box=document.getElementById("ptsSubContent");
+  box.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill">Dernières transactions points</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Date</th><th>Compte</th><th>Type</th><th>Points</th><th>Source</th><th>Description</th></tr></thead>
+    <tbody id="ptsHistBody">${rowSkeleton(8,4)}</tbody></table></div></div>`;
+  try{
+    const accs = await api("/api/points/accounts");
+    const allTx = [];
+    for(const a of (accs||[]).slice(0,20)){
+      try{
+        const tx = await api("/api/points/accounts/"+encodeURIComponent(a.accountNumber)+"/history");
+        (tx||[]).forEach(t=>allTx.push(t));
+      }catch(_){}
+    }
+    allTx.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+    document.getElementById("ptsHistBody").innerHTML = allTx.length ? allTx.slice(0,100).map(t=>`
+      <tr>
+        <td style="font-size:12px;color:var(--text-2);white-space:nowrap">${dt(t.createdAt)}</td>
+        <td><code style="font-size:11px">${esc(t.accountNumber)}</code></td>
+        <td>${ptsTypeBadge(t.type)}</td>
+        <td class="strong" style="color:${t.points>=0?'var(--ok)':'var(--brand)'}">${t.points>=0?'+':''}${(t.points||0).toLocaleString("fr-FR")}</td>
+        <td style="font-size:12px">${esc((t.source||'').replace(/_/g,' '))}</td>
+        <td style="font-size:12px;color:var(--text-2)">${esc(t.description||'')}</td>
+      </tr>`).join("") : `<tr><td colspan="6">${emptyFull()}</td></tr>`;
+  }catch(e){ document.getElementById("ptsHistBody").innerHTML=`<tr><td colspan="6">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+function ptsTypeBadge(t){
+  const map={EARN:{lbl:"Gain",cls:"b-ok"},BURN:{lbl:"Brûlé",cls:"b-warn"},EXPIRE:{lbl:"Expiré",cls:"b-muted"},ADJUST:{lbl:"Ajustement",cls:"b-info"}};
+  const m=map[t]||{lbl:t,cls:"b-muted"};
+  return `<span class="badge ${m.cls}">${m.lbl}</span>`;
+}
+
+async function ptsHistory(acc){
+  try{
+    const tx = await api("/api/points/accounts/"+encodeURIComponent(acc)+"/history");
+    const body = `
+      <div style="margin-bottom:12px;padding:10px 14px;background:var(--surface-2);border-radius:8px">
+        <div style="font-size:12px;color:var(--muted)">COMPTE</div>
+        <div style="font-family:monospace;font-size:14px">${esc(acc)}</div>
+      </div>
+      <div style="max-height:60vh;overflow-y:auto">
+        <table style="width:100%;font-size:13px">
+          <thead><tr><th>Date</th><th>Type</th><th>Points</th><th>Description</th></tr></thead>
+          <tbody>${(tx||[]).map(t=>`<tr>
+            <td style="font-size:11px;color:var(--muted);white-space:nowrap">${dt(t.createdAt)}</td>
+            <td>${ptsTypeBadge(t.type)}</td>
+            <td class="strong" style="color:${t.points>=0?'var(--ok)':'var(--brand)'}">${t.points>=0?'+':''}${(t.points||0).toLocaleString("fr-FR")}</td>
+            <td style="font-size:11px">${esc(t.description||'')}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    openModal("Historique — "+acc, body, `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`);
+  }catch(e){ toast("Erreur","err"); }
+}
+
+function ptsCreditModal(acc){
+  const body = `
+    <div class="form-grid">
+      <div class="field full"><label>N° de compte *</label>
+        <input id="pts_acc" data-validate="account" value="${esc(acc||"")}" placeholder="Ex: 400123456789">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Nom porteur (si nouveau compte)</label>
+        <input id="pts_owner" placeholder="Ex: Marie Nkeng">
+      </div>
+      <div class="field"><label>Points à créditer *</label>
+        <input id="pts_amount" type="number" min="1" step="1" data-validate="positive">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Validité (mois)</label>
+        <input id="pts_validity" type="number" min="1" value="12">
+      </div>
+      <div class="field full"><label>Motif *</label>
+        <input id="pts_desc" placeholder="Ex: Bonus bienvenue, ajustement manuel">
+      </div>
+    </div>`;
+  openModal("Créditer des points", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="ptsCreditSave()">Créditer</button>`);
+  setTimeout(()=>wireLiveValidation("#modalBack"),50);
+}
+
+async function ptsCreditSave(){
+  const acc = val("pts_acc");
+  if(!acc){ toast("N° compte requis","err"); return; }
+  const body = {
+    points: parseInt(val("pts_amount")||"0",10),
+    description: val("pts_desc") || "Crédit manuel",
+    ownerName: val("pts_owner")||null,
+    validityMonths: parseInt(val("pts_validity")||"12",10)
+  };
+  if(body.points<=0){ toast("Points > 0 requis","err"); return; }
+  try{
+    await api("/api/points/accounts/"+encodeURIComponent(acc)+"/credit",{method:"POST",body:JSON.stringify(body)});
+    toast(`+${body.points} points crédités`,"ok");
+    closeModal(); renderPoints();
+  }catch(e){ let m=String(e.message||e); try{const j=JSON.parse(m);if(j.error)m=j.error}catch(_){} toast(m.slice(0,200),"err"); }
+}
+
+function ptsBurnModal(acc, balance){
+  const body = `
+    <div style="margin-bottom:12px;padding:10px 14px;background:var(--surface-2);border-radius:8px">
+      <div style="font-size:12px;color:var(--muted)">SOLDE ACTUEL</div>
+      <div style="font-size:22px;font-weight:700;color:var(--brand)">${(balance||0).toLocaleString("fr-FR")} points</div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Points à brûler *</label>
+        <input id="pts_burnAmt" type="number" min="1" max="${balance}" step="1">
+      </div>
+      <div class="field full"><label>Motif *</label>
+        <input id="pts_burnDesc" placeholder="Ex: Redemption gift card, échange marketplace">
+      </div>
+    </div>`;
+  openModal("Brûler des points — "+acc, body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="ptsBurnSave('${esc(acc)}')">Brûler</button>`);
+}
+
+async function ptsBurnSave(acc){
+  const body = {
+    points: parseInt(val("pts_burnAmt")||"0",10),
+    description: val("pts_burnDesc") || "Redemption"
+  };
+  if(body.points<=0){ toast("Points > 0 requis","err"); return; }
+  try{
+    await api("/api/points/accounts/"+encodeURIComponent(acc)+"/burn",{method:"POST",body:JSON.stringify(body)});
+    toast(`-${body.points} points brûlés`,"ok");
+    closeModal(); renderPoints();
+  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+function ptsRuleModal(id){
+  const r = id ? (window.__ptsRules||[]).find(x=>x.id===id) : {};
+  const isEdit = !!id;
+  const merchantOptions = (window.__merchants||[]).map(m=>`<option value="${m.id}" ${r.merchant&&r.merchant.id===m.id?"selected":""}>${esc(m.brandName||m.name)}</option>`).join("");
+  const mccOptions = (window.__MCC_LIST||[]).map(m=>`<option value="${m.code}" ${r.mccCode===m.code?"selected":""}>${esc(m.label)}</option>`).join("");
+  const body = `
+    <div class="form-grid">
+      <div class="field full"><label>Nom de la règle *</label>
+        <input id="pr_name" data-validate="name" value="${esc(r.name||"")}" placeholder="Ex: 10 pts par 1000 FCFA">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Points / 1000 FCFA *</label>
+        <input id="pr_rate" type="number" min="1" value="${r.pointsPer1000Fcfa||10}">
+      </div>
+      <div class="field"><label>Multiplicateur</label>
+        <input id="pr_mult" type="number" min="0.1" step="0.1" value="${r.multiplier||1}">
+      </div>
+      <div class="field"><label>Validité (mois)</label>
+        <input id="pr_validity" type="number" min="1" value="${r.validityMonths||12}">
+      </div>
+      <div class="field"><label>Priorité (0=basse)</label>
+        <input id="pr_prio" type="number" min="0" value="${r.priority||0}">
+      </div>
+      <div class="field"><label>Marchand cible (optionnel)</label>
+        <select id="pr_merchant"><option value="">— Tout marchand —</option>${merchantOptions}</select>
+      </div>
+      <div class="field"><label>MCC cible (optionnel)</label>
+        <select id="pr_mcc"><option value="">— Tout MCC —</option>${mccOptions}</select>
+      </div>
+      <div class="field full"><label>SKU cible (optionnel, séparer par virgule)</label>
+        <input id="pr_sku" value="${esc(r.productSku||"")}" placeholder="Ex: SKU-001,SKU-002">
+      </div>
+      <div class="field"><label>Montant min (FCFA)</label>
+        <input id="pr_minAmt" type="number" min="0" value="${r.minSpendAmount||0}">
+      </div>
+      <div class="field"><label>Actif</label>
+        <select id="pr_active"><option value="true" ${r.active!==false?"selected":""}>Oui</option><option value="false" ${r.active===false?"selected":""}>Non</option></select>
+      </div>
+    </div>`;
+  openModal(isEdit?"Modifier la règle":"Nouvelle règle d'acquisition", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="ptsRuleSave(${id||"null"})">Enregistrer</button>`);
+  setTimeout(()=>wireLiveValidation("#modalBack"),50);
+}
+
+async function ptsRuleSave(id){
+  const merchantId = val("pr_merchant");
+  const body = {
+    name: val("pr_name"),
+    pointsPer1000Fcfa: parseInt(val("pr_rate")||"0",10),
+    multiplier: parseFloat(val("pr_mult")||"1"),
+    validityMonths: parseInt(val("pr_validity")||"12",10),
+    priority: parseInt(val("pr_prio")||"0",10),
+    merchant: merchantId?{id:parseInt(merchantId,10)}:null,
+    mccCode: val("pr_mcc")||null,
+    productSku: val("pr_sku")||null,
+    minSpendAmount: parseFloat(val("pr_minAmt")||"0"),
+    active: val("pr_active")==="true"
+  };
+  if(!body.name){ toast("Nom requis","err"); return; }
+  try{
+    await api(id?`/api/points/rules/${id}`:"/api/points/rules",
+      {method:id?"PUT":"POST", body:JSON.stringify(body)});
+    toast("Règle enregistrée","ok");
+    closeModal(); ptsSubTab('rules');
+  }catch(e){ let m=String(e.message||e); try{const j=JSON.parse(m);if(j.error)m=j.error}catch(_){} toast(m.slice(0,200),"err"); }
+}
+
+async function ptsRuleDelete(id){
+  if(!confirm("Supprimer cette règle ?")) return;
+  try{ await api("/api/points/rules/"+id,{method:"DELETE"}); toast("Règle supprimée","ok"); ptsSubTab('rules'); }
+  catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+async function ptsExpireCheck(){
+  if(!confirm("Lancer le balayage d'expiration des points ? Les points périmés seront retirés.")) return;
+  try{
+    const r = await api("/api/points/expire-check",{method:"POST"});
+    toast(`${r.totalPointsExpired||0} points expirés sur ${r.accountsAffected||0} compte(s)`,"ok");
+    renderPoints();
+  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+
+/* =========== PREPAID CARDS (V9 — GL-04 support) =========== */
+
+async function renderPrepaidCards(){
+  const el=document.getElementById("content");
+  const canManage=ME.role==="ADMIN";
+  el.innerHTML=`<div class="page">${head(t("prepaidCards"),t("pc_sub"),
+    (canManage?`<button class="btn btn-primary" onclick="pcModal()">+ Émettre une carte</button>`:"")+refreshBtn())}
+    <div class="kpi-grid" style="margin-bottom:16px">
+      <div class="kpi-card"><div class="kpi-label">Total cartes</div><div class="kpi-value" id="pcKpiTot">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Actives</div><div class="kpi-value" id="pcKpiAct">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">BINs Afriland</div><div class="kpi-value" id="pcKpiBins">—</div></div>
+    </div>
+    <div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="pcCp">—</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Carte</th><th>Produit</th><th>Porteur</th><th>Compte lié</th><th>Statut</th><th>Activée</th><th>Expire</th><th style="text-align:right">Actions</th></tr></thead>
+    <tbody id="pcBody">${rowSkeleton(6,6)}</tbody></table></div></div></div>`;
+  try{
+    const [rows, stats] = await Promise.all([api("/api/prepaid-cards"), api("/api/prepaid-cards/stats")]);
+    window.__prepaidCards = Array.isArray(rows)?rows:[];
+    document.getElementById("pcKpiTot").textContent = stats.total||0;
+    document.getElementById("pcKpiAct").textContent = stats.active||0;
+    document.getElementById("pcKpiBins").textContent = Object.keys(stats.byBin||{}).length;
+    document.getElementById("pcCp").textContent = window.__prepaidCards.length + " carte(s)";
+    document.getElementById("pcBody").innerHTML = window.__prepaidCards.length ? window.__prepaidCards.map(c=>`
+      <tr>
+        <td><code style="background:var(--surface-2);padding:2px 6px;border-radius:4px;font-size:12px">${esc(c.cardNumberMasked)}</code></td>
+        <td class="strong">${esc(c.productName||"—")}</td>
+        <td>${esc(c.ownerName||"—")}<br><code style="font-size:10px;color:var(--muted)">${esc(c.ownerAccountNumber)}</code></td>
+        <td><code style="font-size:11px">${esc(c.linkedBankAccount)}</code></td>
+        <td>${pcStatusBadge(c.status)}</td>
+        <td style="font-size:12px">${c.activatedAt?dt(c.activatedAt):"—"}</td>
+        <td style="font-size:12px">${c.expiresAt?dt(c.expiresAt):"—"}</td>
+        <td class="row-actions">${canManage?`
+          ${c.status==="ACTIVE"?`<button class="mini-btn danger" onclick="pcBlock(${c.id})">Bloquer</button>`:`<button class="mini-btn" onclick="pcActivate(${c.id})">Activer</button>`}
+          <button class="mini-btn" onclick="pcView(${c.id})">Détails</button>
+        `:""}</td>
+      </tr>`).join("") : `<tr><td colspan="8">${emptyFull()}</td></tr>`;
+  }catch(e){ document.getElementById("pcBody").innerHTML=`<tr><td colspan="8">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+function pcStatusBadge(s){
+  const map={ACTIVE:{lbl:"Active",cls:"b-ok"},BLOCKED:{lbl:"Bloquée",cls:"b-danger"},EXPIRED:{lbl:"Expirée",cls:"b-muted"},CANCELLED:{lbl:"Annulée",cls:"b-muted"},PENDING_ACTIVATION:{lbl:"À activer",cls:"b-warn"}};
+  const m=map[s]||{lbl:s,cls:"b-muted"};
+  return `<span class="badge ${m.cls}">${m.lbl}</span>`;
+}
+
+async function pcModal(){
+  let bins=[];
+  try{ bins = await api("/api/prepaid-cards/bins"); }catch(_){}
+  const binOptions = bins.map(b=>`<option value="${b.bin}">${esc(b.label)}</option>`).join("");
+  const body = `
+    <div style="margin-bottom:12px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;color:var(--text-2)">
+      ℹ️ Seuls les 6 premiers chiffres (BIN) et les 4 derniers sont enregistrés. Les 6 chiffres du milieu ne sont jamais stockés.
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>BIN (produit carte) *</label>
+        <select id="pc_bin">${binOptions}</select>
+      </div>
+      <div class="field"><label>4 derniers chiffres *</label>
+        <input id="pc_last4" pattern="\d{4}" maxlength="4" placeholder="Ex: 3742">
+      </div>
+      <div class="field full"><label>N° compte porteur *</label>
+        <input id="pc_owner" data-validate="account" placeholder="Ex: 400123456789">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Nom porteur *</label>
+        <input id="pc_ownerName" data-validate="name" placeholder="Ex: Marie Nkeng">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Téléphone porteur</label>
+        <input id="pc_phone" data-validate="phone" placeholder="Ex: +237 6XX XXX XXX">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Email porteur</label>
+        <input id="pc_email" type="email" data-validate="email" placeholder="Ex: marie@example.com">
+        <div class="field-error"></div>
+      </div>
+      <div class="field full"><label>Compte bancaire lié *</label>
+        <input id="pc_linked" data-validate="account" placeholder="Ex: 400123456789 (souvent identique au porteur)">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Date d'activation</label>
+        <input id="pc_activatedAt" type="date">
+      </div>
+      <div class="field"><label>Date d'expiration</label>
+        <input id="pc_expiresAt" type="date">
+      </div>
+      <div class="field full"><label>Notes</label>
+        <input id="pc_notes" placeholder="Optionnel">
+      </div>
+    </div>`;
+  openModal("Émettre une carte prépayée", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="pcSave()">Émettre</button>`);
+  setTimeout(()=>wireLiveValidation("#modalBack"),50);
+}
+
+async function pcSave(){
+  const body = {
+    bin: document.getElementById("pc_bin").value,
+    last4: val("pc_last4"),
+    ownerAccountNumber: val("pc_owner"),
+    ownerName: val("pc_ownerName"),
+    ownerPhone: val("pc_phone")||null,
+    ownerEmail: val("pc_email")||null,
+    linkedBankAccount: val("pc_linked"),
+    activatedAt: val("pc_activatedAt")||null,
+    expiresAt: val("pc_expiresAt")||null,
+    notes: val("pc_notes")||null,
+    status: val("pc_activatedAt")?"ACTIVE":"PENDING_ACTIVATION"
+  };
+  if(!body.ownerAccountNumber||!body.linkedBankAccount||!body.ownerName){ toast("Champs requis manquants","err"); return; }
+  try{
+    await api("/api/prepaid-cards",{method:"POST",body:JSON.stringify(body)});
+    toast("Carte émise","ok"); closeModal(); renderPrepaidCards();
+  }catch(e){ let m=String(e.message||e); try{const j=JSON.parse(m);if(j.error)m=j.error}catch(_){} toast(m.slice(0,200),"err"); }
+}
+
+async function pcActivate(id){
+  if(!confirm("Activer cette carte ?")) return;
+  try{ await api(`/api/prepaid-cards/${id}/activate`,{method:"POST"}); toast("Carte activée","ok"); renderPrepaidCards(); }
+  catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+async function pcBlock(id){
+  if(!confirm("Bloquer cette carte ?")) return;
+  try{ await api(`/api/prepaid-cards/${id}/block`,{method:"POST"}); toast("Carte bloquée","ok"); renderPrepaidCards(); }
+  catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+function pcView(id){
+  const card = (window.__prepaidCards||[]).find(c=>c.id===id);
+  if(!card) return;
+  const body = `
+    <div style="padding:20px;background:linear-gradient(135deg,#1a1a2e 0%,#c1121f 100%);color:#fff;border-radius:14px;margin-bottom:16px">
+      <div style="font-size:11px;opacity:0.7;letter-spacing:2px">AFRILAND FIRST BANK</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:2px">${esc(card.productName)}</div>
+      <div style="font-family:monospace;font-size:20px;letter-spacing:2px;margin-top:24px">${esc(card.cardNumberMasked||"").replace(/(.{4})/g,'$1 ')}</div>
+      <div style="display:flex;justify-content:space-between;margin-top:16px">
+        <div>
+          <div style="font-size:10px;opacity:0.7">PORTEUR</div>
+          <div style="font-size:14px">${esc(card.ownerName||"—")}</div>
+        </div>
+        <div>
+          <div style="font-size:10px;opacity:0.7">EXPIRE</div>
+          <div style="font-size:14px">${card.expiresAt?dt(card.expiresAt):"—"}</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px">
+      <div><span style="color:var(--muted);font-size:11px">BIN</span><br><code>${esc(card.bin)}</code></div>
+      <div><span style="color:var(--muted);font-size:11px">Statut</span><br>${pcStatusBadge(card.status)}</div>
+      <div><span style="color:var(--muted);font-size:11px">Compte porteur</span><br><code>${esc(card.ownerAccountNumber)}</code></div>
+      <div><span style="color:var(--muted);font-size:11px">Compte bancaire lié</span><br><code>${esc(card.linkedBankAccount)}</code></div>
+      <div><span style="color:var(--muted);font-size:11px">Téléphone</span><br>${esc(card.ownerPhone||"—")}</div>
+      <div><span style="color:var(--muted);font-size:11px">Email</span><br>${esc(card.ownerEmail||"—")}</div>
+    </div>`;
+  openModal("Carte prépayée #"+card.id, body, `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>`);
+}
+
+
+/* =========== CLO OFFERS (V9 — GL-04) =========== */
+
+async function renderCloOffers(){
+  const el=document.getElementById("content");
+  const canManage=ME.role==="ADMIN";
+  el.innerHTML=`<div class="page">${head(t("cloOffers"),t("clo_sub"),
+    (canManage?`<button class="btn btn-primary" onclick="cloOfferModal()">+ Créer une offre</button>
+     <button class="btn btn-ghost" onclick="cloOptInsView()">Opt-ins clients</button>
+     <button class="btn btn-ghost" onclick="cloSimulateModal()">Simuler une transaction</button>`:"")+refreshBtn())}
+    <div class="kpi-grid" style="margin-bottom:16px">
+      <div class="kpi-card"><div class="kpi-label">Offres totales</div><div class="kpi-value" id="cloKpiTot">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Actives</div><div class="kpi-value" id="cloKpiAct">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Clients opt-in</div><div class="kpi-value" id="cloKpiOpt">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Redemptions</div><div class="kpi-value" id="cloKpiRed">—</div></div>
+    </div>
+    <div class="tabs" style="margin-bottom:12px">
+      <button class="tab active" onclick="cloSubTab('offers')" id="cloTab_offers">Offres</button>
+      <button class="tab" onclick="cloSubTab('redemptions')" id="cloTab_redemptions">Historique redemptions</button>
+    </div>
+    <div id="cloSubContent"></div>
+  </div>`;
+  try{
+    const stats = await api("/api/clo/stats");
+    document.getElementById("cloKpiTot").textContent = stats.totalOffers||0;
+    document.getElementById("cloKpiAct").textContent = stats.activeOffers||0;
+    document.getElementById("cloKpiOpt").textContent = stats.optedInClients||0;
+    document.getElementById("cloKpiRed").textContent = stats.totalRedemptions||0;
+  }catch(e){}
+  cloSubTab('offers');
+}
+
+function cloSubTab(name){
+  ["offers","redemptions"].forEach(n=>{
+    const el=document.getElementById("cloTab_"+n); if(el) el.classList.toggle("active", n===name);
+  });
+  if(name==="offers") cloRenderOffers();
+  else cloRenderRedemptions();
+}
+
+async function cloRenderOffers(){
+  const box=document.getElementById("cloSubContent");
+  const canManage=ME.role==="ADMIN";
+  box.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="cloOffCp">—</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Nom</th><th>Marchand</th><th>Récompense</th><th>Cibles BIN</th><th>Budget</th><th>Redemptions</th><th>Validité</th><th>Statut</th><th style="text-align:right">Actions</th></tr></thead>
+    <tbody id="cloOffBody">${rowSkeleton(5,7)}</tbody></table></div></div>`;
+  try{
+    const rows = await api("/api/clo/offers");
+    window.__cloOffers = Array.isArray(rows)?rows:[];
+    document.getElementById("cloOffCp").textContent = window.__cloOffers.length + " offre(s)";
+    document.getElementById("cloOffBody").innerHTML = window.__cloOffers.length ? window.__cloOffers.map(o=>`
+      <tr>
+        <td class="strong">${esc(o.name)}<br><span style="font-size:11px;color:var(--muted)">${esc((o.description||'').slice(0,60))}</span></td>
+        <td>${o.merchant?esc(o.merchant.brandName||o.merchant.name):"—"}</td>
+        <td>${cloRewardLabel(o)}</td>
+        <td style="font-size:11px"><code>${esc(o.targetBins||"Tous")}</code></td>
+        <td style="font-size:12px">${o.totalBudget?(o.totalBudget||0).toLocaleString("fr-FR"):"∞"}<br><span style="color:var(--muted)">${(o.budgetUsed||0).toLocaleString("fr-FR")} utilisé</span></td>
+        <td>${o.redemptionCount||0}</td>
+        <td style="font-size:12px;white-space:nowrap">${o.validFrom?dt(o.validFrom):"—"}<br>→ ${o.validTo?dt(o.validTo):"—"}</td>
+        <td>${cloStatusBadge(o.status)}</td>
+        <td class="row-actions">${canManage?`
+          ${o.status==="ACTIVE"?`<button class="mini-btn" onclick="cloPause(${o.id})">Pause</button>`:o.status!=="ARCHIVED"?`<button class="mini-btn" onclick="cloActivate(${o.id})">Activer</button>`:""}
+          <button class="mini-btn" onclick="cloOfferModal(${o.id})">Modifier</button>
+          <button class="mini-btn danger" onclick="cloArchive(${o.id})">Archiver</button>
+        `:""}</td>
+      </tr>`).join("") : `<tr><td colspan="9">${emptyFull()}</td></tr>`;
+  }catch(e){ document.getElementById("cloOffBody").innerHTML=`<tr><td colspan="9">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+function cloRewardLabel(o){
+  if(!o.rewardType) return "—";
+  const v = (o.rewardValue||0);
+  if(o.rewardType==="CASHBACK_PERCENT") return `<span class="badge b-info">💰 ${v}% cashback</span>`;
+  if(o.rewardType==="CASHBACK_FIXED") return `<span class="badge b-info">💰 ${v.toLocaleString("fr-FR")} FCFA</span>`;
+  return `<span class="badge b-ok">⭐ ${v.toLocaleString("fr-FR")} points</span>`;
+}
+
+function cloStatusBadge(s){
+  const map={DRAFT:{lbl:"Brouillon",cls:"b-muted"},ACTIVE:{lbl:"Active",cls:"b-ok"},PAUSED:{lbl:"Pause",cls:"b-warn"},EXPIRED:{lbl:"Expirée",cls:"b-muted"},ARCHIVED:{lbl:"Archivée",cls:"b-muted"}};
+  const m=map[s]||{lbl:s,cls:"b-muted"};
+  return `<span class="badge ${m.cls}">${m.lbl}</span>`;
+}
+
+async function cloRenderRedemptions(){
+  const box=document.getElementById("cloSubContent");
+  box.innerHTML=`<div class="table-wrap"><div class="table-toolbar"><span class="count-pill">Historique redemptions</span></div>
+    <div class="table-scroll"><table><thead><tr><th>Date</th><th>Offre</th><th>Compte</th><th>Carte (BIN)</th><th>Transaction</th><th>Récompense</th></tr></thead>
+    <tbody id="cloRedBody">${rowSkeleton(6,5)}</tbody></table></div></div>`;
+  try{
+    const rows = await api("/api/clo/redemptions");
+    document.getElementById("cloRedBody").innerHTML = rows.length ? rows.map(r=>`
+      <tr>
+        <td style="font-size:12px">${dt(r.redeemedAt)}</td>
+        <td>${r.offer?esc(r.offer.name):"—"}</td>
+        <td><code style="font-size:11px">${esc(r.accountNumber)}</code></td>
+        <td><code style="font-size:11px">${esc(r.cardNumberMasked||"")}</code></td>
+        <td>${(r.transactionAmount||0).toLocaleString("fr-FR")} FCFA</td>
+        <td class="strong" style="color:var(--ok)">+${(r.rewardAmount||0).toLocaleString("fr-FR")} <span style="font-size:11px;color:var(--muted)">${esc((r.rewardType||'').replace("CASHBACK_","").replace("_"," ").toLowerCase())}</span></td>
+      </tr>`).join("") : `<tr><td colspan="6">${emptyFull()}</td></tr>`;
+  }catch(e){ document.getElementById("cloRedBody").innerHTML=`<tr><td colspan="6">${emptyMini(t("err_load"))}</td></tr>`; }
+}
+
+async function cloOfferModal(id){
+  const o = id ? (window.__cloOffers||[]).find(x=>x.id===id) : {};
+  const isEdit = !!id;
+  const merchantOptions = (window.__merchants||[]).map(m=>`<option value="${m.id}" ${o.merchant&&o.merchant.id===m.id?"selected":""}>${esc(m.brandName||m.name)}</option>`).join("");
+  let bins=[];
+  try{ bins = await api("/api/prepaid-cards/bins"); }catch(_){}
+  const binOptions = bins.map(b=>`<label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surface-2);border-radius:6px;font-size:12px;cursor:pointer"><input type="checkbox" class="clo_bin" value="${b.bin}" ${(o.targetBins||"").split(",").includes(b.bin)?"checked":""}> ${esc(b.label)}</label>`).join("");
+  const body = `
+    <div class="form-grid">
+      <div class="field full"><label>Nom de l'offre *</label>
+        <input id="clo_name" data-validate="name" value="${esc(o.name||"")}" placeholder="Ex: 10% cashback stations-service">
+        <div class="field-error"></div>
+      </div>
+      <div class="field full"><label>Description</label>
+        <input id="clo_desc" value="${esc(o.description||"")}" placeholder="Détail de l'offre montrée au porteur">
+      </div>
+      <div class="field"><label>Marchand sponsor *</label>
+        <select id="clo_merchant"><option value="">— Choisir —</option>${merchantOptions}</select>
+      </div>
+      <div class="field"><label>Type de récompense *</label>
+        <select id="clo_rewardType" onchange="cloUpdateRewardHint()">
+          <option value="CASHBACK_PERCENT" ${o.rewardType==="CASHBACK_PERCENT"?"selected":""}>💰 Cashback %</option>
+          <option value="CASHBACK_FIXED" ${o.rewardType==="CASHBACK_FIXED"?"selected":""}>💰 Cashback fixe (FCFA)</option>
+          <option value="POINTS_BONUS" ${o.rewardType==="POINTS_BONUS"?"selected":""}>⭐ Points bonus</option>
+        </select>
+      </div>
+      <div class="field"><label id="clo_valLabel">Valeur *</label>
+        <input id="clo_rewardValue" type="number" min="0" step="0.01" value="${o.rewardValue||""}" data-validate="positive">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Montant min transaction (FCFA)</label>
+        <input id="clo_minTx" type="number" min="0" value="${o.minTransactionAmount||""}">
+      </div>
+      <div class="field"><label>Max récompense/porteur (FCFA)</label>
+        <input id="clo_maxPerClient" type="number" min="0" value="${o.maxRewardPerCardholder||""}">
+      </div>
+      <div class="field"><label>Budget total (FCFA)</label>
+        <input id="clo_budget" type="number" min="0" value="${o.totalBudget||""}">
+      </div>
+      <div class="field"><label>Canal</label>
+        <select id="clo_channel">
+          <option value="">Tous canaux</option>
+          <option value="ECOMM" ${o.channelFilter==="ECOMM"?"selected":""}>🌐 E-commerce</option>
+          <option value="F2F" ${o.channelFilter==="F2F"?"selected":""}>🏪 En magasin</option>
+          <option value="MOBILE_WALLET" ${o.channelFilter==="MOBILE_WALLET"?"selected":""}>📱 Mobile Wallet</option>
+        </select>
+      </div>
+      <div class="field"><label>Valable du *</label>
+        <input id="clo_validFrom" type="date" value="${o.validFrom||""}">
+      </div>
+      <div class="field"><label>Valable au *</label>
+        <input id="clo_validTo" type="date" value="${o.validTo||""}">
+      </div>
+      <div class="field full"><label>BINs ciblés (cochez, vide = tous les porteurs Afriland prépayés)</label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">${binOptions}</div>
+      </div>
+    </div>`;
+  openModal(isEdit?"Modifier l'offre CLO":"Nouvelle offre CLO", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="cloOfferSave(${id||"null"})">Enregistrer</button>`);
+  setTimeout(()=>{ wireLiveValidation("#modalBack"); cloUpdateRewardHint(); },50);
+}
+
+function cloUpdateRewardHint(){
+  const t = document.getElementById("clo_rewardType")?.value;
+  const lbl = document.getElementById("clo_valLabel");
+  if(!lbl) return;
+  if(t==="CASHBACK_PERCENT") lbl.textContent="Pourcentage (0-100) *";
+  else if(t==="CASHBACK_FIXED") lbl.textContent="Montant fixe FCFA *";
+  else lbl.textContent="Nombre de points *";
+}
+
+async function cloOfferSave(id){
+  const bins = Array.from(document.querySelectorAll(".clo_bin:checked")).map(x=>x.value).join(",");
+  const merchantId = val("clo_merchant");
+  const body = {
+    name: val("clo_name"),
+    description: val("clo_desc"),
+    merchant: merchantId?{id:parseInt(merchantId,10)}:null,
+    rewardType: document.getElementById("clo_rewardType").value,
+    rewardValue: parseFloat(val("clo_rewardValue")||"0"),
+    targetBins: bins||null,
+    minTransactionAmount: val("clo_minTx")?parseFloat(val("clo_minTx")):null,
+    maxRewardPerCardholder: val("clo_maxPerClient")?parseFloat(val("clo_maxPerClient")):null,
+    totalBudget: val("clo_budget")?parseFloat(val("clo_budget")):null,
+    channelFilter: val("clo_channel")||null,
+    validFrom: val("clo_validFrom")||null,
+    validTo: val("clo_validTo")||null
+  };
+  if(!body.name||!body.merchant){ toast("Nom et marchand requis","err"); return; }
+  try{
+    await api(id?`/api/clo/offers/${id}`:"/api/clo/offers",
+      {method:id?"PUT":"POST", body:JSON.stringify(body)});
+    toast("Offre enregistrée","ok"); closeModal(); renderCloOffers();
+  }catch(e){ let m=String(e.message||e); try{const j=JSON.parse(m);if(j.error)m=j.error}catch(_){} toast(m.slice(0,200),"err"); }
+}
+
+async function cloActivate(id){
+  try{ await api(`/api/clo/offers/${id}/activate`,{method:"POST"}); toast("Offre activée","ok"); cloSubTab('offers'); }
+  catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+async function cloPause(id){
+  try{ await api(`/api/clo/offers/${id}/pause`,{method:"POST"}); toast("Offre en pause","ok"); cloSubTab('offers'); }
+  catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+async function cloArchive(id){
+  if(!confirm("Archiver cette offre ?")) return;
+  try{ await api(`/api/clo/offers/${id}`,{method:"DELETE"}); toast("Offre archivée","ok"); cloSubTab('offers'); }
+  catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+async function cloOptInsView(){
+  try{
+    const rows = await api("/api/clo/opt-ins");
+    const body = `
+      <div style="margin-bottom:12px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;color:var(--text-2)">
+        Liste des porteurs ayant activé leur consentement pour recevoir des offres CLO merchant-funded.
+      </div>
+      <div style="max-height:60vh;overflow-y:auto">
+        <table style="width:100%;font-size:13px">
+          <thead><tr><th>N° compte</th><th>Porteur</th><th>Opt-in</th><th>Canaux</th><th>Depuis</th><th style="text-align:right">Action</th></tr></thead>
+          <tbody>${(rows||[]).map(o=>`<tr>
+            <td><code style="font-size:11px">${esc(o.accountNumber)}</code></td>
+            <td>${esc(o.ownerName||"—")}</td>
+            <td>${o.optedIn?'<span class="badge b-ok">✓ Actif</span>':'<span class="badge b-muted">Révoqué</span>'}</td>
+            <td style="font-size:11px">${esc(o.notificationChannels||"—")}</td>
+            <td style="font-size:11px;color:var(--muted)">${o.optedInAt?dt(o.optedInAt):"—"}</td>
+            <td style="text-align:right"><button class="mini-btn" onclick="cloOptInModal('${esc(o.accountNumber)}')">Modifier</button></td>
+          </tr>`).join('') || `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted)">Aucun opt-in enregistré</td></tr>`}</tbody>
+        </table>
+      </div>`;
+    openModal("Opt-ins CLO", body,
+      `<button class="btn btn-ghost" onclick="closeModal()">Fermer</button>
+       <button class="btn btn-primary" onclick="cloOptInModal()">+ Nouvel opt-in</button>`);
+  }catch(e){ toast("Erreur","err"); }
+}
+
+function cloOptInModal(acc){
+  const body = `
+    <div class="form-grid">
+      <div class="field full"><label>N° compte porteur *</label>
+        <input id="clo_optAcc" data-validate="account" value="${esc(acc||"")}" placeholder="Ex: 400123456789">
+        <div class="field-error"></div>
+      </div>
+      <div class="field full"><label>Nom porteur</label>
+        <input id="clo_optOwner" placeholder="Ex: Marie Nkeng">
+      </div>
+      <div class="field"><label>Consentement *</label>
+        <select id="clo_optIn">
+          <option value="true">✓ Opt-in (activé)</option>
+          <option value="false">✗ Opt-out (révoqué)</option>
+        </select>
+      </div>
+      <div class="field"><label>Canaux notification</label>
+        <input id="clo_optChannels" value="PUSH,SMS" placeholder="PUSH,SMS,EMAIL">
+      </div>
+    </div>`;
+  openModal("Opt-in CLO", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="cloOptInSave()">Enregistrer</button>`);
+  setTimeout(()=>wireLiveValidation("#modalBack"),50);
+}
+
+async function cloOptInSave(){
+  const acc = val("clo_optAcc");
+  if(!acc){ toast("N° compte requis","err"); return; }
+  const body = {
+    optedIn: val("clo_optIn")==="true",
+    ownerName: val("clo_optOwner")||null,
+    notificationChannels: val("clo_optChannels")||"PUSH,SMS"
+  };
+  try{
+    await api("/api/clo/opt-ins/"+encodeURIComponent(acc),{method:"POST",body:JSON.stringify(body)});
+    toast(body.optedIn?"Opt-in activé":"Opt-out enregistré","ok");
+    closeModal(); cloOptInsView();
+  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
+async function cloSimulateModal(){
+  const merchantOptions = (window.__merchants||[]).map(m=>`<option value="${m.id}">${esc(m.brandName||m.name)}</option>`).join("");
+  let cards = [];
+  try{ cards = await api("/api/prepaid-cards"); }catch(_){}
+  const cardOptions = cards.map(c=>`<option value="${c.id}" data-acc="${esc(c.ownerAccountNumber)}">${esc(c.cardNumberMasked)} — ${esc(c.ownerName||'')}</option>`).join("");
+  const body = `
+    <div style="margin-bottom:12px;padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;color:var(--text-2)">
+      Simulez une transaction pour tester si une offre CLO se déclenche. En production ce serait fait automatiquement via le webhook POS.
+    </div>
+    <div class="form-grid">
+      <div class="field full"><label>Carte prépayée utilisée *</label>
+        <select id="sim_card" onchange="document.getElementById('sim_acc').value=this.selectedOptions[0].getAttribute('data-acc')||''">
+          <option value="">— Choisir —</option>${cardOptions}
+        </select>
+      </div>
+      <div class="field full"><label>Compte porteur (auto)</label>
+        <input id="sim_acc" readonly style="background:var(--surface-2)">
+      </div>
+      <div class="field"><label>Marchand *</label>
+        <select id="sim_merchant">${merchantOptions}</select>
+      </div>
+      <div class="field"><label>Montant transaction (FCFA) *</label>
+        <input id="sim_amt" type="number" min="0" value="15000">
+      </div>
+    </div>`;
+  openModal("Simuler une transaction CLO", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="cloSimulateRun()">Simuler</button>`);
+}
+
+async function cloSimulateRun(){
+  const body = {
+    accountNumber: val("sim_acc"),
+    cardId: parseInt(val("sim_card")||"0",10),
+    merchantId: parseInt(val("sim_merchant")||"0",10),
+    transactionAmount: parseFloat(val("sim_amt")||"0")
+  };
+  if(!body.accountNumber||!body.cardId||!body.merchantId){ toast("Champs requis manquants","err"); return; }
+  try{
+    const r = await api("/api/clo/simulate-redemption",{method:"POST",body:JSON.stringify(body)});
+    if(r.matched){
+      toast(`✓ Offre "${r.offer}" déclenchée : +${r.rewardValue} ${r.rewardType.replace("CASHBACK_","").replace("_"," ")}`,"ok");
+    } else {
+      toast("✗ "+(r.message||"Aucune offre applicable"),"err");
+    }
+    closeModal(); renderCloOffers();
+  }catch(e){ toast(String(e.message||e).slice(0,200),"err"); }
+}
+
 /* =========== LOYALTY TIERS (V8 — GL-07) =========== */
 
 async function renderLoyaltyTiers(){
