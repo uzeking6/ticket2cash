@@ -686,7 +686,7 @@ const ROUTES={
  dashboard:renderDashboard,businessDashboard:renderBusinessDashboard,security:renderSecurity,
  merchants:renderMerchants,products:renderProducts,campaigns:renderCampaigns,
  tickets:()=>renderTable("tickets"),transactions:()=>renderTable("transactions"),claims:()=>renderTable("claims"),review:renderReviewQueue,payments:()=>renderTable("payments"),
- users:()=>renderTable("users"),fraud:()=>renderTable("fraud"),auditLogs:()=>renderTable("auditLogs"),
+ users:renderUsers,fraud:()=>renderTable("fraud"),auditLogs:()=>renderTable("auditLogs"),
  settings:()=>renderAccount("settings"),profile:()=>renderAccount("profile"),account:renderAccount,
  trends:renderTrends,webhooks:renderWebhooks,apiKeys:renderApiKeys,
  finance:renderFinance,ocr:renderOcr,pricing:()=>renderCrud("pricing"),ticketTemplate:()=>renderCrud("ticketTemplate"),
@@ -1435,6 +1435,206 @@ function paintRows(key,rows){
   cp.textContent=rows.length+" "+t("items");
   if(!rows.length){tb.innerHTML=`<tr><td colspan="${cfg.cols.length}">${emptyFull()}</td></tr>`;return;}
   tb.innerHTML=rows.map(r=>`<tr>${cfg.cols.map(col=>`<td>${cell(r,col)}</td>`).join("")}</tr>`).join("");
+}
+
+/* ============ USERS (V9.1 — renderUsers dédié avec diagnostic) ============ */
+
+async function renderUsers(){
+  const el = document.getElementById("content");
+  const canManage = ME.role === "ADMIN";
+  el.innerHTML = `<div class="page">${head(t("users"), t("users_sub"),
+    (canManage ? `<button class="btn btn-primary" onclick="usrModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>${t("adduser_btn")||"Ajouter"}</button>` : "") + refreshBtn())}
+    <div class="kpi-grid" style="margin-bottom:16px">
+      <div class="kpi-card"><div class="kpi-label">Total</div><div class="kpi-value" id="uKpiTotal">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Admins</div><div class="kpi-value" id="uKpiAdmin">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Partenaires</div><div class="kpi-value" id="uKpiPartner">—</div></div>
+      <div class="kpi-card"><div class="kpi-label">Verrouillés</div><div class="kpi-value" id="uKpiLocked">—</div></div>
+    </div>
+    <div id="uDiag" style="display:none;padding:14px 18px;margin-bottom:14px;border-radius:10px;background:#FEF2F2;border-left:4px solid var(--brand);color:#7F1D1D;font-size:13px;font-family:'Consolas',monospace;white-space:pre-wrap"></div>
+    <div class="table-wrap"><div class="table-toolbar"><span class="count-pill" id="uCp">—</span></div>
+    <div class="table-scroll"><table><thead><tr><th>${t("c_username")||"Utilisateur"}</th><th>${t("c_fullname")||"Nom complet"}</th><th>${t("c_email")||"Email"}</th><th>${t("c_role")||"Rôle"}</th><th>${t("c_locked")||"État"}</th><th>${t("c_lastlogin")||"Dernière connexion"}</th><th style="text-align:right">${t("actions")||"Actions"}</th></tr></thead>
+    <tbody id="uBody">${rowSkeleton(6, 6)}</tbody></table></div></div></div>`;
+
+  // Try to fetch — with detailed diagnostic
+  let rows;
+  try {
+    const resp = await fetch("/api/auth/users", { credentials: "same-origin", headers: { "Accept": "application/json" } });
+    if (!resp.ok) {
+      // Show detailed diagnostic
+      let details = "";
+      try { const j = await resp.json(); details = "\n" + JSON.stringify(j, null, 2); }
+      catch(_) { try { details = "\n" + (await resp.text()).slice(0, 400); } catch(_) {} }
+      const diag = document.getElementById("uDiag");
+      let msg = `⚠ Erreur HTTP ${resp.status} sur GET /api/auth/users`;
+      if (resp.status === 401) msg += "\n→ Session expirée ou non authentifié. Reconnectez-vous.";
+      else if (resp.status === 403) msg += "\n→ Rôle insuffisant (seul ADMIN peut voir cette page).";
+      else if (resp.status === 404) msg += "\n→ L'endpoint /api/auth/users n'existe pas côté backend.\n→ Vérifier AuthController.java ou consulter les logs serveur.";
+      else if (resp.status >= 500) msg += "\n→ Erreur serveur. Consulter /var/log/ticket2cash.log";
+      msg += details;
+      diag.textContent = msg;
+      diag.style.display = "block";
+      document.getElementById("uBody").innerHTML = `<tr><td colspan="7" style="padding:40px;text-align:center;color:var(--muted)">Consultez le diagnostic ci-dessus</td></tr>`;
+      document.getElementById("uCp").textContent = "0";
+      return;
+    }
+    rows = await resp.json();
+  } catch(e) {
+    const diag = document.getElementById("uDiag");
+    diag.textContent = `⚠ Erreur réseau lors du chargement:\n${e.message || e}\n→ Vérifiez que le serveur est démarré.`;
+    diag.style.display = "block";
+    document.getElementById("uBody").innerHTML = `<tr><td colspan="7" style="padding:40px;text-align:center;color:var(--muted)">Consultez le diagnostic ci-dessus</td></tr>`;
+    document.getElementById("uCp").textContent = "0";
+    return;
+  }
+
+  if (!Array.isArray(rows)) rows = rows && rows.content ? rows.content : [];
+  window.__users = rows;
+
+  // KPIs
+  document.getElementById("uKpiTotal").textContent = rows.length;
+  document.getElementById("uKpiAdmin").textContent = rows.filter(u => u.role === "ADMIN").length;
+  document.getElementById("uKpiPartner").textContent = rows.filter(u => u.role === "PARTNER").length;
+  document.getElementById("uKpiLocked").textContent = rows.filter(u => u.accountLocked).length;
+
+  document.getElementById("uCp").textContent = rows.length + " utilisateur(s)";
+  document.getElementById("uBody").innerHTML = rows.length ? rows.map(u => `
+    <tr>
+      <td class="strong">${esc(u.username || "—")}</td>
+      <td>${esc(u.fullName || "—")}</td>
+      <td><span class="mono" style="font-size:12px">${esc(u.email || "—")}</span></td>
+      <td>${usrRoleBadge(u.role)}</td>
+      <td>${u.accountLocked ? '<span class="badge b-danger">🔒 Verrouillé</span>' : '<span class="badge b-ok">✓ Actif</span>'}</td>
+      <td style="color:var(--text-2);font-size:12px">${u.lastLoginAt ? dt(u.lastLoginAt) : "—"}</td>
+      <td class="row-actions">${canManage ? `
+        ${u.accountLocked
+          ? `<button class="mini-btn" onclick="usrUnlock(${u.id})">Déverrouiller</button>`
+          : `<button class="mini-btn danger" onclick="usrLock(${u.id})">Verrouiller</button>`}
+        <button class="mini-btn" onclick="usrModal(${u.id})">Modifier</button>
+        ${u.username !== ME.username ? `<button class="mini-btn danger" onclick="usrDelete(${u.id},'${esc(u.username)}')">Supprimer</button>` : ''}
+      ` : ""}</td>
+    </tr>`).join("") : `<tr><td colspan="7">${emptyFull()}</td></tr>`;
+}
+
+function usrRoleBadge(role){
+  const map = {
+    ADMIN: {lbl:"👑 Admin", cls:"b-danger"},
+    PARTNER: {lbl:"🤝 Partenaire", cls:"b-info"},
+    OPERATEUR: {lbl:"⚙️ Opérateur", cls:"b-warn"},
+    LECTEUR: {lbl:"👁 Lecteur", cls:"b-muted"}
+  };
+  const m = map[role] || {lbl: role, cls: "b-muted"};
+  return `<span class="badge ${m.cls}">${m.lbl}</span>`;
+}
+
+async function usrModal(id){
+  await loadMerchants();
+  const u = id ? (window.__users || []).find(x => x.id === id) : {};
+  const isEdit = !!id;
+  const roles = ["ADMIN", "OPERATEUR", "LECTEUR", "PARTNER"];
+  const body = `
+    <div class="form-grid">
+      <div class="field"><label>Nom d'utilisateur *</label>
+        <input id="usr_username" data-validate="username" value="${esc(u.username || "")}" ${isEdit ? "readonly" : ""} placeholder="ex: jdoe">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Nom complet *</label>
+        <input id="usr_fullname" data-validate="name" value="${esc(u.fullName || "")}" placeholder="ex: Jean Dupont">
+        <div class="field-error"></div>
+      </div>
+      <div class="field full"><label>Email *</label>
+        <input id="usr_email" type="email" data-validate="email" value="${esc(u.email || "")}" placeholder="ex: jean@afriland.cm">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>${isEdit ? "Nouveau mot de passe (vide = inchangé)" : "Mot de passe *"}</label>
+        <input id="usr_password" type="text" data-validate="${isEdit ? '' : 'password'}" placeholder="${isEdit ? '(inchangé)' : 'Min 8 caractères'}">
+        <div class="field-error"></div>
+      </div>
+      <div class="field"><label>Rôle *</label>
+        <select id="usr_role" onchange="usrToggleMerchant()">
+          ${roles.map(r => `<option value="${r}" ${u.role === r ? "selected" : ""}>${r}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field full" id="usr_merchant_wrap" style="display:${u.role === "PARTNER" ? "flex" : "none"}">
+        <label>Marchand associé *</label>
+        <select id="usr_merchant">
+          <option value="">— Choisir —</option>
+          ${(window.MERCH || []).map(m => `<option value="${m.id}" ${u.merchantId === m.id ? "selected" : ""}>${esc(m.brandName || m.name)}</option>`).join("")}
+        </select>
+      </div>
+    </div>`;
+  openModal(isEdit ? "Modifier l'utilisateur" : "Nouvel utilisateur", body,
+    `<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+     <button class="btn btn-primary" onclick="usrSave(${id || 'null'})">Enregistrer</button>`);
+  setTimeout(() => wireLiveValidation("#modalBack"), 50);
+}
+
+function usrToggleMerchant(){
+  const r = val("usr_role");
+  const w = document.getElementById("usr_merchant_wrap");
+  if (w) w.style.display = r === "PARTNER" ? "flex" : "none";
+}
+
+async function usrSave(id){
+  const body = {
+    username: val("usr_username"),
+    fullName: val("usr_fullname"),
+    email: val("usr_email"),
+    role: val("usr_role")
+  };
+  const pwd = val("usr_password");
+  if (pwd) body.password = pwd;
+  const mid = val("usr_merchant");
+
+  if (!body.username || !body.fullName || !body.email || !body.role) {
+    toast("Tous les champs marqués * sont requis", "err"); return;
+  }
+  if (!id && !pwd) { toast("Mot de passe requis pour un nouvel utilisateur", "err"); return; }
+  if (body.role === "PARTNER" && !mid) { toast("Marchand requis pour un partenaire", "err"); return; }
+
+  try {
+    const res = await api(id ? `/api/auth/users/${id}` : "/api/auth/users",
+      { method: id ? "PUT" : "POST", body: JSON.stringify(body) });
+    // Assign merchant if partner
+    if (body.role === "PARTNER") {
+      const uid = id || (res && (res.id || res.userId));
+      if (uid && mid) {
+        try { await api(`/api/auth/users/${uid}/merchant?merchantId=${mid}`, { method: "PUT" }); }
+        catch(_) {}
+      }
+    }
+    toast(id ? "Utilisateur mis à jour" : "Utilisateur créé", "ok");
+    closeModal(); renderUsers();
+  } catch(e) {
+    let m = String(e.message || e);
+    try { const j = JSON.parse(m); if (j.error) m = j.error; } catch(_) {}
+    toast(m.slice(0, 200), "err");
+  }
+}
+
+async function usrLock(id){
+  if (!confirm("Verrouiller cet utilisateur ? Il ne pourra plus se connecter.")) return;
+  try {
+    await api(`/api/auth/users/${id}/lock`, { method: "POST" });
+    toast("Utilisateur verrouillé", "ok");
+    renderUsers();
+  } catch(e) { toast(String(e.message || e).slice(0, 200), "err"); }
+}
+
+async function usrUnlock(id){
+  try {
+    await api(`/api/auth/users/${id}/unlock`, { method: "POST" });
+    toast("Utilisateur déverrouillé", "ok");
+    renderUsers();
+  } catch(e) { toast(String(e.message || e).slice(0, 200), "err"); }
+}
+
+async function usrDelete(id, username){
+  if (!confirm(`Supprimer définitivement l'utilisateur "${username}" ?\nCette action est irréversible.`)) return;
+  try {
+    await api(`/api/auth/users/${id}`, { method: "DELETE" });
+    toast("Utilisateur supprimé", "ok");
+    renderUsers();
+  } catch(e) { toast(String(e.message || e).slice(0, 200), "err"); }
 }
 
 /* ============ SECURITY / SETTINGS / PROFILE ============ */
