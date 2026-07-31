@@ -48,8 +48,15 @@ public class Voucher {
     @Column(nullable = false, length = 30)
     private VoucherValueType valueType;
 
-    /** The numeric value: percentage points if PERCENTAGE_DISCOUNT, FCFA if FIXED_AMOUNT, ignored if FREE_PRODUCT. */
-    @Column(precision = 15, scale = 2)
+    /**
+     * The numeric value: percentage points if PERCENTAGE_DISCOUNT, FCFA if FIXED_AMOUNT,
+     * ignored if FREE_PRODUCT.
+     *
+     * <p>Column named {@code voucher_value} rather than {@code value} because
+     * {@code VALUE} is a reserved SQL keyword in H2 2.x (and PostgreSQL). Using
+     * the raw field name would break DDL generation.
+     */
+    @Column(name = "voucher_value", precision = 15, scale = 2)
     private BigDecimal value;
 
     /** Optional: which merchant this voucher is valid at. Null = any merchant. */
